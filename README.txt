@@ -1,10 +1,12 @@
-Livro Histórico — versão v19
+Refatoração limpa
 
-Correção principal:
-- O DOCX do Livro Histórico agora é gerado a partir do mesmo HTML/CSS da visualização.
-- O DOCX do Pedido de Serviço agora é gerado a partir do mesmo HTML/CSS da visualização.
-- Removido o gerador Word paralelo simplificado que mudava layout, zoom, tabelas e espaçamentos.
-- Cache do PWA atualizado para forçar atualização da versão instalada.
+Base refeita para estabilidade:
+- navegação por bigrama
+- PWA com instalação obrigatória
+- mensagens e confirmações no padrão do app
+- importação por merge com tela de conflito lado a lado
+- relatório de importação em modal
+- logo corrigida
 
 Publicação:
 1. apague todos os arquivos antigos do repositório
@@ -13,6 +15,3 @@ Publicação:
 4. remova o app antigo do celular
 5. abra o link em aba anônima se necessário
 6. instale novamente
-
-
-V20: corrigido Word do Livro Histórico para DOCX nativo com margens A4 e assinaturas em rodapé real, lado a lado. Pedido de Serviço mantido para etapa seguinte.
