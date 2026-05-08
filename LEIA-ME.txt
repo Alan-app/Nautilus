@@ -1,0 +1,16 @@
+VERSÃO v09 - correção teclado Uber/99
+
+O QUE FOI PEDIDO:
+- Restaurar os botões Uber e 99 do teclado virtual do botão flutuante.
+
+O QUE FOI FEITO:
+- Corrigido CSS que escondia os botões.
+- Restaurada exibição dos cards Uber e 99.
+- Mantida a lógica existente de saldo separado.
+
+O QUE NÃO FOI ALTERADO:
+- Virada das 4h
+- Metas
+- Sincronismo
+- Login
+- Admin

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaDriver v06 · admin</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg:#0f172a;
+  --card:#111827;
+  --card2:#0b1220;
+  --line:#2b3648;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --blue:#2563eb;
+  --green:#16a34a;
+  --red:#dc2626;
+  --gray:#334155;
+}
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; }
+body { padding:16px; }
+.wrap { max-width:980px; margin:0 auto; }
+.card {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+  overflow:hidden;
+}
+h1 { margin:0 0 10px 0; font-size:24px; line-height:1.15; }
+.subtle, .whoami, .note { color:var(--muted); font-size:12px; line-height:1.4; }
+input {
+  width:100%;
+  padding:12px 14px;
+  margin-top:10px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#08111f;
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+.row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+.row > * { flex:1 1 0; min-width:0; }
+button {
+  padding:11px 14px;
+  cursor:pointer;
+  border-radius:12px;
+  border:none;
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+}
+.primary { background:var(--blue); }
+.success { background:var(--green); }
+.danger { background:var(--red); }
+.secondary { background:var(--gray); }
+#msg {
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:12px;
+  display:none;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  line-height:1.4;
+  font-size:13px;
+}
+.hidden { display:none !important; }
+
+.topbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.top-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0,1fr));
+  gap:12px;
+}
+.stat {
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+}
+.stat .label { font-size:12px; color:var(--muted); }
+.stat .value { font-size:24px; font-weight:700; margin-top:8px; }
+
+.toolbar {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.search { flex:1 1 260px; min-width:220px; margin-top:0; }
+
+.list {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.user-card {
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--card2);
+  overflow:hidden;
+}
+.user-summary {
+  display:grid;
+  grid-template-columns: 38px 1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:12px 14px;
+  cursor:pointer;
+}
+.chevron {
+  width:30px;
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:#172033;
+  font-size:16px;
+  user-select:none;
+}
+.user-name {
+  font-size:15px;
+  font-weight:700;
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.badge {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:86px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  background:var(--card);
+  white-space:nowrap;
+}
+.badge.trial { color:#fde68a; }
+.badge.active { color:#86efac; }
+.badge.blocked { color:#fca5a5; }
+
+.user-details {
+  border-top:1px solid var(--line);
+  padding:14px;
+  background:rgba(0,0,0,.08);
+}
+.details-grid {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:12px;
+  margin-bottom:12px;
+}
+.detail-box {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+  min-width:0;
+}
+.detail-label {
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:6px;
+}
+.detail-value {
+  font-size:13px;
+  line-height:1.35;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+.actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.note { margin-top:8px; }
+
+@media (max-width: 860px) {
+  .stats { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .details-grid { grid-template-columns:1fr; }
+}
+@media (max-width: 640px) {
+  body { padding:12px; }
+  .card { padding:14px; }
+  h1 { font-size:21px; }
+  .user-summary { grid-template-columns:34px 1fr; }
+  .user-summary .badge { grid-column:2; justify-self:start; }
+}
+
+.version-debug-badge{
+  position:fixed;
+  right:10px;
+  bottom:10px;
+  z-index:2147483647;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,23,42,.88);
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.2px;
+  opacity:.95;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Admin - MetaDriver</h1>
+    <div class="subtle">Entre com seu email administrador.</div>
+    <input id="email" type="email" placeholder="email admin">
+    <input id="pass" type="password" placeholder="senha">
+    <div class="row">
+      <button class="primary" id="loginBtn" type="button">Entrar</button>
+      <button class="secondary" id="logoutBtn1" type="button">Sair</button>
+    </div>
+    <div id="msg"></div>
+  </div>
+
+  <div class="card hidden" id="adminCard">
+    <div class="topbar">
+      <div>
+        <h1 style="margin:0 0 6px 0;">Painel Admin</h1>
+        <div class="whoami" id="whoami">-</div>
+      </div>
+      <div class="top-actions">
+        <button class="secondary" id="reloadBtn" type="button">Atualizar</button>
+        <button class="danger" id="logoutBtn2" type="button">Sair</button>
+      </div>
+    </div>
+    <div class="note">Na lista principal aparece só nome e status. Toque no triângulo para expandir e ver o restante.</div>
+  </div>
+
+  <div class="card hidden" id="statsCard">
+    <div class="stats">
+      <div class="stat"><div class="label">Total</div><div class="value" id="statTotal">0</div></div>
+      <div class="stat"><div class="label">Em teste</div><div class="value" id="statTrial">0</div></div>
+      <div class="stat"><div class="label">Ativos</div><div class="value" id="statActive">0</div></div>
+      <div class="stat"><div class="label">Bloqueados</div><div class="value" id="statBlocked">0</div></div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="listCard">
+    <div class="toolbar">
+      <input id="search" class="search" type="text" placeholder="Buscar por nome, email ou user_id">
+    </div>
+    <div id="userList" class="list"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://xoqlgwjpmdkiazwpwhmn.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcWxnd2pwbWRraWF6d3B3aG1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NjY1OTksImV4cCI6MjA4NzU0MjU5OX0.txohC3MvvEDaCCVRouVPDrmVaAO1PJxY0LawUttj9PA';
+let allUsers = [];
+
+function $(id) { return document.getElementById(id); }
+function showMsg(text) {
+  const el = $("msg");
+  el.style.display = "block";
+  el.textContent = text;
+}
+function hideMsg() {
+  const el = $("msg");
+  el.style.display = "none";
+  el.textContent = "";
+}
+function saveSession(data) {
+  localStorage.setItem("admin_sb_token", data.access_token || "");
+  localStorage.setItem("admin_sb_refresh_token", data.refresh_token || "");
+  localStorage.setItem("admin_sb_expires_at", String(data.expires_at || 0));
+}
+function clearSession() {
+  localStorage.removeItem("admin_sb_token");
+  localStorage.removeItem("admin_sb_refresh_token");
+  localStorage.removeItem("admin_sb_expires_at");
+}
+function getToken() { return localStorage.getItem("admin_sb_token") || ""; }
+function setLoggedIn(logged) {
+  $("adminCard").classList.toggle("hidden", !logged);
+  $("statsCard").classList.toggle("hidden", !logged);
+  $("listCard").classList.toggle("hidden", !logged);
+}
+function fmtDate(v) {
+  if(!v) return "-";
+  try { return new Date(v).toLocaleString("pt-BR"); } catch(e) { return v; }
+}
+async function api(path, method, body, token, extraHeaders) {
+  const headers = Object.assign({
+    "apikey": SUPABASE_KEY,
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + (token || SUPABASE_KEY)
+  }, extraHeaders || {});
+  const res = await fetch(SUPABASE_URL + path, {
+    method: method || "GET",
+    headers,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch(e) { data = { raw:text }; }
+  if(!res.ok){
+    throw new Error((data && (data.message || data.error || data.msg || data.error_description)) || ("HTTP " + res.status));
+  }
+  return data;
+}
+async function login() {
+  hideMsg();
+  const email = $("email").value.trim();
+  const pass = $("pass").value.trim();
+  if(!email || !pass) { showMsg("Preencha email e senha."); return; }
+  try {
+    const data = await api("/auth/v1/token?grant_type=password", "POST", { email, password: pass });
+    if(!data.access_token) throw new Error("Login falhou.");
+    saveSession(data);
+    await initAdmin();
+  } catch(e) {
+    showMsg(e.message || "Erro no login.");
+  }
+}
+async function fetchUsers() {
+  const token = getToken();
+  const data = await api("/rest/v1/user_access?select=*", "GET", null, token, { "Accept":"application/json" });
+  return Array.isArray(data) ? data : [];
+}
+async function getMe() {
+  const token = getToken();
+  return await api("/auth/v1/user", "GET", null, token);
+}
+async function liberar(id) {
+  const token = getToken();
+  await api("/rest/v1/user_access?user_id=eq." + encodeURIComponent(id), "PATCH", { status:"active" }, token, { "Prefer":"return=minimal" });
+  await loadUsers();
+}
+async function bloquear(id) {
+  const token = getToken();
+  await api("/rest/v1/user_access?user_id=eq." + encodeURIComponent(id), "PATCH", { status:"blocked" }, token, { "Prefer":"return=minimal" });
+  await loadUsers();
+}
+async function resetTrial(id) {
+  const token = getToken();
+  const now = new Date();
+  const end = new Date(now.getTime() + 7*24*60*60*1000).toISOString();
+  await api("/rest/v1/user_access?user_id=eq." + encodeURIComponent(id), "PATCH", {
+    status:"trial",
+    trial_start: now.toISOString(),
+    trial_end: end
+  }, token, { "Prefer":"return=minimal" });
+  await loadUsers();
+}
+function updateStats(users) {
+  $("statTotal").textContent = users.length;
+  $("statTrial").textContent = users.filter(u => (u.status || "") === "trial").length;
+  $("statActive").textContent = users.filter(u => (u.status || "") === "active").length;
+  $("statBlocked").textContent = users.filter(u => (u.status || "") === "blocked").length;
+}
+function renderUsers(users) {
+  const list = $("userList");
+  list.innerHTML = "";
+  users.forEach(function(u, idx) {
+    const name = u.nome || "-";
+    const email = u.email || "-";
+    const userId = u.user_id || "-";
+    const status = (u.status || "-").toLowerCase();
+    const detailsId = "details-" + idx + "-" + (u.user_id || "x");
+    const card = document.createElement("div");
+    card.className = "user-card";
+    card.innerHTML = `
+      <div class="user-summary" data-toggle="${detailsId}">
+        <div class="chevron" id="icon-${detailsId}">▸</div>
+        <div class="user-name" title="${name}">${name}</div>
+        <div><span class="badge ${status}">${u.status || "-"}</span></div>
+      </div>
+      <div class="user-details hidden" id="${detailsId}">
+        <div class="details-grid">
+          <div class="detail-box">
+            <div class="detail-label">Email</div>
+            <div class="detail-value">${email}</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-label">User ID</div>
+            <div class="detail-value">${userId}</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-label">Criado em</div>
+            <div class="detail-value">${fmtDate(u.created_at)}</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-label">Fim do teste</div>
+            <div class="detail-value">${fmtDate(u.trial_end)}</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="success" type="button" data-action="liberar" data-id="${u.user_id}">Liberar</button>
+          <button class="danger" type="button" data-action="bloquear" data-id="${u.user_id}">Bloquear</button>
+          <button class="secondary" type="button" data-action="trial" data-id="${u.user_id}">Resetar trial</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+function applyFilter() {
+  const q = ($("search").value || "").trim().toLowerCase();
+  if(!q) {
+    renderUsers(allUsers);
+    return;
+  }
+  const filtered = allUsers.filter(function(u) {
+    const txt = ((u.nome || "") + " " + (u.email || "") + " " + (u.user_id || "")).toLowerCase();
+    return txt.includes(q);
+  });
+  renderUsers(filtered);
+}
+async function loadUsers() {
+  try {
+    allUsers = await fetchUsers();
+    updateStats(allUsers);
+    applyFilter();
+  } catch(e) {
+    showMsg("Admin sem acesso: " + (e.message || "erro"));
+  }
+}
+async function initAdmin() {
+  const token = getToken();
+  if(!token) {
+    setLoggedIn(false);
+    return;
+  }
+  try {
+    const me = await getMe();
+    $("whoami").textContent = me.email || "";
+    setLoggedIn(true);
+    await loadUsers();
+  } catch(e) {
+    clearSession();
+    setLoggedIn(false);
+    showMsg("Sessão inválida.");
+  }
+}
+
+document.addEventListener("click", async function(e) {
+  const toggle = e.target.closest("[data-toggle]");
+  if(toggle) {
+    const id = toggle.getAttribute("data-toggle");
+    const box = document.getElementById(id);
+    const icon = document.getElementById("icon-" + id);
+    const open = box.classList.contains("hidden");
+    box.classList.toggle("hidden", !open);
+    if(icon) icon.textContent = open ? "▾" : "▸";
+    return;
+  }
+
+  const btn = e.target.closest("button[data-action]");
+  if(!btn) return;
+  const id = btn.getAttribute("data-id");
+  const action = btn.getAttribute("data-action");
+  try {
+    if(action === "liberar") await liberar(id);
+    if(action === "bloquear") await bloquear(id);
+    if(action === "trial") await resetTrial(id);
+  } catch(err) {
+    showMsg(err.message || "Erro ao atualizar usuário.");
+  }
+});
+
+$("loginBtn").addEventListener("click", login, true);
+$("reloadBtn").addEventListener("click", loadUsers, true);
+$("search").addEventListener("input", applyFilter, true);
+$("logoutBtn1").addEventListener("click", function(){ clearSession(); location.reload(); }, true);
+$("logoutBtn2").addEventListener("click", function(){ clearSession(); location.reload(); }, true);
+initAdmin();
+</script>
+
+
+
+<script>
+(function(){
+  const fab=document.getElementById("quickBalanceFab");
+  if(!fab) return;
+
+  let startX=0, startY=0, offsetX=0, offsetY=0, isDragging=false, moved=false;
+  let idleTimer=null;
+
+  function clamp(val,min,max){ return Math.max(min, Math.min(val,max)); }
+
+  function clearIdleTimer(){
+    if(idleTimer){
+      clearTimeout(idleTimer);
+      idleTimer=null;
+    }
+  }
+
+  function scheduleIdleFade(){
+    clearIdleTimer();
+    if(dados && dados.saldoAtualButtonAtivo === false) return;
+    idleTimer = setTimeout(function(){
+      fab.classList.add("idle-faded");
+    }, 1800);
+  }
+
+  function wakeFab(){
+    clearIdleTimer();
+    fab.classList.remove("idle-faded");
+  }
+
+  function applyFabVisibility(){
+    const hidden = !!(dados && dados.saldoAtualButtonAtivo === false);
+    fab.classList.toggle("hidden", hidden);
+    if(hidden){
+      clearIdleTimer();
+      fab.classList.remove("idle-faded");
+    }else{
+      scheduleIdleFade();
+    }
+  }
+
+  function applyFabPosition(){
+    if(dados && dados.saldoAtualButtonPos && typeof dados.saldoAtualButtonPos.x === "number" && typeof dados.saldoAtualButtonPos.y === "number"){
+      fab.style.left = dados.saldoAtualButtonPos.x + "px";
+      fab.style.top = dados.saldoAtualButtonPos.y + "px";
+      fab.style.transform = "none";
+    }else{
+      fab.style.left = "50%";
+      fab.style.top = "70%";
+      fab.style.transform = "translate(-50%, -50%)";
+    }
+  }
+
+  window.applyFabVisibility = applyFabVisibility;
+  window.applyFabPosition = applyFabPosition;
+
+  function saveFabPosition(x,y){
+    if(!window.dados) return;
+    dados.saldoAtualButtonPos = { x:x, y:y };
+    if(typeof salvar === "function") salvar();
+  }
+
+  function snapToEdge(x,y){
+    const maxX = window.innerWidth - fab.offsetWidth;
+    const maxY = window.innerHeight - fab.offsetHeight;
+    const snappedX = (x + fab.offsetWidth/2 < window.innerWidth/2) ? 12 : Math.max(12, maxX - 12);
+    const snappedY = clamp(y, 12, Math.max(12, maxY - 12));
+    fab.style.left = snappedX + "px";
+    fab.style.top = snappedY + "px";
+    fab.style.transform = "none";
+    saveFabPosition(snappedX, snappedY);
+  }
+
+  function getClient(e){
+    return e.touches ? {x:e.touches[0].clientX, y:e.touches[0].clientY} : {x:e.clientX, y:e.clientY};
+  }
+
+  fab.addEventListener("touchstart",startDrag,{passive:false});
+  fab.addEventListener("mousedown",startDrag);
+  fab.addEventListener("click", function(e){
+    wakeFab();
+    scheduleIdleFade();
+    if(moved){
+      e.preventDefault();
+      e.stopPropagation();
+      moved = false;
+    }
+  }, true);
+
+  fab.addEventListener("touchend", function(){ wakeFab(); scheduleIdleFade(); }, {passive:true});
+  fab.addEventListener("mouseenter", wakeFab);
+  fab.addEventListener("mouseleave", scheduleIdleFade);
+
+  function startDrag(e){
+    if(dados && dados.saldoAtualButtonAtivo === false) return;
+    wakeFab();
+    const rect=fab.getBoundingClientRect();
+    const client=getClient(e);
+    startX = client.x;
+    startY = client.y;
+    offsetX=client.x-rect.left;
+    offsetY=client.y-rect.top;
+    isDragging=true;
+    moved=false;
+
+    document.addEventListener("touchmove",onDrag,{passive:false});
+    document.addEventListener("mousemove",onDrag);
+    document.addEventListener("touchend",endDrag);
+    document.addEventListener("mouseup",endDrag);
+  }
+
+  function onDrag(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    const client=getClient(e);
+    const dx=Math.abs(client.x - startX);
+    const dy=Math.abs(client.y - startY);
+    if(dx > 4 || dy > 4) moved = true;
+
+    let x=client.x-offsetX;
+    let y=client.y-offsetY;
+
+    const maxX=window.innerWidth - fab.offsetWidth;
+    const maxY=window.innerHeight - fab.offsetHeight;
+
+    x=clamp(x, 0, maxX);
+    y=clamp(y, 0, maxY);
+
+    fab.style.left=x+"px";
+    fab.style.top=y+"px";
+    fab.style.transform="none";
+  }
+
+  function endDrag(){
+    if(!isDragging) return;
+    isDragging=false;
+    document.removeEventListener("touchmove",onDrag);
+    document.removeEventListener("mousemove",onDrag);
+    document.removeEventListener("touchend",endDrag);
+    document.removeEventListener("mouseup",endDrag);
+
+    const rect = fab.getBoundingClientRect();
+    if(moved){
+      snapToEdge(rect.left, rect.top);
+      setTimeout(()=>{ moved = false; }, 50);
+    }
+    scheduleIdleFade();
+  }
+
+  window.addEventListener("resize", function(){
+    const rect = fab.getBoundingClientRect();
+    if(fab.style.transform === "none"){
+      const maxX=window.innerWidth - fab.offsetWidth;
+      const maxY=window.innerHeight - fab.offsetHeight;
+      const x=clamp(rect.left, 0, maxX);
+      const y=clamp(rect.top, 0, maxY);
+      fab.style.left=x+"px";
+      fab.style.top=y+"px";
+      saveFabPosition(x,y);
+    }
+  });
+
+  setTimeout(function(){
+    applyFabVisibility();
+    applyFabPosition();
+    scheduleIdleFade();
+  }, 50);
+})();
+</script>
+
+<div class="version-debug-badge" id="versionDebugBadge">MetaDriver v06 · admin</div>
+</body>
+</html>
