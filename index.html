@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Livro Histórico</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#012544">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Livro Histórico">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#031522 0%,#031b2f 100%);font-family:Arial,Helvetica,sans-serif;color:#fff;padding:20px}
+.wrap{width:min(420px,100%);text-align:center}
+.panel{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:24px;padding:24px 20px;box-shadow:0 18px 40px rgba(0,0,0,.34)}
+.logo-img{width:120px;height:120px;object-fit:contain;border-radius:28px;margin:0 auto 18px;display:block;box-shadow:0 10px 28px rgba(0,0,0,.30)}
+.title{font-size:28px;font-weight:800;margin-bottom:10px;letter-spacing:.03em}
+.sub{opacity:.9;line-height:1.45;margin-bottom:18px;font-size:14px}
+button{width:100%;padding:14px 16px;border:none;border-radius:14px;font:inherit;font-weight:700;background:#f0c419;color:#0b1220}
+.note{margin-top:12px;font-size:12px;opacity:.82;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel">
+    <img class="logo-img" src="icon-512.png" alt="Logo Livro Histórico">
+    <div class="title">Livro Histórico</div>
+    <div class="sub" id="subText">Instale o aplicativo para usar da forma correta.</div>
+    <button id="installBtn" type="button">Instalar aplicativo</button>
+    <div class="note" id="noteText">O uso pelo navegador fica bloqueado. Depois de instalar, abra pelo ícone do app.</div>
+  </div>
+</div>
+<script>
+let deferredPrompt=null;
+function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+function isSafari(){ return /^((?!chrome|android).)*safari/i.test(navigator.userAgent); }
+function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone; }
+if (isStandalone()) location.replace('app.html');
+window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt=e; });
+window.addEventListener('appinstalled', function(){ deferredPrompt=null; document.getElementById('subText').textContent='Aplicativo instalado com sucesso. Agora abra pelo ícone instalado.'; document.getElementById('noteText').textContent='Feche o navegador e use somente o app instalado.'; document.getElementById('installBtn').style.display='none'; });
+document.getElementById('installBtn').addEventListener('click', async function(){
+  if (deferredPrompt) { deferredPrompt.prompt(); try { await deferredPrompt.userChoice; } catch(e) {} return; }
+  if (isIOS() && isSafari()) { document.getElementById('subText').textContent='No iPhone, use o menu Compartilhar do Safari e depois “Adicionar à Tela de Início”.'; document.getElementById('noteText').textContent='Depois de instalar, abra somente pelo ícone do app.'; return; }
+}, true);
+if ('serviceWorker' in navigator) window.addEventListener('load', function(){ navigator.serviceWorker.register('./service-worker.js').catch(console.error); });
+</script>
+</body>
+</html>

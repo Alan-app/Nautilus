@@ -1,0 +1,4104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Livro Histórico</title>
+  <meta name="theme-color" content="#012544" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Livro Histórico" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <style>
+    :root{
+      --bg:#031522; --bg2:#031b2f; --nav:#032547; --card:#0b4c95; --card2:#355f97; --card3:#59657a;
+      --panel:#183c6b; --line:#2d5b90; --gold:#f0c419; --text:#f3f7fb; --muted:#c3cfdd;
+      --success:#66d58a; --danger:#ff8f8f; --shadow:0 18px 40px rgba(0,0,0,.34);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+    body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);color:var(--text);min-height:100vh}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}
+    .app{max-width:720px;width:100%;margin:0 auto;min-height:100vh;background:linear-gradient(180deg, rgba(1,28,51,.96), rgba(2,23,42,.98));overflow-x:hidden}
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(180deg,var(--nav) 0%, #03203d 100%);border-bottom:1px solid rgba(255,255,255,.14);padding:16px}
+    .topbar-main{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px}
+    .topbtn{width:40px;height:40px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);color:#fff;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
+    .ghost{visibility:hidden}
+    .brand{text-align:center;min-width:0}
+    .brand h1{margin:0;font-size:2rem;letter-spacing:.08em;text-transform:uppercase}
+    .brand p{margin:8px 0 0;color:var(--muted);font-size:1rem;line-height:1.25}
+    .gold-line{position:fixed;left:0;right:0;height:4px;background:var(--gold);z-index:1001}
+    .content{padding:22px 16px 90px;max-width:100%;overflow-x:hidden}
+    .hidden{display:none !important}
+    .section{display:grid;gap:12px}
+    .banner{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);line-height:1.45;color:#d9e5f2}
+    .folder-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:18px}
+    .folder-btn{border:none;background:transparent;color:#fff;text-align:center;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .folder-icon{width:100%;aspect-ratio:1 / 0.9;border-radius:24px;background:linear-gradient(180deg,#f7c84a 0%, #e6ad18 100%);position:relative;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.16);max-width:220px}
+    .folder-icon::before{content:"";position:absolute;left:10%;top:-10%;width:38%;height:24%;background:linear-gradient(180deg,#f6d16a 0%, #efbe36 100%);border-radius:18px 18px 0 0;border:1px solid rgba(255,255,255,.16);border-bottom:none}
+    .folder-icon::after{content:"";position:absolute;inset:16% 7% 8% 7%;border-radius:18px;background:linear-gradient(180deg,#f4ca53 0%, #dd9f11 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+    .folder-paw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.2rem;z-index:2}
+    .folder-label{font-size:1.1rem;font-weight:800;color:#fff;line-height:1.05;margin-top:0}
+    .folder-sub{font-size:.92rem;color:var(--muted);line-height:1.05;margin-top:-4px;min-height:2.25em;display:block}
+    .menu-grid{display:grid;gap:16px}
+    .menu-card{background:linear-gradient(180deg,var(--card) 0%, #083f7a 100%);border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;padding-bottom:20px;text-align:left;color:#fff;border:none;min-height:88px}
+    .menu-card.secondary{background:linear-gradient(180deg,var(--card2) 0%, #315688 100%)}
+    .menu-card.tertiary{background:linear-gradient(180deg,var(--card3) 0%, #4e586c 100%)}
+    .menu-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--gold)}
+    .menu-icon{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex:0 0 auto}
+    .menu-text h2{margin:0;font-size:1.22rem;color:#fff;line-height:1.12}
+    .menu-text p{margin:4px 0 0;color:#d6e1ee;font-size:.9rem;line-height:1.2}
+    .card{width:100%;max-width:100%;overflow:hidden;padding-bottom:20px;background:linear-gradient(180deg, rgba(24,60,107,.98), rgba(18,52,92,.98));border-radius:22px;padding:16px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08)}
+    .card h2,.card h3{margin:0 0 8px}
+    .card p{margin:0;color:var(--muted)}
+    .field{display:grid;gap:6px}
+    .field label{font-weight:800}
+    .grid-2{display:grid;gap:14px;grid-template-columns:1fr}
+    @media(min-width:560px){.grid-2{grid-template-columns:1fr 1fr}}
+    input,select,textarea{width:100%;background:#203f70;border:1px solid rgba(255,255,255,.12);color:var(--text);border-radius:16px;padding:14px;min-height:52px;outline:none}
+    textarea{min-height:130px;resize:vertical;line-height:1.45}
+    input::placeholder,textarea::placeholder{color:#9bb0c8}
+    input:focus,select:focus,textarea:focus{border-color:#8dc5ff;box-shadow:0 0 0 3px rgba(105,183,255,.15)}
+    .btn{border:none;border-radius:18px;padding:14px 16px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;min-height:52px}
+    .btn-primary{background:#0c4d96;color:#fff}
+    .btn-secondary{background:#476997;color:#fff}
+    .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.12)}
+    .btn-row{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:560px){.btn-row{grid-template-columns:1fr 1fr}}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.08);color:#eaf3ff;font-weight:700;font-size:.88rem;border:1px solid rgba(255,255,255,.08)}
+    .status-msg{min-height:1.2em;color:var(--success);font-weight:700}
+    .record-list{display:grid;gap:16px}
+    .record-card{background:linear-gradient(180deg, rgba(31,67,116,.98), rgba(28,63,109,.98));border-radius:22px;padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden;padding-bottom:20px;border:1px solid rgba(255,255,255,.08)}
+    .record-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--gold)}
+    .record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .record-head-left{display:flex;align-items:flex-start;gap:12px;min-width:0}
+    .sigla{min-width:58px;height:52px;border-radius:14px;background:#114d97;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;flex:0 0 auto}
+    .record-title .date{font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:6px}
+    .record-title .meta{display:flex;gap:8px;flex-wrap:wrap}
+    .record-actions{display:grid;grid-template-columns:repeat(2,42px);gap:10px}
+    .icon-btn{width:42px;height:42px;border:none;border-radius:12px;background:rgba(255,255,255,.09);color:#fff;font-size:1.12rem;display:flex;align-items:center;justify-content:center}
+    .icon-btn.view{color:#7dc4ff}.icon-btn.edit{color:#7fe38b}.icon-btn.done{color:#5ade84}.icon-btn.delete{color:#ff9292}
+    .record-body{margin-top:16px;display:grid;gap:10px}
+    .label-block b{display:block;margin-bottom:4px}
+    .attachment-box{display:grid;gap:10px}
+    .attachment-preview-wrap{display:flex;gap:10px;flex-wrap:wrap}
+    .attachment-thumb{
+      width:92px;height:92px;border-radius:14px;object-fit:cover;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06)
+    }
+    .thumb-btn{border:none;background:transparent;padding:0;cursor:pointer}
+    .attachment-chip{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);font-size:.88rem
+    }
+    .gallery-grid{display:flex;gap:10px;flex-wrap:wrap}
+    .gallery-item{display:grid;gap:6px}
+    .gallery-label{font-size:.82rem;color:var(--muted)}    .status-open{color:#ffd976}.status-closed{color:#7cf09a}
+    .empty{padding:26px 16px;border-radius:18px;background:rgba(255,255,255,.05);text-align:center;color:var(--muted);border:1px dashed rgba(255,255,255,.14)}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+    #appConfirmModal{z-index:1200}
+    #appMessageModal{z-index:1150}
+    .modal-overlay.show{display:flex}
+    .modal-box{width:min(560px,100%);max-height:90vh;overflow:auto;background:linear-gradient(180deg, rgba(24,60,107,.99), rgba(18,52,92,.99));border:1px solid rgba(255,255,255,.12);border-radius:22px;box-shadow:var(--shadow);padding:18px}
+    .modal-box h3{margin:0 0 10px;font-size:1.2rem}
+    .modal-box p{margin:0 0 16px;color:var(--muted);line-height:1.45;white-space:pre-line}
+    .modal-actions{display:grid;gap:10px;grid-template-columns:1fr}
+    @media(min-width:560px){.modal-actions{grid-template-columns:1fr 1fr}}
+    .report-list,.conflict-grid{display:grid;gap:10px;margin-top:10px}
+    .report-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);color:#f3f7fb;font-weight:700}
+    .report-item span:last-child{color:#f0c419;font-size:1.05rem}
+    .conflict-grid{grid-template-columns:1fr}
+    @media(min-width:700px){.conflict-grid{grid-template-columns:1fr 1fr}}
+    .conflict-col{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px}
+    .conflict-col h4{margin:0 0 10px;font-size:1rem;color:#fff}
+    .conflict-field{margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .conflict-field:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+    .conflict-field b{display:block;margin-bottom:4px;color:#fff}
+    .conflict-diff{outline:2px solid rgba(240,196,25,.75);border-radius:10px;padding:6px 8px;background:rgba(240,196,25,.08)}
+    .chip-toggle{cursor:pointer;border:none;transition:background .15s,color .15s;}
+    .chip-toggle.active{background:var(--gold);color:#0b1220;}
+    .bigrama-list{display:grid;gap:10px;}
+    .bigrama-list-btn{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,var(--card) 0%,#083f7a 100%);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px 16px;color:#fff;text-align:left;box-shadow:var(--shadow);position:relative;overflow:hidden;padding-bottom:20px;}
+    .hours-list{ display:grid; gap:0; }
+    .hours-table-header{
+      display:grid; grid-template-columns:1fr 110px 70px;
+      padding:8px 10px; border-radius:12px 12px 0 0;
+      background:rgba(240,196,25,.12); border:1px solid rgba(240,196,25,.2);
+      font-size:.82rem; font-weight:800; color:var(--gold); letter-spacing:.04em; text-transform:uppercase;
+    }
+    .hours-table-header span:not(:first-child){ text-align:center; }
+    .hours-table-row{
+      display:grid; grid-template-columns:1fr 110px 70px;
+      align-items:center; gap:0;
+      padding:10px;
+      background:linear-gradient(180deg,rgba(31,67,116,.98),rgba(28,63,109,.98));
+      border:1px solid rgba(255,255,255,.07); border-top:none;
+      transition:background .15s;
+    }
+    .hours-table-row:last-child{ border-radius:0 0 16px 16px; }
+    .hours-table-row:hover{ background:rgba(40,80,135,.98); }
+    .hours-col-nome{ font-weight:800; font-size:.97rem; color:#fff; }
+    .hours-col-horas{
+      text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .hours-col-horas input{
+      width:58px; text-align:center; padding:6px 4px; min-height:34px;
+      border-radius:10px; font-size:.95rem; font-weight:800;
+    }
+    .hours-col-horas .btn-save-h{
+      width:34px; height:34px; min-height:unset; border-radius:10px; padding:0;
+      font-size:1rem; display:flex; align-items:center; justify-content:center;
+      background:#0c4d96; color:#fff; border:none; cursor:pointer; flex:0 0 auto;
+    }
+    .hours-col-horas .btn-save-h:active{ background:#083f7a; }
+    .hours-col-data{ text-align:center; font-size:.78rem; color:var(--muted); word-break:break-word; line-height:1.3; }
+    .bigrama-list-btn::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gold);}
+    .bigrama-list-sigla{min-width:52px;height:48px;border-radius:12px;background:#114d97;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;flex:0 0 auto;}
+    .bigrama-list-info{display:flex;flex-direction:column;gap:2px;}
+    .bigrama-list-nome{font-size:1.05rem;font-weight:800;}
+    .bigrama-list-sub{font-size:.88rem;color:var(--muted);}
+    .home-controls{
+      display:grid;
+      gap:14px;
+    }
+    .home-control-group{
+      display:grid;
+      gap:8px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .home-control-label{
+      font-size:.92rem;
+      font-weight:800;
+      color:#fff;
+    }
+    .home-control-buttons{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .menu-list{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+    .menu-item{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 4px;
+      background:transparent;
+      color:#fff;
+      border:none;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      border-radius:0;
+      text-align:left;
+      font-weight:700;
+      min-height:auto;
+      text-transform:none;
+      letter-spacing:0;
+    }
+    .menu-item:last-child{
+      border-bottom:none;
+    }
+    .menu-item .menu-item-label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .menu-item .menu-item-arrow{
+      color:var(--muted);
+      font-size:1.1rem;
+    }
+    .submenu-panel{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      display:grid;
+      gap:12px;
+    }
+    .submenu-title{
+      font-weight:800;
+      color:#fff;
+      font-size:.95rem;
+    }
+
+    .official-sheet{background:#fff;color:#111;padding:18mm 12mm 18mm 12mm;width:210mm;min-height:297mm;margin:0 auto 18px;box-shadow:0 10px 25px rgba(0,0,0,.28);page-break-after:always;font-family:"Times New Roman", Times, serif;position:relative}
+    .sheet-top-right{text-align:right;font-size:11pt;line-height:1.2;margin-bottom:8px}
+    .page-code{text-align:center;font-size:12pt;margin:10px 0;letter-spacing:.16em}
+    .doc-title-table,.meta-table,.hist-table{width:100%;border-collapse:collapse;table-layout:fixed}
+    .doc-title-table td,.meta-table td,.hist-table td,.hist-table th{border:1px solid #2b2b2b;padding:5px 7px;vertical-align:top;font-size:10.5pt}
+    .doc-title{font-weight:700;font-size:13pt!important;text-align:center;line-height:1.15}
+    .box-label{font-weight:700}
+    .hist-table th{font-weight:700;text-align:center;background:#f2f2f2;vertical-align:middle}
+    .left-col{width:30%;text-align:center;vertical-align:middle!important;font-size:10.5pt;padding:10px 6px!important}
+    .right-col{width:70%;padding:10px!important}
+    .rh-block{line-height:1.35;min-height:84px}
+    .signature-bar{position:absolute;left:12mm;right:12mm;bottom:10mm;display:flex;justify-content:space-between;align-items:flex-end;gap:20mm}
+    .signature-box{width:44%;text-align:center;font-size:10pt}
+    .signature-line{border-top:1px solid #222;margin-bottom:4px;height:0}
+    .print-note{font-size:.92rem;line-height:1.45;color:var(--muted)}
+    @media(max-width:900px){.official-sheet{width:100%;min-height:auto;padding:16px}.signature-bar{position:static;margin-top:18px}}
+    @media print{
+      body{background:#fff}
+      .topbar,.gold-line,.content > :not(.print-zone), .modal-overlay{display:none!important}
+      .content{padding:0}
+      .print-zone{display:block!important}
+      .official-sheet{margin:0;box-shadow:none;width:210mm;min-height:297mm}
+    }
+  
+    .report-list{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .report-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:#f3f7fb;
+      font-weight:700;
+    }
+    .report-item span:last-child{color:#f0c419;font-size:1.05rem;}
+    .conflict-grid{display:grid;gap:12px;grid-template-columns:1fr;margin-top:10px;}
+    @media(min-width:700px){.conflict-grid{grid-template-columns:1fr 1fr;}}
+    .conflict-col{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px;}
+    .conflict-col h4{margin:0 0 10px;font-size:1rem;color:#fff;}
+    .conflict-field{margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08);}
+    .conflict-field:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+    .conflict-field b{display:block;margin-bottom:4px;color:#fff;}
+    .conflict-diff{outline:2px solid rgba(240,196,25,.75);border-radius:10px;padding:6px 8px;background:rgba(240,196,25,.08);}
+    /* ── DESKTOP LAYOUT (≥ 960px) ── */
+    .desktop-sidebar{ display:none; }
+    @media(min-width:960px){
+      .topbar{left:260px;right:0;width:calc(100% - 260px);}
+      .gold-line{left:260px;right:0;width:calc(100% - 260px);}
+
+      body{ background:linear-gradient(135deg,#021220 0%,#031b2f 100%); }
+      .desktop-sidebar{
+        display:flex; flex-direction:column;
+        position:fixed; top:0; left:0; bottom:0; width:260px;
+        background:linear-gradient(180deg,#021b30 0%,#031522 100%);
+        border-right:1px solid rgba(255,255,255,.10);
+        z-index:50;
+      }
+      .sidebar-brand{ padding:24px 20px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
+      .sidebar-brand h1{ margin:0; font-size:1.05rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); }
+      .sidebar-brand p{ margin:4px 0 0; font-size:.80rem; color:var(--muted); line-height:1.3; }
+      .sidebar-gold{ height:3px; background:var(--gold); }
+      .sidebar-nav{ flex:1; padding:14px 10px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; }
+      .sidebar-nav-item{
+        display:flex; align-items:center; gap:11px; padding:10px 13px;
+        border-radius:13px; border:none; background:transparent; color:var(--muted);
+        font-size:.95rem; font-weight:700; text-align:left; cursor:pointer;
+        transition:background .15s,color .15s; width:100%;
+      }
+      .sidebar-nav-item:hover{ background:rgba(255,255,255,.07); color:#fff; }
+      .sidebar-nav-item.active{ background:rgba(240,196,25,.13); color:var(--gold); }
+      .sidebar-nav-item .nav-icon{ font-size:1.15rem; width:26px; text-align:center; flex:0 0 auto; }
+      .sidebar-divider{ height:1px; background:rgba(255,255,255,.07); margin:5px 2px; }
+      .sidebar-context{ padding:12px 16px; border-top:1px solid rgba(255,255,255,.08); font-size:.83rem; color:var(--muted); line-height:1.4; }
+      .sidebar-context b{ color:#fff; display:block; margin-bottom:2px; }
+      .app{ margin-left:260px; max-width:100%; }
+      .topbar{ padding:10px 24px; }
+      .topbar-main{ grid-template-columns:44px 1fr 44px; }
+      .brand h1{ font-size:1.4rem; }
+      .brand p{ font-size:.88rem; margin-top:2px; }
+      #topMenuBtn{ display:none; }
+      .content{ padding:22px 32px 60px; max-width:1060px; overflow-x:hidden; }
+      .folder-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); column-gap:22px; row-gap:18px; }
+      .menu-grid{ grid-template-columns:1fr 1fr; }
+      .grid-2{ grid-template-columns:1fr 1fr; }
+      .btn-row{ grid-template-columns:1fr 1fr; }
+      .record-actions{ grid-template-columns:repeat(4,42px); }
+      .card{width:100%;max-width:100%;overflow:hidden;padding-bottom:20px; padding:24px; }
+      .record-card{ padding:20px; }
+      #relatorioContent table td,#relatorioContent table th{ padding:10px 12px; }
+    }
+  
+    body.lock-scroll{
+      overflow:hidden;padding-bottom:20px;
+      height:100vh;
+    }
+
+
+    #mainMenuModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+
+
+    .collapsible-toggle{
+      margin-left:auto;
+      width:38px;height:38px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      flex:0 0 auto;
+    }
+    .card-head-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:space-between;
+    }
+
+
+    #historicoFiltroBody{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+    #historicoFiltroBody.hidden{
+      display:none !important;
+    }
+    #historicoFiltroBody .field{
+      gap:6px;
+      margin:0;
+    }
+    #historicoFiltroBody .grid-2{
+      gap:12px;
+      margin:0;
+    }
+    #historicoFiltroBody .toolbar{
+      margin-top:2px !important;
+      gap:10px;
+    }
+    #historicoFiltroBody label{
+      line-height:1.2;
+    }
+
+
+    #historicoFiltroBody{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+    #historicoFiltroBody.hidden{
+      display:none !important;
+    }
+    #historicoFiltroBody .field{
+      gap:4px;
+      margin:0;
+    }
+    #historicoFiltroBody .field label{
+      font-size:.92rem;
+      line-height:1.1;
+    }
+    #historicoFiltroBody .grid-2{
+      gap:8px;
+      margin:0;
+    }
+    #historicoFiltroBody input,
+    #historicoFiltroBody select{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:.95rem;
+    }
+    #historicoFiltroBody .toolbar{
+      margin-top:0 !important;
+      gap:8px;
+    }
+    #historicoFiltroBody .btn{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:.84rem;
+    }
+    .collapsible-toggle{
+      width:34px;
+      height:34px;
+      border-radius:10px;
+      font-size:.92rem;
+    }
+
+
+    #manageEquipModal,
+    #addEquipModal,
+    #reminderPickerModal,
+    #reminderModal,
+    #dueReminderModal,
+    #horasReminderActionModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+
+
+    #manageEquipModal .modal-box,
+    #addEquipModal .modal-box,
+    #reminderPickerModal .modal-box,
+    #reminderModal .modal-box,
+    #dueReminderModal .modal-box,
+    #horasReminderActionModal .modal-box{
+      display:flex;
+      flex-direction:column;
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 90px));
+      overflow:hidden;padding-bottom:20px;
+    }
+    #manageEquipModal .modal-box h3,
+    #addEquipModal .modal-box h3,
+    #reminderPickerModal .modal-box h3,
+    #reminderModal .modal-box h3,
+    #dueReminderModal .modal-box h3,
+    #horasReminderActionModal .modal-box h3{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:linear-gradient(180deg, rgba(24,60,107,.99), rgba(18,52,92,.99));
+      padding-bottom:8px;
+      margin-bottom:8px;
+      flex:0 0 auto;
+    }
+    #manageEquipModal .modal-box > p,
+    #addEquipModal .modal-box > p,
+    #reminderPickerModal .modal-box > p,
+    #reminderModal .modal-box > p,
+    #dueReminderModal .modal-box > p,
+    #horasReminderActionModal .modal-box > p{
+      flex:0 0 auto;
+      margin-bottom:12px;
+    }
+    #manageEquipList,
+    #reminderEquipList,
+    #dueReminderContent,
+    #horasReminderActionContent,
+    #addEquipModal form,
+    #reminderModal form{
+      flex:1 1 auto;
+      min-height:0;
+      overflow-y:auto;
+      padding-right:4px;
+    }
+    #manageEquipModal .toolbar,
+    #addEquipModal .toolbar,
+    #reminderPickerModal .toolbar,
+    #reminderModal .toolbar,
+    #dueReminderModal .toolbar,
+    #horasReminderActionModal .modal-actions,
+    #horasReminderActionModal .toolbar{
+      flex:0 0 auto;
+    }
+
+
+    #exportBackupModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+
+
+    #manageBigramasModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+    #manageBigramasModal .modal-box{
+      width:min(520px,100%);
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 90px));
+      overflow:auto;
+      padding:14px;
+      border-radius:18px;
+    }
+    #manageBigramasModal h3{
+      margin:0 0 8px;
+      font-size:1.08rem;
+    }
+    #manageBigramasModal p{
+      margin:0 0 12px;
+      font-size:.92rem;
+      line-height:1.35;
+    }
+    #manageBigramasModal .section{
+      gap:10px;
+    }
+    #manageBigramasModal .grid-2{
+      gap:10px;
+    }
+    #manageBigramasModal .field{
+      gap:4px;
+    }
+    #manageBigramasModal .field label{
+      font-size:.9rem;
+      line-height:1.1;
+    }
+    #manageBigramasModal input{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:.95rem;
+    }
+    #manageBigramasModal .btn-row{
+      gap:8px;
+    }
+    #manageBigramasModal .btn,
+    #manageBigramasModal .toolbar .btn{
+      min-height:42px;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:.82rem;
+    }
+    #manageBigramasModal #bigramaList{
+      gap:10px;
+      margin-top:4px;
+    }
+    #manageBigramasModal .record-card{
+      padding:12px 12px 14px;
+      border-radius:18px;
+    }
+    #manageBigramasModal .record-head{
+      gap:10px;
+    }
+    #manageBigramasModal .sigla{
+      min-width:48px;
+      height:44px;
+      font-size:1.25rem;
+      border-radius:12px;
+    }
+    #manageBigramasModal .record-title .date{
+      font-size:.96rem;
+      margin-bottom:4px;
+    }
+    #manageBigramasModal .record-actions{
+      grid-template-columns:repeat(2,38px);
+      gap:8px;
+    }
+    #manageBigramasModal .icon-btn{
+      width:38px;
+      height:38px;
+      border-radius:10px;
+      font-size:1rem;
+    }
+
+
+    #mainMenuModal .modal-box{
+      width:min(520px,100%);
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 90px));
+      overflow:auto;
+      padding:14px;
+      border-radius:18px;
+    }
+    #mainMenuModal h3{
+      margin:0 0 8px;
+      font-size:1.08rem;
+    }
+    #mainMenuModal p{
+      margin:0 0 12px;
+      font-size:.92rem;
+      line-height:1.35;
+    }
+    #mainMenuModal .menu-list{
+      gap:4px;
+      margin-top:4px;
+    }
+    #mainMenuModal .menu-item{
+      padding:10px 2px;
+      font-size:.95rem;
+    }
+    #mainMenuModal .submenu-panel{
+      margin-top:6px;
+      padding:10px 12px;
+      gap:10px;
+      border-radius:14px;
+    }
+    #mainMenuModal .submenu-title{
+      font-size:.9rem;
+    }
+    #mainMenuModal .home-control-buttons{
+      gap:6px;
+      margin-top:6px !important;
+    }
+    #mainMenuModal .chip{
+      padding:6px 9px;
+      font-size:.8rem;
+    }
+
+
+.topbar{
+  padding:10px 14px !important;
+}
+.topbar-title{
+  font-size:1.1rem !important;
+  line-height:1.1 !important;
+}
+
+
+    #relatorioContent{
+      width:100%;
+      max-width:100%;
+      overflow-x:auto;
+    }
+    #relatorioContent table{
+      width:100%;
+      max-width:100%;
+      table-layout:fixed;
+      border-collapse:collapse;
+    }
+    #relatorioContent th,
+    #relatorioContent td{
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      white-space:normal;
+    }
+    @media print{
+      #relatorioContent{
+        overflow:visible !important;
+      }
+      #relatorioContent table{
+        width:100% !important;
+        max-width:100% !important;
+        table-layout:fixed !important;
+      }
+      #relatorioContent th,
+      #relatorioContent td{
+        font-size:9pt !important;
+        padding:6px 8px !important;
+        word-break:break-word !important;
+        overflow-wrap:anywhere !important;
+        white-space:normal !important;
+      }
+    }
+
+
+    #screen-relatorio{
+      margin-top:0 !important;
+      padding-top:0 !important;
+    }
+    #screen-relatorio .card{
+      margin-top:0 !important;
+    }
+    #relatorioContent{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden !important;
+    }
+    #relatorioContent table{
+      width:100% !important;
+      max-width:100% !important;
+      table-layout:fixed !important;
+      border-collapse:collapse;
+    }
+    #relatorioContent th,
+    #relatorioContent td{
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      white-space:normal;
+      font-size:.92rem;
+      padding:8px 10px;
+    }
+    @media(min-width:960px){
+      #relatorioContent th,
+      #relatorioContent td{
+        padding:8px 10px !important;
+      }
+    }
+    @media print{
+      #relatorioContent{
+        overflow:visible !important;
+      }
+      #relatorioContent table{
+        width:100% !important;
+        max-width:100% !important;
+        table-layout:fixed !important;
+      }
+      #relatorioContent th,
+      #relatorioContent td{
+        font-size:8.6pt !important;
+        padding:5px 6px !important;
+        word-break:break-word !important;
+        overflow-wrap:anywhere !important;
+        white-space:normal !important;
+      }
+    }
+
+
+    #screen-relatorio .card{
+      margin-top:8px !important;
+    }
+
+    #screen-relatorio,
+    #relatorioContent,
+    #relatorioContent > div,
+    #relatorioContent .card,
+    #relatorioContent .banner{
+      max-width:100% !important;
+      overflow-x:hidden !important;
+    }
+    #relatorioContent table{
+      width:100% !important;
+      max-width:100% !important;
+      table-layout:fixed !important;
+      border-collapse:collapse !important;
+    }
+    #relatorioContent th,
+    #relatorioContent td{
+      max-width:0;
+      white-space:normal !important;
+      word-break:break-word !important;
+      overflow-wrap:anywhere !important;
+    }
+
+
+#relatorioContent table{
+  table-layout:auto !important;
+}
+#relatorioContent th:nth-child(1),
+#relatorioContent td:nth-child(1){
+  width:80px;
+  white-space:nowrap;
+}
+#relatorioContent th:nth-child(2),
+#relatorioContent td:nth-child(2){
+  width:45%;
+  white-space:normal;
+  word-break:normal;
+}
+#relatorioContent th:nth-child(3),
+#relatorioContent td:nth-child(3){
+  width:25%;
+  white-space:nowrap;
+}
+
+
+#relatorioContent th:nth-child(3),
+#relatorioContent td:nth-child(3){
+  width:32%;
+  white-space:nowrap !important;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+}
+#relatorioContent th:nth-child(2),
+#relatorioContent td:nth-child(2){
+  width:38%;
+  white-space:normal;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+}
+
+
+    #psModal{
+      align-items:flex-start !important;
+      padding-top:calc(var(--topbar-height, 88px) + 20px) !important;
+    }
+
+    #psModal .modal-box{
+      width:min(560px,100%) !important;
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 80px)) !important;
+      overflow:hidden !important;
+      display:flex !important;
+      flex-direction:column !important;
+      padding:14px !important;
+      border-radius:18px !important;
+      margin:0 !important;
+    }
+
+    #psModal h3{
+      position:sticky !important;
+      top:0 !important;
+      z-index:2 !important;
+      background:linear-gradient(180deg, rgba(24,60,107,.99), rgba(18,52,92,.99)) !important;
+      padding-bottom:6px !important;
+      margin-bottom:8px !important;
+      font-size:1.08rem !important;
+    }
+
+    #psForm{
+      flex:1 1 auto !important;
+      overflow-y:auto !important;
+      min-height:0 !important;
+      padding-right:4px !important;
+      gap:8px !important;
+    }
+
+    #psForm .field{
+      gap:4px !important;
+    }
+
+    #psForm label{
+      font-size:.9rem !important;
+      line-height:1.1 !important;
+    }
+
+    #psForm input,
+    #psForm select,
+    #psForm textarea{
+      min-height:42px !important;
+      padding:10px 12px !important;
+      border-radius:12px !important;
+      font-size:.95rem !important;
+    }
+
+    #psForm textarea{
+      min-height:90px !important;
+    }
+
+    #psForm .btn{
+      min-height:44px !important;
+      padding:10px 12px !important;
+      font-size:.82rem !important;
+      border-radius:14px !important;
+    }
+
+    #psAttachmentPreview{
+      gap:6px !important;
+    }
+
+
+    body.ps-print-mode .topbar,
+    body.ps-print-mode .gold-line,
+    body.ps-print-mode .content > :not(#psPrintHost),
+    body.ps-print-mode .modal-overlay{display:none!important}
+    body.ps-print-mode .content{padding:0!important}
+    body.ps-print-mode #psPrintHost{display:block!important}
+    body.ps-print-mode #psPrintHost .ps-page{margin:0;box-shadow:none;width:210mm;min-height:297mm}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar desktop -->
+  <aside class="desktop-sidebar">
+    <div class="sidebar-brand">
+      <h1>Livro Histórico</h1>
+      <p>Registro histórico de equipamentos</p>
+    </div>
+    <div class="sidebar-gold"></div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-nav-item" id="sideHome" type="button" onclick="goHome()">
+        <span class="nav-icon">🏠</span> Início
+      </button>
+      <div class="sidebar-divider"></div>
+      <button class="sidebar-nav-item" id="sideNovo" type="button" onclick="closeMainMenu();showScreen('novo')">
+        <span class="nav-icon">📝</span> Novo Registro
+      </button>
+      <button class="sidebar-nav-item" id="sideHistorico" type="button" onclick="closeMainMenu();showScreen('historico')">
+        <span class="nav-icon">📚</span> Ver Histórico
+      </button>
+      <button class="sidebar-nav-item" id="sideFicha" type="button" onclick="closeMainMenu();showScreen('ficha')">
+        <span class="nav-icon">🗂️</span> Dados da Ficha
+      </button>
+      <button class="sidebar-nav-item" id="sideDocumento" type="button" onclick="closeMainMenu();showScreen('documento')">
+        <span class="nav-icon">🖨️</span> Documento Oficial
+      </button>
+      <button class="sidebar-nav-item" id="sideHoras" type="button" onclick="closeMainMenu();showScreen('horas')">
+        <span class="nav-icon">⏱️</span> Horas de Funcionamento
+      </button>
+      <button class="sidebar-nav-item" id="sidePs" type="button" onclick="closeMainMenu();showScreen('ps')">
+        <span class="nav-icon">📋</span> Pedido de Serviço
+      </button>
+      <div class="sidebar-divider"></div>
+      <button class="sidebar-nav-item" id="sideRelatorio" type="button" onclick="openRelatorio()">
+        <span class="nav-icon">📊</span> Relatório
+      </button>
+      <button class="sidebar-nav-item" type="button" onclick="openManageBigramas()">
+        <span class="nav-icon">➕</span> Adicionar Bigrama
+      </button>
+      <button class="sidebar-nav-item" type="button" onclick="openExportModal()">
+        <span class="nav-icon">💾</span> Exportar Backup
+      </button>
+      <label class="sidebar-nav-item" for="importBackupSidebar">
+        <span class="nav-icon">📥</span> Importar Backup
+      </label>
+      <input id="importBackupSidebar" class="hidden" type="file" accept=".json" />
+    </nav>
+    <div class="sidebar-context" id="sidebarContext">
+      <b>Nenhum sistema selecionado</b>
+      Selecione um bigrama na tela inicial.
+    </div>
+  </aside>
+
+  <div class="topbar">
+    <div class="topbar-main">
+      <button id="topBackBtn" class="topbtn ghost" onclick="goBack()">←</button>
+      <div class="brand">
+        <h1 id="topTitle">LIVRO HISTÓRICO</h1>
+        <p id="topSubtitle">Sistema de registro histórico de equipamentos de máquinas</p>
+      </div>
+      <button id="topMenuBtn" class="topbtn" onclick="openMainMenu()">☰</button>
+    </div>
+  </div>
+  <div class="gold-line"></div>
+
+  <div class="content">
+    <section id="screen-home" class="section">
+<div id="homeFolders" class="folder-grid"></div>
+    </section>
+
+    <section id="screen-dashboard" class="section hidden">
+      <div id="dashboardBanner" class="banner"></div>
+      <div class="menu-grid">
+        <button class="menu-card" type="button" onclick="showScreen('novo')"><div class="menu-icon">📝</div><div class="menu-text"><h2>Novo Registro</h2><p>Lançar nova avaria, manutenção ou ocorrência.</p></div></button>
+        <button class="menu-card secondary" type="button" onclick="showScreen('historico')"><div class="menu-icon">📚</div><div class="menu-text"><h2>Ver Histórico</h2><p>Visualizar, filtrar, editar, concluir e exportar registros.</p></div></button>
+        <button class="menu-card tertiary" type="button" onclick="showScreen('ficha')"><div class="menu-icon">🗂️</div><div class="menu-text"><h2>Dados da Ficha</h2><p>Configurar campos fixos do modelo oficial.</p></div></button>
+        <button class="menu-card secondary" type="button" onclick="showScreen('documento')"><div class="menu-icon">🖨️</div><div class="menu-text"><h2>Documento Oficial</h2><p>Gerar visualização pronta para impressão ou PDF.</p></div></button>
+        <button class="menu-card tertiary" type="button" onclick="showScreen('horas')"><div class="menu-icon">⏱️</div><div class="menu-text"><h2>Horas de Funcionamento</h2><p>Cadastrar equipamentos, atualizar horas e configurar lembretes.</p></div></button>
+        <button class="menu-card secondary" type="button" onclick="showScreen('ps')"><div class="menu-icon">📋</div><div class="menu-text"><h2>Pedido de Serviço</h2><p>Criar, visualizar e imprimir pedidos de serviço.</p></div></button>
+      </div>
+    </section>
+
+    <section id="screen-novo" class="section hidden">
+      <div class="card">
+        <h2 id="formHeading">Novo Registro</h2>
+        <p style="margin-bottom:14px;">O registro será salvo no bigrama selecionado.</p>
+        <div style="margin-bottom:14px;"><span id="selectedBigramaChip" class="chip"></span></div>
+        <form id="recordForm" class="section">
+          <div class="grid-2">
+            <div class="field"><label for="dataInicio">Data de Início *</label><input id="dataInicio" type="date" required /></div>
+            <div class="field"><label for="dataFim">Data de Fechamento</label><input id="dataFim" type="date" /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="horasFunc">Horas de Funcionamento</label><input id="horasFunc" type="text" placeholder="Ex.: 1500" /></div>
+            <div class="field"><label for="tipoRegistro">Tipo de Registro</label>
+              <select id="tipoRegistro">
+                <option value="avaria">Avaria</option><option value="manutencao">Manutenção</option><option value="rotina">Rotina de manutenção</option><option value="ocorrencia">Ocorrência</option><option value="anotacao">Anotação</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="equipamento">Equipamento</label><input id="equipamento" type="text" placeholder="Nome do equipamento (ex.: Bomba DA00002)" /></div>
+          <div class="field"><label for="avaria">Avaria / Registro *</label><textarea id="avaria" placeholder="Descreva a avaria ocorrida ou o fato histórico." required></textarea></div>
+          <div class="field"><label for="solucao">Solução</label><textarea id="solucao" placeholder="Descreva a solução aplicada"></textarea></div>
+          <div class="field"><label for="observacao">Observação</label><textarea id="observacao" placeholder="Observações adicionais"></textarea></div>
+          <div class="field">
+            <label for="anexosImagem">Anexar imagens</label>
+            <div class="attachment-box">
+              <input id="anexosImagem" type="file" accept="image/*" multiple />
+              <div id="anexosPreview" class="attachment-preview-wrap"></div>
+              <div style="font-size:.88rem;color:var(--muted);line-height:1.35;">As imagens ficam salvas para consulta dentro do app e não entram no PDF.</div>
+            </div>
+          </div>
+          <div class="btn-row"><button id="submitRecordBtn" class="btn btn-primary" type="submit">Salvar Registro</button><button class="btn btn-secondary" type="button" onclick="resetRecordForm()">Limpar</button></div>
+          <div id="recordStatus" class="status-msg"></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="screen-historico" class="section hidden">
+      <div class="card">
+        <div class="card-head-row">
+          <h2 style="margin:0;">Filtrar Historico</h2>
+          <button id="historicoFiltroToggle" class="collapsible-toggle" type="button" onclick="toggleHistoricoFiltros()" aria-label="Expandir ou recolher filtros">▾</button>
+        </div>
+        <div id="historicoFiltroBody" class="hidden">
+          <div class="field"><label for="filtroBusca">Busca livre</label><input id="filtroBusca" type="text" placeholder="Buscar por equipamento, avaria, solução..." /></div>
+          <div class="field"><label for="filtroStatus">Status</label>
+            <select id="filtroStatus"><option value="TODOS">Todos</option><option value="aberto">Em aberto</option><option value="fechado">Fechado</option></select>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="filtroDataInicio">Data inicial</label><input id="filtroDataInicio" type="date" /></div>
+            <div class="field"><label for="filtroDataFim">Data final</label><input id="filtroDataFim" type="date" /></div>
+          </div>
+          <div class="toolbar"><button class="btn btn-secondary" type="button" onclick="clearFilters()">Limpar filtros</button><button class="btn btn-ghost" type="button" onclick="showScreen('documento')">Ir para documento oficial</button></div>
+        </div>
+      </div>
+      <div id="historyStats" class="banner"></div>
+      <div id="recordList" class="record-list"></div>
+    </section>
+
+    <section id="screen-ficha" class="section hidden">
+      <div class="card">
+        <h2>Dados da Ficha</h2>
+        <p style="margin-bottom:14px;">Os dados abaixo pertencem somente ao bigrama selecionado.</p>
+        <form id="fichaForm" class="section">
+          <div class="grid-2">
+            <div class="field"><label for="navio">Navio</label><input id="navio" type="text" /></div>
+            <div class="field"><label for="fichaNumero">Ficha Nº</label><input id="fichaNumero" type="text" placeholder="Ex.: 01" /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="folhaInicial">Folha Inicial</label><input id="folhaInicial" type="number" min="1" step="1" /></div>
+            <div class="field"><label for="anexoPrimeiraPagina">Anexo da 1ª página</label><select id="anexoPrimeiraPagina"><option value="A">Anexo A</option><option value="B">Anexo B</option></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="sistemaFicha">Sistema</label><input id="sistemaFicha" type="text" /></div>
+            <div class="field"><label for="equipamentoFicha">Equipamento</label><input id="equipamentoFicha" type="text" /></div>
+          </div>
+          <div class="field"><label for="manualPlano">Manual e/ou Plano</label><input id="manualPlano" type="text" /></div>
+          <div class="grid-2">
+            <div class="field"><label for="fabricante">Fabricante</label><input id="fabricante" type="text" /></div>
+            <div class="field"><label for="dadosPlaca">Dados de Placa</label><input id="dadosPlaca" type="text" /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="localizacao">Localização</label><input id="localizacao" type="text" /></div>
+            <div class="field"><label for="numeroSerie">Nº de Série</label><input id="numeroSerie" type="text" /></div>
+          </div>
+          <div class="btn-row"><button class="btn btn-primary" type="submit">Salvar Dados da Ficha</button><button class="btn btn-secondary" type="button" onclick="aplicarPadraoFicha()">Restaurar padrão</button></div>
+          <div id="fichaStatus" class="status-msg"></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="screen-documento" class="section hidden">
+      <div class="card">
+        <h2>Documento Oficial</h2>
+        <p style="margin-bottom:14px;">Somente registros em aberto do bigrama selecionado entram no PDF.</p>
+        <div class="toolbar"><button class="btn btn-primary" type="button" onclick="openPrintChoiceModal()">Imprimir / Exportar PDF</button></div>
+        <div class="print-note" style="margin-top:12px;">Ao escolher “Marcar registros como fechado”, os itens que entrarem no PDF serão considerados já impressos.</div>
+      </div>
+      <div id="printHost" class="print-zone"></div>
+    </section>
+
+    <section id="screen-horas" class="section hidden" style="margin-top:-22px;">
+      <div id="horasStatus" class="status-msg"></div>
+      <div id="horasList" class="hours-list"></div>
+    </section>
+    <section id="screen-relatorio" class="section hidden" style="margin-top:0;padding-top:0;">
+      <div class="card">
+        <h2>Relatório Geral</h2>
+        
+        <div class="toolbar" style="margin-bottom:4px;">
+          <button class="btn btn-primary" type="button" onclick="printRelatorio()">🖨️ Imprimir / Exportar PDF</button>
+        </div>
+      </div>
+      <div id="relatorioContent"></div>
+    </section>
+
+
+    <section id="screen-ps" class="section hidden">
+      <div class="card">
+        <h2>Pedido de Serviço</h2>
+        <p style="margin-bottom:14px;">Pedidos do bigrama selecionado.</p>
+        <div class="toolbar">
+          <button class="btn btn-primary" type="button" onclick="openPsModal()">➕ Novo Pedido</button>
+        </div>
+      </div>
+      <div id="psList" class="record-list"></div>
+    </section>
+
+  <div id="psModal" class="modal-overlay" onclick="if(event.target.id==='psModal')closePsModal()">
+    <div class="modal-box" style="width:min(680px,100%);max-height:92vh;overflow-y:auto;" onclick="event.stopPropagation()">
+      <h3 id="psModalTitle">Novo Pedido de Serviço</h3>
+      <form id="psForm" class="section">
+        <div class="grid-2">
+          <div class="field"><label for="psOm">1. OM Solicitante</label><input id="psOm" type="text" placeholder="Ex.: SHumaita" /></div>
+          <div class="field"><label for="psData">2. Data</label><input id="psData" type="date" /></div>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label for="psNumero">3. Número</label><input id="psNumero" type="text" placeholder="Ex.: PS 001/2026" /></div>
+          <div class="field"><label for="psPrioridade">4. Prioridade</label>
+            <select id="psPrioridade"><option value="A">A</option><option value="B">B</option></select>
+          </div>
+        </div>
+        <div class="field"><label for="psDescricao">5. Descrição do Serviço *</label><textarea id="psDescricao" placeholder="Descreva o serviço solicitado" required></textarea></div>
+        <div class="grid-2">
+          <div class="field"><label for="psTipoManutencao">6. Tipo de Manutenção</label>
+            <select id="psTipoManutencao"><option value="corretiva">Corretiva</option><option value="preventiva">Preventiva</option></select>
+          </div>
+          <div class="field"><label for="psSobressalentes">7. Sobressalentes Disponíveis?</label>
+            <select id="psSobressalentes"><option value="sim">Sim</option><option value="nao">Não</option><option value="na">Não se aplica</option></select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label for="psCodigoMrc">8. Código MRC</label><input id="psCodigoMrc" type="text" placeholder="Ex.: N/A" /></div>
+          <div class="field"><label for="psCodigoLcn">9. Código LCN</label><input id="psCodigoLcn" type="text" placeholder="Ex.: N/A" /></div>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label for="psCompartimento">10. Compartimento</label><input id="psCompartimento" type="text" placeholder="Ex.: Praça de Máquinas" /></div>
+          <div class="field"><label for="psFunctionalMark">11. Functional Mark</label><input id="psFunctionalMark" type="text" placeholder="Ex.: P01436/EJ00202" /></div>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label for="psDadosPlaca">12. Dados da Placa do Fabricante</label><input id="psDadosPlaca" type="text" placeholder="Ex.: N/A" /></div>
+          <div class="field"><label for="psHorasFuncionamento">13. Horas de Funcionamento</label><input id="psHorasFuncionamento" type="text" placeholder="Ex.: N/A" /></div>
+        </div>
+        <div class="field"><label for="psDataUltimaManutencao">14. Data da Última Manutenção</label><input id="psDataUltimaManutencao" type="date" /></div>
+        <div class="grid-2">
+          <div class="field"><label for="psEncarregado">15. Encarregado da Incumbência</label><input id="psEncarregado" type="text" placeholder="Ex.: 2º SG-MO-SB Alan Oliveira" /></div>
+          <div class="field"><label for="psOficial">16. Oficial Responsável</label><input id="psOficial" type="text" placeholder="Ex.: 1T Fajardo" /></div>
+        </div>
+        <div class="field"><label for="psDivisao">17. Divisão Responsável</label><input id="psDivisao" type="text" placeholder="Ex.: Divisão de Máquinas" /></div>
+        <div class="field"><label for="psInfoComplementares">18. Informações Complementares</label><textarea id="psInfoComplementares" placeholder="Informações adicionais sobre o reparo"></textarea></div>
+        <div class="field">
+          <label>Imagens</label>
+          <label class="btn btn-ghost" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;" for="psAnexosImagem">📎 Adicionar imagens</label>
+          <input id="psAnexosImagem" type="file" accept="image/*" multiple class="hidden" />
+          <div id="psAttachmentPreview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:8px;"></div>
+        </div>
+        <div class="btn-row">
+          <button id="psSubmitBtn" class="btn btn-primary" type="submit">Salvar Pedido</button>
+          <button class="btn btn-secondary" type="button" onclick="resetPsForm()">Limpar</button>
+        </div>
+        <div id="psStatus" class="status-msg"></div>
+      </form>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closePsModal()">Fechar</button></div>
+    </div>
+  </div>
+
+  <div id="mainMenuModal" class="modal-overlay" onclick="if(event.target.id==='mainMenuModal')closeMainMenu()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Menu</h3>
+      <p>Ações gerais do aplicativo.</p>
+      <div class="menu-list">
+        <button class="menu-item" type="button" onclick="openManageBigramas()">
+          <span class="menu-item-label"><span>➕</span><span>Adicionar Bigrama</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="toggleVisualPrefsMenu()">
+          <span class="menu-item-label"><span>⚙️</span><span>Organização da tela inicial</span></span>
+          <span class="menu-item-arrow" id="visualPrefsArrow">▾</span>
+        </button>
+        <div id="visualPrefsPanel" class="submenu-panel hidden">
+          <div>
+            <div class="submenu-title">Classificação</div>
+            <div class="home-control-buttons" style="margin-top:8px;">
+              <button id="btnOrdemAlfa" class="chip chip-toggle active" type="button" onclick="setHomeOrdem('alfa')">Ordem alfabética</button>
+              <button id="btnOrdemUpdate" class="chip chip-toggle" type="button" onclick="setHomeOrdem('update')">Última atualização</button>
+            </div>
+          </div>
+          <div>
+            <div class="submenu-title">Exibição</div>
+            <div class="home-control-buttons" style="margin-top:8px;">
+              <button id="btnApresentacaoPasta" class="chip chip-toggle active" type="button" onclick="setHomeApresentacao('pasta')">Em pastas</button>
+              <button id="btnApresentacaoLista" class="chip chip-toggle" type="button" onclick="setHomeApresentacao('lista')">Em lista</button>
+            </div>
+          </div>
+        </div>
+        <button class="menu-item" type="button" onclick="openRelatorio()">
+          <span class="menu-item-label"><span>📊</span><span>Relatório</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="openExportModal()">
+          <span class="menu-item-label"><span>💾</span><span>Exportar backup</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <label class="menu-item" for="importBackup">
+          <span class="menu-item-label"><span>📥</span><span>Importar backup</span></span>
+          <span class="menu-item-arrow">›</span>
+        </label>
+        <input id="importBackup" class="hidden" type="file" accept=".json" />
+        <button class="menu-item" type="button" onclick="goHome()">
+          <span class="menu-item-label"><span>↩️</span><span>Trocar bigrama</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="closeMainMenu()">
+          <span class="menu-item-label"><span>✖</span><span>Fechar</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="exportBackupModal" class="modal-overlay" onclick="if(event.target.id==='exportBackupModal')closeExportModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Exportar Backup</h3>
+      <p>Escolha o nome do arquivo e como deseja salvar o backup. O backup exportado também leva as imagens anexadas.</p>
+      <div class="section" style="margin-bottom:16px;">
+        <div class="field">
+          <label for="exportFileName">Nome do arquivo</label>
+          <input id="exportFileName" type="text" placeholder="Ex.: Livro H- Backup" />
+        </div>
+        <div id="exportFsaWarning" class="hidden" style="padding:10px 14px;border-radius:14px;background:rgba(255,143,143,.10);border:1px solid rgba(255,143,143,.25);color:#ffb3b3;font-size:.92rem;line-height:1.45;">
+          Seu navegador não suporta seleção de pasta. Use a opção de Downloads.
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" type="button" onclick="exportWithFolderPicker()">📁 Escolher pasta e salvar</button>
+        <button class="btn btn-secondary" type="button" onclick="exportToDownloads()">⬇️ Salvar em Downloads</button>
+      </div>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeExportModal()">Cancelar</button></div>
+    </div>
+  </div>
+
+  <div id="manageBigramasModal" class="modal-overlay" onclick="if(event.target.id==='manageBigramasModal')closeManageBigramas()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Adicionar Bigrama</h3>
+      <p>Adicione, edite ou exclua sistemas.</p>
+      <form id="bigramaForm" class="section">
+        <div class="grid-2">
+          <div class="field"><label for="siglaInput">Sigla *</label><input id="siglaInput" type="text" maxlength="4" placeholder="Ex.: DA" required /></div>
+          <div class="field"><label for="nomeSistemaInput">Nome do sistema *</label><input id="nomeSistemaInput" type="text" placeholder="Ex.: Esgoto" required /></div>
+        </div>
+        <div class="btn-row"><button id="saveBigramaBtn" class="btn btn-primary" type="submit">Salvar Bigrama</button><button class="btn btn-secondary" type="button" onclick="resetBigramaForm()">Limpar</button></div>
+        <div id="bigramaStatus" class="status-msg"></div>
+      </form>
+      <div id="bigramaList" class="record-list"></div>
+      <div class="toolbar" style="margin-top:12px;"><button class="btn btn-ghost" type="button" onclick="closeManageBigramas()">Fechar</button></div>
+    </div>
+  </div>
+
+  <div id="printChoiceModal" class="modal-overlay" onclick="if(event.target.id==='printChoiceModal')closePrintChoiceModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Imprimir / Exportar PDF</h3>
+      <p>Escolha se os registros que forem para o PDF devem ser marcados como fechados após a abertura da visualização de impressão.</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" type="button" onclick="confirmPrintAndCloseDirect()">Marcar registros como "fechado"</button>
+        <button class="btn btn-secondary" type="button" onclick="previewPdfOnlyDirect()">Apenas visualizar PDF</button>
+      </div>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closePrintChoiceModal()">Cancelar</button></div>
+    </div>
+  </div>
+
+  <div id="conflictModal" class="modal-overlay" onclick="if(event.target.id==='conflictModal')closeConflictModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Ver conflito</h3>
+      <p>Compare seu registro com o registro do backup e escolha qual versão deve permanecer.</p>
+      <div id="conflictContent"></div>
+      <div class="toolbar" style="margin-top:14px;">
+        <button class="btn btn-primary" type="button" onclick="resolveConflictChoice('backup')">Usar registro do backup</button>
+        <button class="btn btn-secondary" type="button" onclick="resolveConflictChoice('local')">Manter meu registro</button>
+        <button class="btn btn-ghost" type="button" onclick="closeConflictModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="importReportModal" class="modal-overlay" onclick="if(event.target.id==='importReportModal')closeImportReportModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Relatório de importação</h3>
+      <p>Resumo da atualização do backup.</p>
+      <div id="importReportContent"></div>
+      <div class="toolbar" style="margin-top:14px;"><button class="btn btn-primary" type="button" onclick="closeImportReportModal()">OK</button></div>
+    </div>
+  </div>
+
+  <div id="appMessageModal" class="modal-overlay" onclick="if(event.target.id==='appMessageModal')closeAppMessageModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 id="appMessageTitle">Mensagem</h3>
+      <p id="appMessageBody">—</p>
+      <div class="toolbar" style="margin-top:14px;"><button class="btn btn-primary" type="button" onclick="closeAppMessageModal()">OK</button></div>
+    </div>
+  </div>
+
+  <div id="appConfirmModal" class="modal-overlay" onclick="if(event.target.id==='appConfirmModal')resolveAppConfirm(false)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 id="appConfirmTitle">Confirmar ação</h3>
+      <p id="appConfirmBody">—</p>
+      <div class="toolbar" style="margin-top:14px;">
+        <button class="btn btn-primary" type="button" onclick="resolveAppConfirm(true)">Confirmar</button>
+        <button class="btn btn-ghost" type="button" onclick="resolveAppConfirm(false)">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+    <div id="horasMenuModal" class="modal-overlay" onclick="if(event.target.id==='horasMenuModal')closeHorasMenu()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Menu de Horas de Funcionamento</h3>
+      <p>Escolha a ação desejada.</p>
+      <div class="menu-list">
+        <button class="menu-item" type="button" onclick="openAddEquipModal()">
+          <span class="menu-item-label"><span>➕</span><span>Adicionar equipamento</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="requestReminderPermission()">
+          <span class="menu-item-label"><span>🔔</span><span>Ativar notificações</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="openReminderModal(); closeMainMenu()">
+          <span class="menu-item-label"><span>⏰</span><span>Configurar lembrete</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="openManageEquipModal()">
+          <span class="menu-item-label"><span>🛠️</span><span>Editar / excluir equipamento</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="testReminderNotification(); closeHorasMenu();">
+          <span class="menu-item-label"><span>🧪</span><span>Testar notificação</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+        <button class="menu-item" type="button" onclick="closeHorasMenu()">
+          <span class="menu-item-label"><span>✖</span><span>Fechar</span></span>
+          <span class="menu-item-arrow">›</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manageEquipModal" class="modal-overlay" onclick="if(event.target.id==='manageEquipModal')closeManageEquipModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Gerenciar equipamentos</h3>
+      <p>Escolha o equipamento para editar ou excluir.</p>
+      <div id="manageEquipList" class="hours-list"></div>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeManageEquipModal()">Fechar</button></div>
+    </div>
+  </div>
+
+  <div id="addEquipModal" class="modal-overlay" onclick="if(event.target.id==='addEquipModal')closeAddEquipModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Adicionar equipamento</h3>
+      <p>Cadastre um novo equipamento neste bigrama.</p>
+      <form id="horasForm" class="section">
+        <div class="grid-2">
+          <div class="field"><label for="horasEquipNome">Equipamento *</label><input id="horasEquipNome" type="text" placeholder="Ex.: Bomba de esgoto BB1" required /></div>
+          <div class="field"><label for="horasEquipValor">Horas atuais</label><input id="horasEquipValor" type="number" min="0" step="0.1" placeholder="Ex.: 1500" /></div>
+        </div>
+        <div class="btn-row">
+          <button id="horasSubmitBtn" class="btn btn-primary" type="submit" onclick="handleHorasSubmit(event)">Adicionar equipamento</button>
+          <button class="btn btn-secondary" type="button" onclick="resetHorasForm()">Limpar</button>
+        </div>
+      </form>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeAddEquipModal()">Fechar</button></div>
+    </div>
+  </div>
+
+  <div id="reminderPickerModal" class="modal-overlay" onclick="if(event.target.id==='reminderPickerModal')closeReminderPickerModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Configurar lembrete</h3>
+      <p>Escolha o equipamento para configurar o lembrete.</p>
+      <div id="reminderEquipList" class="hours-list"></div>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeReminderPickerModal()">Fechar</button></div>
+    </div>
+  </div>
+
+<div id="reminderModal" class="modal-overlay" onclick="if(event.target.id==='reminderModal')closeReminderModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Lembrete de atualização</h3>
+      <p>Define a periodicidade para lembrar de atualizar as horas de funcionamento deste bigrama.</p>
+      <form id="reminderForm" class="section">
+        <div class="field">
+          <label for="reminderEquipName">Bigrama</label>
+          <input id="reminderEquipName" type="text" readonly style="opacity:.7;" />
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="reminderType">Periodicidade</label>
+            <select id="reminderType">
+              <option value="none">Sem lembrete</option>
+              <option value="weekly">Semanal</option>
+              <option value="monthly">Mensal</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="reminderStartDate">Data base</label>
+            <input id="reminderStartDate" type="date" />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" type="submit">Salvar lembrete</button>
+          <button class="btn btn-secondary" type="button" onclick="clearReminderConfig()">Remover lembrete</button>
+        </div>
+      </form>
+      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeReminderModal()">Fechar</button></div>
+    </div>
+  </div>
+
+    <div id="horasReminderActionModal" class="modal-overlay" onclick="if(event.target.id==='horasReminderActionModal')closeHorasReminderActionModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Lembrete de horas de funcionamento</h3>
+      <p>Atualize as horas de funcionamento dos equipamentos !</p>
+      <div id="horasReminderActionContent" class="report-list"></div>
+      <div class="modal-actions" style="margin-top:14px;">
+        <button class="btn btn-primary" type="button" onclick="confirmHorasReminderDone()">Já atualizei</button>
+        <button class="btn btn-secondary" type="button" onclick="snoozeHorasReminderTomorrow()">Lembrar amanhã</button>
+      </div>
+    </div>
+  </div>
+
+<div id="dueReminderModal" class="modal-overlay" onclick="if(event.target.id==='dueReminderModal')closeDueReminderModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3>Lembretes do dia</h3>
+      <p>Os lembretes abaixo venceram hoje.</p>
+      <div id="dueReminderContent" class="report-list"></div>
+      <div class="toolbar" style="margin-top:14px;"><button class="btn btn-primary" type="button" onclick="closeDueReminderModal()">OK</button></div>
+    </div>
+  </div>
+
+  <div id="imageViewerModal" class="modal-overlay" onclick="if(event.target.id==='imageViewerModal')closeImageViewer()">
+    <div class="modal-box" onclick="event.stopPropagation()" style="width:min(96vw,760px);padding:14px;">
+      <h3>Imagem anexada</h3>
+      <div id="imageViewerSwipeArea" style="display:flex;justify-content:center;align-items:center;overflow:hidden;padding-bottom:20px;touch-action:pan-y;">
+        <img id="imageViewerImg" src="" alt="Imagem anexada" style="max-width:100%;width:auto;height:auto;max-height:70vh;border-radius:16px;display:block;" />
+      </div>
+      <div id="imageViewerCounter" style="text-align:center;margin-top:10px;color:var(--muted);font-size:.9rem;"></div>
+      <div style="text-align:center;margin-top:8px;color:var(--muted);font-size:.85rem;">Arraste para o lado para passar as imagens.</div>
+      <div class="toolbar" style="margin-top:14px;">
+        <button class="btn btn-primary" type="button" onclick="closeImageViewer()">Fechar</button>
+      </div>
+    </div>
+  </div>
+  <div id="psPrintHost" class="print-zone hidden"></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'livro_historico_clean';
+const DEFAULT_BIGRAMAS = [
+  { id:'b1', sigla:'EJ', nome:'Água Potável' },
+  { id:'b2', sigla:'EW', nome:'Auxiliar de Água Salgada' },
+  { id:'b3', sigla:'DA', nome:'Esgoto' },
+  { id:'b4', sigla:'EM', nome:'Resfriamento AS AR' },
+  { id:'b5', sigla:'ES', nome:'Resfriamento Água tratada AR' }
+];
+const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,anexoPrimeiraPagina:'A',sistemaFicha:'',equipamentoFicha:'',manualPlano:'',fabricante:'',dadosPlaca:'',localizacao:'',numeroSerie:''};
+const IMG_DB_NAME = 'livro_historico_imagens';
+const IMG_DB_VERSION = 1;
+const IMG_STORE = 'images';
+
+const AppState = {
+  data: {bigramas:[...DEFAULT_BIGRAMAS], registros:[], fichas:{}, horasData:{}, psData:{}, filtros:{busca:'',status:'TODOS',dataInicio:'',dataFim:''}, selectedBigramaId:null, lastScreen:'home', homePrefs:{ordem:'alfa',apresentacao:'pasta'}},
+  load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw){
+        this.data.bigramas = [...DEFAULT_BIGRAMAS];
+        return;
+      }
+      const parsed = JSON.parse(raw);
+      this.data = {
+        bigramas:Array.isArray(parsed.bigramas)&&parsed.bigramas.length?parsed.bigramas:[...DEFAULT_BIGRAMAS],
+        registros:Array.isArray(parsed.registros)?parsed.registros:[],
+        fichas:parsed.fichas&&typeof parsed.fichas==='object'?parsed.fichas:{},
+        horasData:parsed.horasData&&typeof parsed.horasData==='object'?parsed.horasData:{},
+        psData:parsed.psData&&typeof parsed.psData==='object'?parsed.psData:{},
+        filtros:parsed.filtros?{busca:'',status:'TODOS',dataInicio:'',dataFim:'',...parsed.filtros}:{busca:'',status:'TODOS',dataInicio:'',dataFim:''},
+        selectedBigramaId:parsed.selectedBigramaId||null,
+        lastScreen:parsed.lastScreen||'home',
+        homePrefs:parsed.homePrefs?{ordem:'alfa',apresentacao:'pasta',...parsed.homePrefs}:{ordem:'alfa',apresentacao:'pasta'}
+      };
+      ensureBigramasIntegrity(false);
+    }catch(e){
+      console.error(e);
+      this.data = {bigramas:[...DEFAULT_BIGRAMAS], registros:[], fichas:{}, horasData:{}, psData:{}, filtros:{busca:'',status:'TODOS',dataInicio:'',dataFim:''}, selectedBigramaId:null, lastScreen:'home', homePrefs:{ordem:'alfa',apresentacao:'pasta'}};
+    }
+  },
+  save(){
+    ensureBigramasIntegrity(false);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+  }
+};
+
+
+const STRUCTURAL_DEFAULT_BIGRAMAS = [...DEFAULT_BIGRAMAS];
+
+function ensureBigramasIntegrity(forceSave=false){
+  try{
+    const valid = Array.isArray(AppState.data.bigramas) && AppState.data.bigramas.length > 0 &&
+      AppState.data.bigramas.every(b => b && typeof b === 'object' && String(b.sigla || '').trim() && String(b.nome || '').trim());
+    if(!valid){
+      AppState.data.bigramas = [...STRUCTURAL_DEFAULT_BIGRAMAS];
+      if(forceSave) AppState.save();
+      return true;
+    }
+  }catch(e){
+    AppState.data.bigramas = [...STRUCTURAL_DEFAULT_BIGRAMAS];
+    if(forceSave) AppState.save();
+    return true;
+  }
+  return false;
+}
+
+function ensureHomeFoldersRendered(){
+  try{
+    const wrap = $('homeFolders');
+    if(!wrap) return;
+    renderHomeFolders();
+    const hasButtons = wrap.querySelector('.folder-btn');
+    if(!hasButtons){
+      AppState.data.bigramas = [...STRUCTURAL_DEFAULT_BIGRAMAS];
+      AppState.save();
+      renderHomeFolders();
+    }
+  }catch(e){
+    try{
+      AppState.data.bigramas = [...STRUCTURAL_DEFAULT_BIGRAMAS];
+      AppState.save();
+      renderHomeFolders();
+    }catch(err){}
+  }
+}
+
+const UI = { currentScreen:'home', editingRecordId:null, editingBigramaId:null, pendingImportReport:null, conflictQueue:[], confirmResolver:null, activeHorasReminders:[] };
+const $ = (id)=>document.getElementById(id);
+const uid = (prefix='id') => prefix+'_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+
+function applyFixedTopbarLayout(){
+  const topbar = document.querySelector('.topbar');
+  const goldLine = document.querySelector('.gold-line');
+  const content = document.querySelector('.content');
+  if(!topbar || !goldLine || !content) return;
+
+  const topbarHeight = Math.ceil(topbar.getBoundingClientRect().height || 0);
+  const goldLineHeight = Math.ceil(goldLine.getBoundingClientRect().height || 4);
+
+  document.documentElement.style.setProperty('--topbar-height', `${topbarHeight}px`);
+  goldLine.style.top = `${topbarHeight}px`;
+  content.style.paddingTop = `${topbarHeight + goldLineHeight + 30}px`;
+}
+
+function applyFixedTopbarLayoutStable(){
+  requestAnimationFrame(() => {
+    applyFixedTopbarLayout();
+    requestAnimationFrame(() => {
+      applyFixedTopbarLayout();
+    });
+  });
+}
+
+
+// run twice because title/subtitle can change and reflow after render
+function syncTopbarLayoutStable(){
+  syncTopbarAndGoldLineByPage();
+  requestAnimationFrame(() => {
+    syncTopbarAndGoldLineByPage();
+    requestAnimationFrame(() => {
+      syncTopbarAndGoldLineByPage();
+    });
+  });
+}
+
+function escapeHtml(str){ return String(str??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+function nl2br(str){ return escapeHtml(str).replaceAll('\n','<br>'); }
+function formatDateBR(date){ if(!date) return ''; const [y,m,d]=date.split('-'); return y&&m&&d?`${d}/${m}/${y}`:date; }
+
+function showAppMessage(title, body){
+  $('appMessageTitle').textContent = title || 'Mensagem';
+  $('appMessageBody').textContent = body || '';
+  $('appMessageModal').classList.add('show');
+}
+function closeAppMessageModal(){ $('appMessageModal').classList.remove('show'); }
+function showAppConfirm(title, body){
+  return new Promise(resolve => {
+    UI.confirmResolver = resolve;
+    $('appConfirmTitle').textContent = title || 'Confirmar ação';
+    $('appConfirmBody').textContent = body || '';
+    $('appConfirmModal').classList.add('show');
+  });
+}
+function resolveAppConfirm(value){
+  $('appConfirmModal').classList.remove('show');
+  if(UI.confirmResolver){
+    const fn = UI.confirmResolver;
+    UI.confirmResolver = null;
+    fn(Boolean(value));
+  }
+}
+
+function getSelectedBigrama(){ return AppState.data.bigramas.find(b=>b.id===AppState.data.selectedBigramaId)||null; }
+function getBigramaById(id){ return AppState.data.bigramas.find(b=>b.id===id)||null; }
+function getBigramaLabel(id){ const b=getBigramaById(id); return b?`${b.sigla} - ${b.nome}`:'—'; }
+function getDefaultFichaForSelected(){ const b=getSelectedBigrama(); return {...DEFAULT_FICHA,sistemaFicha:b?`${b.nome.toUpperCase()} (${b.sigla})`:''}; }
+function getFichaForSelected(){ const b=getSelectedBigrama(); if(!b) return {...DEFAULT_FICHA}; return {...getDefaultFichaForSelected(), ...(AppState.data.fichas[b.id]||{})}; }
+function saveFichaForSelected(data){ const b=getSelectedBigrama(); if(!b) return; AppState.data.fichas[b.id]={...data}; AppState.save(); }
+
+function getLastUpdate(bigramaId){
+  const regs = AppState.data.registros.filter(r => r.bigramaId === bigramaId);
+  if(!regs.length) return 0;
+  return Math.max(...regs.map(r => r.updatedAt || r.createdAt || 0));
+}
+function getSortedBigramas(){
+  const prefs = AppState.data.homePrefs || {ordem:'alfa',apresentacao:'pasta'};
+  const list = [...AppState.data.bigramas];
+  if(prefs.ordem === 'update'){
+    list.sort((a,b) => getLastUpdate(b.id) - getLastUpdate(a.id));
+  } else {
+    list.sort((a,b) => a.sigla.localeCompare(b.sigla));
+  }
+  return list;
+}
+function setHomeOrdem(ordem){
+  AppState.data.homePrefs = {...(AppState.data.homePrefs||{}), ordem};
+  AppState.save();
+  updateHomeToggleUI();
+  renderHomeFolders();
+}
+function setHomeApresentacao(apresentacao){
+  AppState.data.homePrefs = {...(AppState.data.homePrefs||{}), apresentacao};
+  AppState.save();
+  updateHomeToggleUI();
+  renderHomeFolders();
+}
+function updateHomeToggleUI(){
+  const prefs = AppState.data.homePrefs || {ordem:'alfa',apresentacao:'pasta'};
+  ['btnOrdemAlfa','btnOrdemUpdate','btnApresentacaoPasta','btnApresentacaoLista'].forEach(id=>{
+    const el = $(id); if(el) el.classList.remove('active');
+  });
+  if(prefs.ordem==='alfa') { const el=$('btnOrdemAlfa'); if(el) el.classList.add('active'); }
+  else { const el=$('btnOrdemUpdate'); if(el) el.classList.add('active'); }
+  if(prefs.apresentacao==='lista') { const el=$('btnApresentacaoLista'); if(el) el.classList.add('active'); }
+  else { const el=$('btnApresentacaoPasta'); if(el) el.classList.add('active'); }
+}
+function renderHomeFolders(){
+  const wrap = $('homeFolders');
+  if(!wrap) return;
+  ensureBigramasIntegrity(false);
+  if(!AppState.data.bigramas.length){
+    AppState.data.bigramas = [...STRUCTURAL_DEFAULT_BIGRAMAS];
+    AppState.save();
+  }
+  const prefs = AppState.data.homePrefs || {ordem:'alfa',apresentacao:'pasta'};
+  const bigramas = getSortedBigramas();
+  updateHomeToggleUI();
+  if(prefs.apresentacao === 'lista'){
+    wrap.className = 'bigrama-list';
+    wrap.innerHTML = bigramas.map(b => {
+      const lastUp = getLastUpdate(b.id);
+      const sub = lastUp ? 'Atualizado em ' + new Date(lastUp).toLocaleDateString('pt-BR') : 'Sem registros';
+      return `<button class="bigrama-list-btn" type="button" onclick="selectBigrama('${b.id}')">
+        <div class="bigrama-list-sigla">${escapeHtml(b.sigla)}</div>
+        <div class="bigrama-list-info">
+          <div class="bigrama-list-nome">${escapeHtml(b.nome)}</div>
+          <div class="bigrama-list-sub">${sub}</div>
+        </div>
+        <span style="margin-left:auto;font-size:1.4rem;opacity:.5;">›</span>
+      </button>`;
+    }).join('');
+  } else {
+    wrap.className = 'folder-grid';
+    wrap.innerHTML = bigramas.map(b => `
+      <button class="folder-btn" type="button" onclick="selectBigrama('${b.id}')">
+        <div class="folder-icon"><div class="folder-paw">📁</div></div>
+        <div class="folder-label">${escapeHtml(b.sigla)}</div>
+        <div class="folder-sub">${escapeHtml(b.nome)}</div>
+      </button>
+    `).join('');
+  }
+}
+
+
+let pendingAttachments = [];
+let viewerImages = [];
+let viewerIndex = 0;
+
+function imageDbOpen(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IMG_DB_NAME, IMG_DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if(!db.objectStoreNames.contains(IMG_STORE)){
+        db.createObjectStore(IMG_STORE, { keyPath:'id' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Falha ao abrir banco de imagens'));
+  });
+}
+async function imageDbPut(image){
+  const db = await imageDbOpen();
+  return await new Promise((resolve, reject) => {
+    const tx = db.transaction(IMG_STORE, 'readwrite');
+    tx.objectStore(IMG_STORE).put(image);
+    tx.oncomplete = () => { try{ db.close(); }catch(e){} resolve(true); };
+    tx.onerror = () => { try{ db.close(); }catch(e){} reject(tx.error || new Error('Falha ao salvar imagem')); };
+  });
+}
+async function imageDbGet(id){
+  const db = await imageDbOpen();
+  return await new Promise((resolve) => {
+    const tx = db.transaction(IMG_STORE, 'readonly');
+    const rq = tx.objectStore(IMG_STORE).get(id);
+    rq.onsuccess = () => { try{ db.close(); }catch(e){} resolve(rq.result || null); };
+    rq.onerror = () => { try{ db.close(); }catch(e){} resolve(null); };
+  });
+}
+async function imageDbDelete(id){
+  const db = await imageDbOpen();
+  return await new Promise((resolve) => {
+    const tx = db.transaction(IMG_STORE, 'readwrite');
+    tx.objectStore(IMG_STORE).delete(id);
+    tx.oncomplete = () => { try{ db.close(); }catch(e){} resolve(true); };
+    tx.onerror = () => { try{ db.close(); }catch(e){} resolve(false); };
+  });
+}
+async function imageDbExportAll(){
+  const db = await imageDbOpen();
+  return await new Promise((resolve) => {
+    const tx = db.transaction(IMG_STORE, 'readonly');
+    const rq = tx.objectStore(IMG_STORE).getAll();
+    rq.onsuccess = () => { try{ db.close(); }catch(e){} resolve(Array.isArray(rq.result) ? rq.result : []); };
+    rq.onerror = () => { try{ db.close(); }catch(e){} resolve([]); };
+  });
+}
+async function imageDbImportMany(items){
+  if(!Array.isArray(items) || !items.length) return;
+  const db = await imageDbOpen();
+  await new Promise((resolve) => {
+    const tx = db.transaction(IMG_STORE, 'readwrite');
+    const st = tx.objectStore(IMG_STORE);
+    items.forEach(item => st.put(item));
+    tx.oncomplete = () => { try{ db.close(); }catch(e){} resolve(true); };
+    tx.onerror = () => { try{ db.close(); }catch(e){} resolve(false); };
+  });
+}
+function fileToDataUrl(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error('Falha ao ler imagem'));
+    reader.readAsDataURL(file);
+  });
+}
+function loadImageElement(src){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Falha ao carregar imagem'));
+    img.src = src;
+  });
+}
+async function createCompressedImageVersions(file){
+  const src = await fileToDataUrl(file);
+  const img = await loadImageElement(src);
+
+  const makeVersion = (maxSide, quality) => {
+    const ratio = Math.min(1, maxSide / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+    const w = Math.max(1, Math.round((img.naturalWidth || img.width) * ratio));
+    const h = Math.max(1, Math.round((img.naturalHeight || img.height) * ratio));
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    return canvas.toDataURL('image/jpeg', quality);
+  };
+
+  return {
+    fullDataUrl: makeVersion(1600, 0.82),
+    thumbDataUrl: makeVersion(260, 0.72)
+  };
+}
+function resetAttachmentInput(){
+  pendingAttachments = [];
+  const input = $('anexosImagem');
+  const preview = $('anexosPreview');
+  if(input) input.value = '';
+  if(preview) preview.innerHTML = '';
+}
+async function fillPreviewThumbs(containerId, attachments){
+  const wrap = $(containerId);
+  if(!wrap) return;
+  const images = wrap.querySelectorAll('[data-image-id]');
+  for(const el of images){
+    const id = el.getAttribute('data-image-id');
+    const local = attachments.find(a => a.id === id);
+    if(local && local.thumbDataUrl){
+      el.src = local.thumbDataUrl;
+      continue;
+    }
+    const stored = await imageDbGet(id);
+    if(stored && stored.thumbDataUrl) el.src = stored.thumbDataUrl;
+  }
+}
+function renderAttachmentPreview(){
+  const preview = $('anexosPreview');
+  if(!preview) return;
+  if(!pendingAttachments.length){
+    preview.innerHTML = '';
+    return;
+  }
+  preview.innerHTML = pendingAttachments.map((img, idx) => `
+    <div class="gallery-item">
+      <button class="thumb-btn" type="button" onclick="openPendingImageViewer(${idx})">
+        <img class="attachment-thumb" data-image-id="${img.id}" src="${img.thumbDataUrl || ''}" alt="Imagem anexa ${idx+1}" />
+      </button>
+      <button class="chip chip-toggle" type="button" onclick="removePendingAttachment(${idx})">Remover</button>
+    </div>
+  `).join('');
+  fillPreviewThumbs('anexosPreview', pendingAttachments);
+}
+function removePendingAttachment(index){
+  pendingAttachments.splice(index,1);
+  renderAttachmentPreview();
+}
+async function handleAttachmentInput(event){
+  const files = Array.from(event.target.files || []).filter(f => f.type && f.type.startsWith('image/'));
+  if(!files.length){
+    renderAttachmentPreview();
+    return;
+  }
+  try{
+    const images = [];
+    for(const file of files){
+      const versions = await createCompressedImageVersions(file);
+      images.push({
+        id: uid('img'),
+        name: file.name,
+        type: file.type || 'image/jpeg',
+        thumbDataUrl: versions.thumbDataUrl,
+        fullDataUrl: versions.fullDataUrl
+      });
+    }
+    pendingAttachments.push(...images);
+    renderAttachmentPreview();
+    event.target.value = '';
+  }catch(e){
+    showAppMessage('Imagem', 'Não foi possível processar a imagem selecionada.');
+  }
+}
+function renderRecordAttachments(record){
+  const attachments = record && Array.isArray(record.anexos) ? record.anexos : [];
+  if(!attachments.length) return '';
+  return `
+    <div class="label-block">
+      <b>Imagens anexadas:</b>
+      <div class="gallery-grid">
+        ${attachments.map((img, idx) => `
+          <div class="gallery-item">
+            <button class="thumb-btn" type="button" onclick="openRecordImageViewer('${record.id}', ${idx})">
+              <img class="attachment-thumb" data-image-id="${img.id || ''}" src="${img.thumbDataUrl || img.dataUrl || ''}" alt="Imagem anexa ${idx+1}" />
+            </button>
+            <div class="gallery-label">${img.name ? escapeHtml(img.name) : 'Imagem ' + (idx+1)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+async function hydrateAttachmentThumbs(){
+  const nodes = document.querySelectorAll('#recordList [data-image-id]');
+  for(const node of nodes){
+    if(node.getAttribute('src')) continue;
+    const id = node.getAttribute('data-image-id');
+    if(!id) continue;
+    const stored = await imageDbGet(id);
+    if(stored && stored.thumbDataUrl) node.src = stored.thumbDataUrl;
+  }
+}
+function updateImageViewerUI(){
+  const img = $('imageViewerImg');
+  const counter = $('imageViewerCounter');
+  if(!img) return;
+  if(!viewerImages.length){
+    img.src = '';
+    if(counter) counter.textContent = '';
+    return;
+  }
+  img.src = viewerImages[viewerIndex] || '';
+  if(counter) counter.textContent = `${viewerIndex + 1}/${viewerImages.length}`;
+}
+function openImageViewer(images, index = 0){
+  const modal = $('imageViewerModal');
+  if(!modal) return;
+  viewerImages = Array.isArray(images) ? images.filter(Boolean) : [];
+  viewerIndex = Math.max(0, Math.min(index, Math.max(0, viewerImages.length - 1)));
+  updateImageViewerUI();
+  modal.classList.add('show');
+}
+async function openPendingImageViewer(index){
+  const images = [];
+  for(const item of pendingAttachments){
+    if(item.fullDataUrl){
+      images.push(item.fullDataUrl);
+    }else{
+      const stored = await imageDbGet(item.id);
+      if(stored && stored.fullDataUrl) images.push(stored.fullDataUrl);
+    }
+  }
+  openImageViewer(images, index);
+}
+async function openRecordImageViewer(recordId, index){
+  const record = AppState.data.registros.find(r => r.id === recordId);
+  const meta = record && Array.isArray(record.anexos) ? record.anexos : [];
+  const images = [];
+  let changed = false;
+
+  for(const item of meta){
+    if(item.fullDataUrl || item.dataUrl){
+      images.push(item.fullDataUrl || item.dataUrl);
+      if(item.id && (item.fullDataUrl || item.thumbDataUrl || item.dataUrl)){
+        await imageDbPut({
+          id: item.id,
+          name: item.name || 'Imagem',
+          type: item.type || 'image/jpeg',
+          fullDataUrl: item.fullDataUrl || item.dataUrl || '',
+          thumbDataUrl: item.thumbDataUrl || item.dataUrl || '',
+          createdAt: Date.now()
+        });
+        if(!item.thumbDataUrl && item.dataUrl){
+          item.thumbDataUrl = item.dataUrl;
+          changed = true;
+        }
+      }
+      continue;
+    }
+    if(item.id){
+      const stored = await imageDbGet(item.id);
+      if(stored && stored.fullDataUrl){
+        images.push(stored.fullDataUrl);
+        if(!item.thumbDataUrl && stored.thumbDataUrl){
+          item.thumbDataUrl = stored.thumbDataUrl;
+          changed = true;
+        }
+      }
+    }
+  }
+
+  if(changed){
+    AppState.save();
+    renderHistory();
+  }
+
+  openImageViewer(images, index);
+}
+function prevImage(){
+  if(viewerImages.length <= 1) return;
+  viewerIndex = (viewerIndex - 1 + viewerImages.length) % viewerImages.length;
+  updateImageViewerUI();
+}
+function nextImage(){
+  if(viewerImages.length <= 1) return;
+  viewerIndex = (viewerIndex + 1) % viewerImages.length;
+  updateImageViewerUI();
+}
+function closeImageViewer(){
+  const modal = $('imageViewerModal');
+  if(modal) modal.classList.remove('show');
+  viewerImages = [];
+  viewerIndex = 0;
+  updateImageViewerUI();
+}
+
+let viewerTouchStartX = null;
+let viewerTouchStartY = null;
+
+async function migrateLegacyAttachmentsToIndexedDB(){
+  let changed = false;
+  for(const record of (AppState.data.registros || [])){
+    if(!Array.isArray(record.anexos) || !record.anexos.length) continue;
+    for(const item of record.anexos){
+      if(!item || typeof item !== 'object') continue;
+      if(!item.id){
+        item.id = uid('img');
+        changed = true;
+      }
+      if(item.dataUrl || item.fullDataUrl){
+        await imageDbPut({
+          id: item.id,
+          name: item.name || 'Imagem',
+          type: item.type || 'image/jpeg',
+          fullDataUrl: item.fullDataUrl || item.dataUrl || '',
+          thumbDataUrl: item.thumbDataUrl || item.dataUrl || '',
+          createdAt: Date.now()
+        });
+        if(!item.thumbDataUrl && item.dataUrl){
+          item.thumbDataUrl = item.dataUrl;
+          changed = true;
+        }
+      }
+    }
+  }
+  if(changed) AppState.save();
+}
+
+function bindImageViewerSwipe(){
+  const area = $('imageViewerSwipeArea');
+  if(!area || area.dataset.swipeBound === '1') return;
+  area.dataset.swipeBound = '1';
+
+  area.addEventListener('touchstart', (e) => {
+    const t = e.changedTouches && e.changedTouches[0];
+    if(!t) return;
+    viewerTouchStartX = t.clientX;
+    viewerTouchStartY = t.clientY;
+  }, {passive:true});
+
+  area.addEventListener('touchend', (e) => {
+    const t = e.changedTouches && e.changedTouches[0];
+    if(!t || viewerTouchStartX === null || viewerTouchStartY === null) return;
+    const dx = t.clientX - viewerTouchStartX;
+    const dy = t.clientY - viewerTouchStartY;
+    viewerTouchStartX = null;
+    viewerTouchStartY = null;
+
+    if(Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    if(dx < 0){
+      nextImage();
+    }else{
+      prevImage();
+    }
+  }, {passive:true});
+}
+
+
+
+function openHorasMenu(){ $('horasMenuModal').classList.add('show'); }
+function closeHorasMenu(){ $('horasMenuModal').classList.remove('show'); }
+function openAddEquipModal(){ closeHorasMenu(); resetHorasForm(); $('addEquipModal').classList.add('show'); }
+function closeAddEquipModal(){ $('addEquipModal').classList.remove('show'); }
+function openReminderPickerModal(){
+  closeHorasMenu();
+  renderReminderEquipList();
+  $('reminderPickerModal').classList.add('show');
+}
+function closeReminderPickerModal(){ $('reminderPickerModal').classList.remove('show'); }
+function openManageEquipModal(){
+  closeHorasMenu();
+  renderManageEquipList();
+  $('manageEquipModal').classList.add('show');
+}
+function closeManageEquipModal(){
+  $('manageEquipModal').classList.remove('show');
+}
+function renderManageEquipList(){
+  const list = [...getHorasListForSelected()].sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+  const wrap = $('manageEquipList');
+  if(!wrap) return;
+  if(!list.length){
+    wrap.innerHTML = '<div class="empty">Nenhum equipamento cadastrado neste bigrama.</div>';
+    return;
+  }
+  wrap.innerHTML = list.map(item => `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid rgba(255,255,255,.08);">
+      <div>
+        <div style="font-weight:800;font-size:.97rem;color:#fff;">${escapeHtml(item.nome || '')}</div>
+        <div style="font-size:.80rem;color:var(--muted);margin-top:2px;">${item.updatedAt ? new Date(item.updatedAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex:0 0 auto;">
+        <button style="padding:6px 12px;border-radius:10px;border:none;background:#355f97;color:#fff;font-weight:700;font-size:.82rem;cursor:pointer;" type="button" onclick="editHorasEquip('${item.id}'); closeManageEquipModal();">✎ Editar</button>
+        <button style="padding:6px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#ff9292;font-weight:700;font-size:.82rem;cursor:pointer;" type="button" onclick="deleteHorasEquip('${item.id}');">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderReminderEquipList(){
+  const list = [...getHorasListForSelected()].sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+  const wrap = $('reminderEquipList');
+  if(!wrap) return;
+  if(!list.length){
+    wrap.innerHTML = '<div class="empty">Nenhum equipamento cadastrado neste bigrama.</div>';
+    return;
+  }
+  wrap.innerHTML = list.map(item => {
+    const reminder = item.reminder || {type:'none', startDate:'', lastNotifiedDate:''};
+    return `
+      <div class="hours-item">
+        <div class="hours-item-head">
+          <div>
+            <div class="hours-item-name">${escapeHtml(item.nome || '')}</div>
+            <div class="hours-item-sub">${escapeHtml(getReminderLabel(reminder))}</div>
+          </div>
+          <div class="toolbar">
+            <button class="btn btn-secondary" type="button" onclick="openReminderModal('${item.id}'); closeReminderPickerModal();">Configurar</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getHorasConfigForSelected(){
+  const id = AppState.data.selectedBigramaId;
+  if(!id) return {equipamentos:[], reminder:{type:'none', startDate:'', lastNotifiedDate:''}};
+  if(!AppState.data.horasData[id]) AppState.data.horasData[id] = {equipamentos:[], reminder:{type:'none', startDate:'', lastNotifiedDate:''}};
+  if(Array.isArray(AppState.data.horasData[id])){
+    AppState.data.horasData[id] = {equipamentos:[...AppState.data.horasData[id]], reminder:{type:'none', startDate:'', lastNotifiedDate:''}};
+  }
+  if(!Array.isArray(AppState.data.horasData[id].equipamentos)) AppState.data.horasData[id].equipamentos = [];
+  if(!AppState.data.horasData[id].reminder) AppState.data.horasData[id].reminder = {type:'none', startDate:'', lastNotifiedDate:''};
+  return AppState.data.horasData[id];
+}
+function getHorasListForSelected(){
+  const cfg = getHorasConfigForSelected();
+  return cfg.equipamentos;
+}
+function getReminderLabel(reminder){
+  if(!reminder || !reminder.type || reminder.type === 'none') return 'Sem lembrete';
+  const base = reminder.type === 'weekly' ? 'Semanal' : 'Mensal';
+  return `${base} · base ${formatDateBR(reminder.startDate || '')}`;
+}
+function resetHorasForm(){
+  UI.editingHorasEquipId = null;
+  $('horasForm').reset();
+  $('horasSubmitBtn').textContent = 'Adicionar equipamento';
+}
+function handleHorasSubmit(e){
+  e.preventDefault();
+  const nome = ($('horasEquipNome').value || '').trim();
+  const horas = ($('horasEquipValor').value || '').trim();
+  if(!AppState.data.selectedBigramaId){
+    setStatus('horasStatus', 'Selecione um bigrama antes.', true);
+    return;
+  }
+  if(!nome){
+    setStatus('horasStatus', 'Informe o nome do equipamento.', true);
+    return;
+  }
+  const list = getHorasListForSelected();
+  if(UI.editingHorasEquipId){
+    const idx = list.findIndex(x => x.id === UI.editingHorasEquipId);
+    if(idx >= 0){
+      list[idx] = {...list[idx], nome, horas, updatedAt: Date.now()};
+      setStatus('horasStatus', 'Equipamento atualizado.');
+    }
+  }else{
+    list.push({id: uid('heq'), nome, horas, createdAt: Date.now(), updatedAt: Date.now(), reminder:{type:'none', startDate:'', lastNotifiedDate:''}});
+    setStatus('horasStatus', 'Equipamento adicionado.');
+  }
+  AppState.save();
+  resetHorasForm();
+  closeAddEquipModal();
+  renderHorasFuncionamento();
+}
+function saveHorasInline(id){
+  const input = $('hinput-' + id);
+  if(!input) return;
+  const horas = input.value.trim();
+  const list = getHorasListForSelected();
+  const idx = list.findIndex(x => x.id === id);
+  if(idx < 0) return;
+  list[idx] = {...list[idx], horas, updatedAt: Date.now()};
+  AppState.save();
+  setStatus('horasStatus', 'Horas atualizadas.');
+  renderHorasFuncionamento();
+}
+function editHorasEquip(id){
+  const item = getHorasListForSelected().find(x => x.id === id);
+  if(!item) return;
+  UI.editingHorasEquipId = id;
+  $('horasEquipNome').value = item.nome || '';
+  $('horasEquipValor').value = item.horas || '';
+  $('horasSubmitBtn').textContent = 'Salvar edição';
+  showScreen('horas');
+  $('addEquipModal').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+async function deleteHorasEquip(id){
+  closeManageEquipModal();
+  const ok = await showAppConfirm('Excluir equipamento', 'Deseja realmente excluir este equipamento da lista de horas?');
+  if(!ok){
+    openManageEquipModal();
+    return;
+  }
+  const list = getHorasListForSelected();
+  AppState.data.horasData[AppState.data.selectedBigramaId] = list.filter(x => x.id !== id);
+  AppState.save();
+  renderHorasFuncionamento();
+  renderManageEquipList();
+}
+function updateHorasValue(id, value){
+  const item = getHorasListForSelected().find(x => x.id === id);
+  if(!item) return;
+  item.horas = value;
+}
+function saveHorasValue(id){
+  const item = getHorasListForSelected().find(x => x.id === id);
+  if(!item) return;
+  item.updatedAt = Date.now();
+  AppState.save();
+  setStatus('horasStatus', 'Horas atualizadas.');
+  renderHorasFuncionamento();
+}
+function openReminderModal(){
+  const cfg = getHorasConfigForSelected();
+  $('reminderEquipName').value = getBigramaLabel(AppState.data.selectedBigramaId) || '';
+  $('reminderType').value = (cfg.reminder && cfg.reminder.type) || 'none';
+  $('reminderStartDate').value = (cfg.reminder && cfg.reminder.startDate) || new Date().toISOString().slice(0,10);
+  $('reminderModal').classList.add('show');
+}
+function closeReminderModal(){
+  $('reminderModal').classList.remove('show');
+}
+function clearReminderConfig(){
+  const cfg = getHorasConfigForSelected();
+  cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
+  AppState.save();
+  closeReminderModal();
+  renderHorasFuncionamento();
+}
+function addDays(dateStr, days){
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0,10);
+}
+function addMonths(dateStr, months){
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString().slice(0,10);
+}
+function getNextReminderDate(reminder, todayStr){
+  if(!reminder || !reminder.startDate || !reminder.type || reminder.type === 'none') return '';
+  let due = reminder.startDate;
+  let guard = 0;
+  while(due < todayStr && guard < 500){
+    due = reminder.type === 'weekly' ? addDays(due, 7) : addMonths(due, 1);
+    guard++;
+  }
+  return due;
+}
+function handleReminderSubmit(e){
+  e.preventDefault();
+  const cfg = getHorasConfigForSelected();
+  const type = $('reminderType').value;
+  const startDate = $('reminderStartDate').value;
+  cfg.reminder = {
+    ...(cfg.reminder || {}),
+    type,
+    startDate: type === 'none' ? '' : startDate,
+    lastNotifiedDate: type === 'none' ? '' : (cfg.reminder && cfg.reminder.lastNotifiedDate) || '',
+    snoozeUntil: type === 'none' ? '' : ((cfg.reminder && cfg.reminder.snoozeUntil) || ''),
+    pendingSince: type === 'none' ? '' : ((cfg.reminder && cfg.reminder.pendingSince) || '')
+  };
+  AppState.save();
+  closeReminderModal();
+  renderHorasFuncionamento();
+  requestReminderPermission();
+}
+function renderHorasFuncionamento(){
+  if(!$('horasList')) return;
+  const list = [...getHorasListForSelected()].sort((a,b) => (a.nome || '').localeCompare(b.nome || ''));
+  if(!list.length){
+    $('horasList').innerHTML = '<div class="empty">Nenhum equipamento cadastrado neste bigrama.</div>';
+    return;
+  }
+  $('horasList').innerHTML =
+    `<div class="hours-table-header">
+      <span>Equipamento</span>
+      <span>Horas</span>
+      <span>Data</span>
+    </div>` +
+    list.map(item => `
+      <div class="hours-table-row">
+        <div class="hours-col-nome">${escapeHtml(item.nome || '')}</div>
+        <div class="hours-col-horas">
+          <input
+            type="number" min="0" step="0.1"
+            value="${escapeHtml(String(item.horas || '0'))}"
+            id="hinput-${item.id}"
+            aria-label="Horas de ${escapeHtml(item.nome || '')}"
+          />
+          <button class="btn-save-h" title="Salvar horas" onclick="saveHorasInline('${item.id}')">✔</button>
+        </div>
+        <div class="hours-col-data">${item.updatedAt ? new Date(item.updatedAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}</div>
+      </div>
+    `).join('');
+}
+async function requestReminderPermission(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'default'){
+    try{ await Notification.requestPermission(); }catch(e){}
+  }
+}
+function showDeviceNotification(title, body){
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+  try{
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistration().then(reg => {
+        if(reg && reg.showNotification){
+          reg.showNotification(title, {body, icon:'./icon-192.png', badge:'./icon-192.png'});
+        }else{
+          new Notification(title, {body, icon:'./icon-192.png'});
+        }
+      });
+    }else{
+      new Notification(title, {body, icon:'./icon-192.png'});
+    }
+  }catch(e){}
+}
+
+function closeHorasReminderActionModal(){
+  $('horasReminderActionModal').classList.remove('show');
+}
+
+
+function getHorasCfgForBigramaId(bigramaId){
+  let cfg = AppState.data.horasData[bigramaId];
+  if(!cfg){
+    cfg = {equipamentos:[], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''}};
+    AppState.data.horasData[bigramaId] = cfg;
+  }
+  if(Array.isArray(cfg)){
+    cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''}};
+    AppState.data.horasData[bigramaId] = cfg;
+  }
+  if(!cfg.equipamentos) cfg.equipamentos = [];
+  if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
+  return cfg;
+}
+
+function getPendingHorasCountForBigrama(bigramaId){
+  const cfg = getHorasCfgForBigramaId(bigramaId);
+  const pendingSince = cfg.reminder && cfg.reminder.pendingSince ? new Date(cfg.reminder.pendingSince).getTime() : 0;
+  if(!pendingSince) return Array.isArray(cfg.equipamentos) ? cfg.equipamentos.length : 0;
+  return (cfg.equipamentos || []).filter(eq => !eq.updatedAt || Number(eq.updatedAt) < pendingSince).length;
+}
+
+function refreshActiveHorasReminderModal(){
+  if(!$('horasReminderActionModal') || !$('horasReminderActionModal').classList.contains('show')) return;
+  if(!Array.isArray(UI.activeHorasReminders) || !UI.activeHorasReminders.length) return;
+
+  UI.activeHorasReminders = UI.activeHorasReminders
+    .map(entry => ({...entry, qtd:getPendingHorasCountForBigrama(entry.bigrama.id)}))
+    .filter(entry => entry.qtd > 0);
+
+  if(!UI.activeHorasReminders.length){
+    closeHorasReminderActionModal();
+    return;
+  }
+
+  renderHorasReminderActionModal(UI.activeHorasReminders);
+}
+
+function renderHorasReminderActionModal(items){
+  $('horasReminderActionContent').innerHTML = items.map(x => `
+    <div class="report-item">
+      <span>${escapeHtml(x.bigrama.sigla)}${x.qtd ? ` · ${x.qtd} equipamento(s)` : ''}</span>
+      <span>${formatDateBR(x.nextDate)}</span>
+    </div>
+  `).join('');
+}
+
+function confirmHorasReminderDone(){
+  const today = new Date().toISOString().slice(0,10);
+  for(const entry of (UI.activeHorasReminders || [])){
+    let cfg = AppState.data.horasData[entry.bigrama.id];
+    if(!cfg) continue;
+    if(Array.isArray(cfg)){
+      cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''}};
+      AppState.data.horasData[entry.bigrama.id] = cfg;
+    }
+    if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''};
+    cfg.reminder.lastNotifiedDate = today;
+    cfg.reminder.snoozeUntil = '';
+    cfg.reminder.pendingSince = '';
+  }
+  AppState.save();
+  UI.activeHorasReminders = [];
+  closeHorasReminderActionModal();
+}
+
+function snoozeHorasReminderTomorrow(){
+  const tomorrowDate = new Date();
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const tomorrow = tomorrowDate.toISOString().slice(0,10);
+  for(const entry of (UI.activeHorasReminders || [])){
+    let cfg = AppState.data.horasData[entry.bigrama.id];
+    if(!cfg) continue;
+    if(Array.isArray(cfg)){
+      cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''}};
+      AppState.data.horasData[entry.bigrama.id] = cfg;
+    }
+    if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''};
+    cfg.reminder.snoozeUntil = tomorrow;
+  }
+  AppState.save();
+  UI.activeHorasReminders = [];
+  closeHorasReminderActionModal();
+}
+
+function closeDueReminderModal(){
+  $('dueReminderModal').classList.remove('show');
+}
+function testReminderNotification(){
+  const today = new Date().toISOString().slice(0,10);
+  const nowIso = new Date().toISOString();
+  const b = getSelectedBigrama();
+  if(!b) return;
+
+  const cfg = getHorasCfgForBigramaId(b.id);
+  if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
+  if(!cfg.reminder.pendingSince) cfg.reminder.pendingSince = nowIso;
+
+  const qtd = getPendingHorasCountForBigrama(b.id);
+  const item = {
+    bigrama: b,
+    nextDate: today,
+    qtd
+  };
+
+  if(item.qtd <= 0){
+    showAppMessage('Lembrete', 'Todos os equipamentos já foram atualizados após a geração do lembrete.');
+    return;
+  }
+
+  AppState.save();
+  UI.activeHorasReminders = [item];
+  renderHorasReminderActionModal([item]);
+  $('horasReminderActionModal').classList.add('show');
+}
+
+function checkDueReminders(){
+  const today = new Date().toISOString().slice(0,10);
+  const nowIso = new Date().toISOString();
+  const dueItems = [];
+
+  for(const bigrama of (AppState.data.bigramas || [])){
+    let cfg = AppState.data.horasData[bigrama.id];
+    if(!cfg) continue;
+
+    if(Array.isArray(cfg)){
+      cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''}};
+      AppState.data.horasData[bigrama.id] = cfg;
+    }
+
+    const reminder = cfg && cfg.reminder ? cfg.reminder : {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
+
+    if(reminder.snoozeUntil && reminder.snoozeUntil > today) continue;
+
+    const nextDate = getNextReminderDate(reminder, today);
+    const shouldNotifyBySchedule = nextDate && nextDate <= today && reminder.lastNotifiedDate !== today && !reminder.pendingSince;
+    const shouldNotifyBySnooze = reminder.snoozeUntil && reminder.snoozeUntil <= today;
+
+    if(shouldNotifyBySchedule || shouldNotifyBySnooze){
+      if(!reminder.pendingSince) reminder.pendingSince = nowIso;
+      const qtd = getPendingHorasCountForBigrama(bigrama.id);
+
+      if(qtd <= 0){
+        reminder.lastNotifiedDate = today;
+        reminder.snoozeUntil = '';
+        reminder.pendingSince = '';
+        continue;
+      }
+
+      dueItems.push({
+        bigrama,
+        nextDate: shouldNotifyBySnooze ? today : nextDate,
+        qtd
+      });
+    } else if(reminder.pendingSince){
+      const qtd = getPendingHorasCountForBigrama(bigrama.id);
+      if(qtd > 0){
+        dueItems.push({
+          bigrama,
+          nextDate: reminder.snoozeUntil && reminder.snoozeUntil <= today ? today : (nextDate || today),
+          qtd
+        });
+      } else {
+        reminder.lastNotifiedDate = today;
+        reminder.snoozeUntil = '';
+        reminder.pendingSince = '';
+      }
+    }
+  }
+
+  if(!dueItems.length){
+    AppState.save();
+    return;
+  }
+
+  AppState.save();
+  UI.activeHorasReminders = dueItems;
+  renderHorasReminderActionModal(dueItems);
+  $('horasReminderActionModal').classList.add('show');
+
+  showDeviceNotification('Livro Histórico', 'Atualize as horas de funcionamento dos equipamentos!');
+}
+function updateSidebar(){
+  const screen = UI.currentScreen;
+  const b = getSelectedBigrama();
+  const ids = ['sideHome','sideNovo','sideHistorico','sideFicha','sideDocumento','sideHoras','sidePs','sideRelatorio'];
+  const map = {home:'sideHome',novo:'sideNovo',historico:'sideHistorico',ficha:'sideFicha',documento:'sideDocumento',horas:'sideHoras',ps:'sidePs',relatorio:'sideRelatorio'};
+  ids.forEach(id=>{ const el=$(id); if(el) el.classList.remove('active'); });
+  const activeId = map[screen]; if(activeId){ const el=$(activeId); if(el) el.classList.add('active'); }
+  const ctx = $('sidebarContext');
+  if(ctx){
+    if(b) ctx.innerHTML = `<b>${escapeHtml(b.sigla)} — ${escapeHtml(b.nome)}</b>Sistema selecionado`;
+    else ctx.innerHTML = `<b>Nenhum sistema selecionado</b>Selecione um bigrama na tela inicial.`;
+  }
+}
+function updateTopbar(){
+  const b = getSelectedBigrama();
+  const topBackBtn = $('topBackBtn');
+  const topTitle = $('topTitle');
+  const topSubtitle = $('topSubtitle');
+  const topMenuBtn = $('topMenuBtn');
+
+  topBackBtn.classList.toggle('ghost', UI.currentScreen==='home');
+
+  // reset shared styles first
+  topTitle.style.fontSize = '';
+  topTitle.style.whiteSpace = '';
+  topTitle.style.overflow = '';
+  topTitle.style.textOverflow = '';
+  topTitle.style.lineHeight = '';
+  topSubtitle.style.display = UI.currentScreen==='relatorio' ? 'none' : '';
+
+  if(UI.currentScreen==='home'){
+    topTitle.textContent = 'LIVRO HISTÓRICO';
+    topSubtitle.textContent = ''; topSubtitle.style.display='none';
+    topMenuBtn.style.visibility = 'visible';
+    topMenuBtn.onclick = openMainMenu;
+    topMenuBtn.setAttribute('aria-label', 'Menu');
+  }else if(UI.currentScreen==='dashboard'){
+    topTitle.textContent = b ? String(b.sigla || '').trim() : 'Sistema';
+    topSubtitle.textContent = '';
+    topTitle.style.fontSize = '2rem';
+    topSubtitle.style.display = 'none';
+    topMenuBtn.style.visibility = 'hidden';
+  }else{
+    const map={novo:'Novo Registro',historico:'Histórico',ficha:'Dados da Ficha',documento:'Documento Oficial',horas:'Horas de Funcionamento',relatorio:'Relatório Geral',ps:'Pedido de Serviço'};
+    topTitle.innerHTML = UI.currentScreen==='horas' ? 'HORAS<br>DE<br>FUNCIONAMENTO' : (map[UI.currentScreen] || 'Livro Histórico');
+    topSubtitle.textContent = UI.currentScreen==='relatorio' ? '' : (b ? getBigramaLabel(b.id) : '');
+
+    if(UI.currentScreen==='horas'){
+      topTitle.style.fontSize = '1.05rem';
+      topTitle.style.whiteSpace = 'normal';
+      topTitle.style.overflow = 'hidden';
+      topTitle.style.textOverflow = 'clip';
+      topTitle.style.lineHeight = '0.95';
+      topMenuBtn.style.visibility = 'visible';
+      topMenuBtn.onclick = openHorasMenu;
+      topMenuBtn.setAttribute('aria-label', 'Menu de Horas');
+    }else{
+      topMenuBtn.style.visibility = 'hidden';
+    }
+  }
+}
+function updateContextUI(){
+  const b=getSelectedBigrama();
+  const label=b?`${b.sigla} - ${b.nome}`:'Nenhum sistema selecionado';
+  if($('selectedBigramaChip')) $('selectedBigramaChip').textContent = label;
+  if($('dashboardBanner')) $('dashboardBanner').innerHTML = b?`<b>Sistema selecionado:</b> ${escapeHtml(label)}`:'Selecione um bigrama.';
+}
+function selectBigrama(id){ AppState.data.selectedBigramaId=id; AppState.save(); updateContextUI(); showScreen('dashboard'); }
+function showScreen(screen){
+  if(screen!=='home' && screen!=='relatorio' && !AppState.data.selectedBigramaId){ showAppMessage('Bigrama','Selecione primeiro um bigrama.'); return; }
+  UI.currentScreen=screen;
+  AppState.data.lastScreen = screen;
+  AppState.save();
+  ['home','dashboard','novo','historico','ficha','documento','horas','relatorio','ps'].forEach(s => $('screen-'+s).classList.toggle('hidden', s!==screen));
+  if(screen!=='home') updateContextUI();
+  if(screen==='historico'){ UI.historicoFiltrosExpanded = false; renderHistory(); syncHistoricoFiltrosUI(); }
+  if(screen==='ficha') fillFichaForm();
+  if(screen==='documento') renderDocument();
+  if(screen==='relatorio') renderRelatorio();
+  if(screen==='horas') renderHorasFuncionamento();
+  if(screen==='ps') renderPsList();
+  updateTopbar(); updateSidebar();
+  if(screen==='relatorio'){
+    const sec = $('screen-relatorio');
+    if(sec) sec.style.marginTop = '0';
+  }
+  if(screen !== 'historico'){
+    requestAnimationFrame(() => window.scrollTo({top:0, behavior:'auto'}));
+  } applyFixedTopbarLayoutStable();
+}
+function goBack(){ if(UI.currentScreen==='home') return; if(UI.currentScreen==='dashboard' || UI.currentScreen==='relatorio' || UI.currentScreen==='ps') showScreen('home'); else showScreen('dashboard'); }
+function goHome(){ closeMainMenu(); closeManageBigramas(); showScreen('home'); }
+function toggleVisualPrefsMenu(){
+  const panel = $('visualPrefsPanel');
+  const arrow = $('visualPrefsArrow');
+  if(!panel) return;
+  panel.classList.toggle('hidden');
+  if(arrow) arrow.textContent = panel.classList.contains('hidden') ? '▾' : '▴';
+}
+
+function openMainMenu(){ $('mainMenuModal').classList.add('show'); }
+function closeMainMenu(){
+  $('mainMenuModal').classList.remove('show');
+  const panel = $('visualPrefsPanel');
+  const arrow = $('visualPrefsArrow');
+  if(panel) panel.classList.add('hidden');
+  if(arrow) arrow.textContent = '▾';
+}
+function openManageBigramas(){ closeMainMenu(); renderBigramaList(); $('manageBigramasModal').classList.add('show'); }
+function closeManageBigramas(){ $('manageBigramasModal').classList.remove('show'); }
+
+function setStatus(id, msg, isError=false){
+  const el=$(id); if(!el) return;
+  el.textContent=msg; el.style.color=isError?'var(--danger)':'var(--success)';
+  clearTimeout(el._timer); el._timer=setTimeout(()=>{ el.textContent=''; },2600);
+}
+
+function resetRecordForm(){
+  UI.editingRecordId=null;
+  $('recordForm').reset();
+  $('dataInicio').value=new Date().toISOString().slice(0,10);
+  $('submitRecordBtn').textContent='Salvar Registro';
+  $('formHeading').textContent='Novo Registro';
+  resetAttachmentInput();
+}
+function recordTypeLabel(value){ return {avaria:'Avaria',manutencao:'Manutenção',rotina:'Rotina de manutenção',ocorrencia:'Ocorrência',anotacao:'Anotação'}[value]||'Avaria'; }
+function dateRangeLabel(rec){
+  const ini=formatDateBR(rec.dataInicio); const fim=formatDateBR(rec.dataFim); const horas=(rec.horasFunc||'').trim(); let base=ini;
+  if(fim && fim!==ini) base+=' à '+fim; if(horas) base+='\n'+horas+' h'; return base;
+}
+async function handleRecordSubmit(e){
+  e.preventDefault();
+  if(!AppState.data.selectedBigramaId){ setStatus('recordStatus','Selecione um bigrama antes.',true); return; }
+  const dataInicio=$('dataInicio').value, dataFim=$('dataFim').value, horasFunc=$('horasFunc').value.trim(), equipamento=$('equipamento').value.trim(),
+        tipoRegistro=$('tipoRegistro').value, avaria=$('avaria').value.trim(), solucao=$('solucao').value.trim(), observacao=$('observacao').value.trim();
+  if(!dataInicio || !avaria){ setStatus('recordStatus','Preencha data de início e avaria/registro.',true); return; }
+  if(dataFim && dataFim<dataInicio){ setStatus('recordStatus','A data de fechamento não pode ser menor que a data de início.',true); return; }
+  const normalizedAttachments = pendingAttachments.map(img => ({
+    id: img.id,
+    name: img.name || 'Imagem',
+    type: img.type || 'image/jpeg'
+  }));
+  const payload = {bigramaId:AppState.data.selectedBigramaId,dataInicio,dataFim,horasFunc,equipamento,tipoRegistro,tipoRegistroLabel:recordTypeLabel(tipoRegistro),avaria,solucao,observacao,anexos:normalizedAttachments,status:'aberto'};
+  try{
+    const existing = UI.editingRecordId ? AppState.data.registros.find(r => r.id === UI.editingRecordId) : null;
+    const removedIds = existing && Array.isArray(existing.anexos)
+      ? existing.anexos.map(a => a.id).filter(id => !normalizedAttachments.some(n => n.id === id))
+      : [];
+    for(const item of pendingAttachments){
+      if(item.fullDataUrl || item.thumbDataUrl){
+        await imageDbPut({
+          id: item.id,
+          name: item.name || 'Imagem',
+          type: item.type || 'image/jpeg',
+          fullDataUrl: item.fullDataUrl || '',
+          thumbDataUrl: item.thumbDataUrl || '',
+          createdAt: Date.now()
+        });
+      }
+    }
+    for(const id of removedIds){
+      await imageDbDelete(id);
+    }
+  }catch(e){
+    showAppMessage('Imagem', 'Não foi possível salvar as imagens anexadas.');
+    return;
+  }
+
+  if(UI.editingRecordId){
+    const idx=AppState.data.registros.findIndex(r=>r.id===UI.editingRecordId);
+    if(idx>=0){ AppState.data.registros[idx]={...AppState.data.registros[idx], ...payload, updatedAt:Date.now()}; setStatus('recordStatus','Registro atualizado.'); }
+  }else{
+    AppState.data.registros.push({id:uid('rec'), ...payload, createdAt:Date.now(), updatedAt:Date.now()});
+    setStatus('recordStatus','Registro salvo.');
+  }
+  AppState.save(); resetRecordForm(); renderHistory(); renderDocument();
+}
+function getCurrentRecords(){ return AppState.data.registros.filter(r=>r.bigramaId===AppState.data.selectedBigramaId); }
+function getFilteredRecords(){
+  const f=AppState.data.filtros, busca=(f.busca||'').trim().toLowerCase();
+  return getCurrentRecords().filter(r=>{
+    const matchBusca=!busca || [r.equipamento,r.avaria,r.solucao,r.observacao,r.horasFunc].join(' ').toLowerCase().includes(busca);
+    const matchStatus=f.status==='TODOS' || r.status===f.status;
+    const matchIni=!f.dataInicio || r.dataInicio>=f.dataInicio;
+    const compareDate=r.dataFim||r.dataInicio;
+    const matchFim=!f.dataFim || compareDate<=f.dataFim;
+    return matchBusca&&matchStatus&&matchIni&&matchFim;
+  }).sort((a,b)=>{ const byDate=b.dataInicio.localeCompare(a.dataInicio); return byDate!==0?byDate:(b.createdAt||0)-(a.createdAt||0); });
+}
+function renderHistory(){
+  const records=getFilteredRecords(); const abertos=records.filter(r=>r.status!=='fechado').length;
+  $('historyStats').innerHTML=`<b>Total filtrado:</b> ${records.length} registro(s)<br><b>Abertos aptos para PDF:</b> ${abertos}<br><b>Sistema:</b> ${escapeHtml(getBigramaLabel(AppState.data.selectedBigramaId))}`;
+  const list=$('recordList');
+  if(!records.length){ list.innerHTML='<div class="empty">Nenhum registro encontrado com os filtros atuais.</div>'; renderDocument(); return; }
+  list.innerHTML=records.map(r=>{
+    const b=getBigramaById(r.bigramaId); const sigla=b?b.sigla:'??';
+    return `<div class="record-card">
+      <div class="record-head">
+        <div class="record-head-left">
+          <div class="sigla">${escapeHtml(sigla)}</div>
+          <div class="record-title">
+            <div class="date">${escapeHtml(formatDateBR(r.dataInicio))}${r.dataFim?' à '+escapeHtml(formatDateBR(r.dataFim)):''}</div>
+            <div class="meta"><span class="chip ${r.status==='fechado'?'status-closed':'status-open'}">${r.status==='fechado'?'Fechado':'Em aberto'}</span></div>
+          </div>
+        </div>
+        <div class="record-actions">
+          <button class="icon-btn view" title="Visualizar" onclick="previewSingleRecord('${r.id}')">👁</button>
+          <button class="icon-btn edit" title="Editar" onclick="editRecord('${r.id}')">✎</button>
+          <button class="icon-btn done" title="${r.status==='fechado'?'Marcar como aberto':'Marcar como fechado'}" onclick="toggleRecordStatus('${r.id}')">${r.status==='fechado'?'✖':'✔'}</button>
+          <button class="icon-btn delete" title="Excluir" onclick="deleteRecord('${r.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="record-body">
+        <div class="label-block"><b>Equipamento:</b> ${escapeHtml(r.equipamento||'Sem equipamento')}</div>
+        <div class="label-block"><b>${escapeHtml(r.tipoRegistroLabel||'Avaria')}:</b> ${nl2br(r.avaria||'—')}</div>
+        <div class="label-block"><b>Solução:</b> ${nl2br(r.solucao||'—')}</div>
+        <div class="label-block"><b>Observação:</b> ${nl2br(r.observacao||'—')}</div>
+        ${renderRecordAttachments(r)}
+      </div>
+    </div>`;
+  }).join('');
+  hydrateAttachmentThumbs();
+  renderDocument();
+}
+function previewSingleRecord(id){
+  const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
+  const qtdImagens = Array.isArray(r.anexos) ? r.anexos.length : 0;
+  showAppMessage(getBigramaLabel(r.bigramaId), `${dateRangeLabel(r).replaceAll('\n',' | ')}\n\n${r.tipoRegistroLabel || 'Avaria'}:\n${r.avaria || '—'}\n\nSolução:\n${r.solucao || '—'}\n\nObservação:\n${r.observacao || '—'}${qtdImagens ? `\n\nImagens anexadas: ${qtdImagens}` : ''}`);
+}
+function editRecord(id){
+  const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
+  AppState.data.selectedBigramaId=r.bigramaId;
+  UI.editingRecordId=id;
+  $('dataInicio').value=r.dataInicio||''; $('dataFim').value=r.dataFim||''; $('horasFunc').value=r.horasFunc||''; $('equipamento').value=r.equipamento||''; $('tipoRegistro').value=r.tipoRegistro||'avaria'; $('avaria').value=r.avaria||''; $('solucao').value=r.solucao||''; $('observacao').value=r.observacao||'';
+  pendingAttachments = Array.isArray(r.anexos) ? [...r.anexos] : [];
+  renderAttachmentPreview();
+  $('submitRecordBtn').textContent='Salvar Edição'; $('formHeading').textContent='Editar Registro';
+  AppState.save(); showScreen('novo'); window.scrollTo({top:0,behavior:'smooth'});
+}
+async function deleteRecord(id){
+  const ok = await showAppConfirm('Excluir registro', 'Deseja realmente excluir este registro?');
+  if(!ok) return;
+  const rec = AppState.data.registros.find(x => x.id === id);
+  if(rec && Array.isArray(rec.anexos)){
+    for(const anexo of rec.anexos){
+      await imageDbDelete(anexo.id);
+    }
+  }
+  AppState.data.registros = AppState.data.registros.filter(x => x.id !== id);
+  if(UI.editingRecordId === id) resetRecordForm();
+  AppState.save();
+  renderHistory();
+  renderDocument();
+}
+function toggleRecordStatus(id){
+  const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
+  r.status=r.status==='fechado'?'aberto':'fechado'; r.updatedAt=Date.now();
+  AppState.save(); renderHistory(); renderDocument();
+}
+
+function syncHistoricoFiltrosUI(){
+  const body = $('historicoFiltroBody');
+  const btn = $('historicoFiltroToggle');
+  if(!body || !btn) return;
+  body.classList.toggle('hidden', !UI.historicoFiltrosExpanded);
+  btn.textContent = UI.historicoFiltrosExpanded ? '▴' : '▾';
+}
+function toggleHistoricoFiltros(){
+  UI.historicoFiltrosExpanded = !UI.historicoFiltrosExpanded;
+  syncHistoricoFiltrosUI();
+}
+
+function clearFilters(){
+  AppState.data.filtros={busca:'',status:'TODOS',dataInicio:'',dataFim:''};
+  $('filtroBusca').value=''; $('filtroStatus').value='TODOS'; $('filtroDataInicio').value=''; $('filtroDataFim').value='';
+  AppState.save(); renderHistory();
+}
+function bindFilterInputs(){
+  $('filtroBusca').addEventListener('input',e=>{AppState.data.filtros.busca=e.target.value; AppState.save(); renderHistory();});
+  $('filtroStatus').addEventListener('change',e=>{AppState.data.filtros.status=e.target.value; AppState.save(); renderHistory();});
+  $('filtroDataInicio').addEventListener('input',e=>{AppState.data.filtros.dataInicio=e.target.value; AppState.save(); renderHistory();});
+  $('filtroDataFim').addEventListener('input',e=>{AppState.data.filtros.dataFim=e.target.value; AppState.save(); renderHistory();});
+}
+
+function renderBigramaList(){
+  const list=$('bigramaList');
+  if(!AppState.data.bigramas.length){ list.innerHTML='<div class="empty">Nenhum bigrama cadastrado.</div>'; return; }
+  list.innerHTML=AppState.data.bigramas.map(b=>`
+    <div class="record-card">
+      <div class="record-head">
+        <div class="record-head-left"><div class="sigla">${escapeHtml(b.sigla)}</div><div class="record-title"><div class="date">${escapeHtml(b.nome)}</div></div></div>
+        <div class="record-actions"><button class="icon-btn edit" title="Editar" onclick="editBigrama('${b.id}')">✎</button><button class="icon-btn delete" title="Excluir" onclick="deleteBigrama('${b.id}')">🗑</button></div>
+      </div>
+    </div>`).join('');
+}
+function handleBigramaSubmit(e){
+  e.preventDefault();
+  const sigla=$('siglaInput').value.trim().toUpperCase(), nome=$('nomeSistemaInput').value.trim();
+  if(!sigla || !nome){ setStatus('bigramaStatus','Informe sigla e nome do sistema.',true); return; }
+  const exists=AppState.data.bigramas.find(b=>b.sigla===sigla && b.id!==UI.editingBigramaId);
+  if(exists){ setStatus('bigramaStatus','Já existe um bigrama com essa sigla.',true); return; }
+  if(UI.editingBigramaId){
+    const idx=AppState.data.bigramas.findIndex(b=>b.id===UI.editingBigramaId);
+    if(idx>=0){
+      const old=AppState.data.bigramas[idx];
+      AppState.data.bigramas[idx]={...old,sigla,nome};
+      const oldFicha=AppState.data.fichas[old.id];
+      if(oldFicha && (!oldFicha.sistemaFicha || oldFicha.sistemaFicha===`${old.nome.toUpperCase()} (${old.sigla})`)){
+        AppState.data.fichas[old.id]={...oldFicha,sistemaFicha:`${nome.toUpperCase()} (${sigla})`};
+      }
+      setStatus('bigramaStatus','Bigrama atualizado.');
+    }
+  }else{
+    const id=uid('big');
+    AppState.data.bigramas.push({id,sigla,nome});
+    AppState.data.fichas[id]={...DEFAULT_FICHA,sistemaFicha:`${nome.toUpperCase()} (${sigla})`};
+    setStatus('bigramaStatus','Bigrama salvo.');
+  }
+  AppState.save(); resetBigramaForm(); renderBigramaList(); renderHomeFolders(); if(AppState.data.selectedBigramaId) updateContextUI();
+}
+function editBigrama(id){
+  const b=AppState.data.bigramas.find(x=>x.id===id); if(!b) return;
+  UI.editingBigramaId=id; $('siglaInput').value=b.sigla||''; $('nomeSistemaInput').value=b.nome||''; $('saveBigramaBtn').textContent='Salvar Edição';
+}
+function resetBigramaForm(){ UI.editingBigramaId=null; $('bigramaForm').reset(); $('saveBigramaBtn').textContent='Salvar Bigrama'; }
+async function deleteBigrama(id){
+  const inUse = AppState.data.registros.some(r => r.bigramaId === id);
+  if(inUse){
+    showAppMessage('Excluir bigrama', 'Não é possível excluir este bigrama porque existem registros vinculados a ele.');
+    return;
+  }
+  const ok = await showAppConfirm('Excluir bigrama', 'Deseja realmente excluir este bigrama?');
+  if(!ok) return;
+  AppState.data.bigramas = AppState.data.bigramas.filter(x => x.id !== id);
+  delete AppState.data.fichas[id];
+  if(AppState.data.selectedBigramaId === id){
+    AppState.data.selectedBigramaId = null;
+    showScreen('home');
+  }
+  AppState.save();
+  renderBigramaList();
+  renderHomeFolders();
+  updateTopbar(); updateSidebar();
+}
+
+function fillFichaForm(){
+  const f=getFichaForSelected();
+  $('navio').value=f.navio||''; $('fichaNumero').value=f.fichaNumero||''; $('folhaInicial').value=f.folhaInicial||1; $('anexoPrimeiraPagina').value=f.anexoPrimeiraPagina||'A';
+  $('sistemaFicha').value=f.sistemaFicha||''; $('equipamentoFicha').value=f.equipamentoFicha||''; $('manualPlano').value=f.manualPlano||''; $('fabricante').value=f.fabricante||''; $('dadosPlaca').value=f.dadosPlaca||''; $('localizacao').value=f.localizacao||''; $('numeroSerie').value=f.numeroSerie||'';
+}
+function aplicarPadraoFicha(){ const f=getDefaultFichaForSelected(); saveFichaForSelected(f); fillFichaForm(); renderDocument(); setStatus('fichaStatus','Padrão restaurado.'); }
+function handleFichaSubmit(e){
+  e.preventDefault();
+  saveFichaForSelected({navio:$('navio').value.trim(),fichaNumero:$('fichaNumero').value.trim(),folhaInicial:parseInt($('folhaInicial').value||'1',10)||1,anexoPrimeiraPagina:$('anexoPrimeiraPagina').value,sistemaFicha:$('sistemaFicha').value.trim(),equipamentoFicha:$('equipamentoFicha').value.trim(),manualPlano:$('manualPlano').value.trim(),fabricante:$('fabricante').value.trim(),dadosPlaca:$('dadosPlaca').value.trim(),localizacao:$('localizacao').value.trim(),numeroSerie:$('numeroSerie').value.trim()});
+  renderDocument(); setStatus('fichaStatus','Dados da ficha salvos.');
+}
+
+function buildRowsHtml(records){
+  return records.map(r=>`<tr><td class="left-col">${nl2br(dateRangeLabel(r))||'&nbsp;'}</td><td class="right-col"><div class="rh-block"><b>${escapeHtml(r.tipoRegistroLabel||'Avaria')}:</b> ${nl2br(r.avaria||'')}<br><br><b>Solução:</b> ${nl2br(r.solucao||'')}<br><br><b>Observação:</b> ${nl2br(r.observacao||'')}</div></td></tr>`).join('');
+}
+function makePage(pageNumber, rowsHtml, isFirst){
+  const ficha=getFichaForSelected();
+  const pageCode=isFirst?`- ${escapeHtml(ficha.anexoPrimeiraPagina||'A')} - ${pageNumber} -`:`- B - ${pageNumber} -`;
+  const headerTop=`<div class="sheet-top-right">ENGENALMARINST Nº 85-13A<br>${isFirst?'Anexo '+escapeHtml(ficha.anexoPrimeiraPagina||'A'):'Anexo B'}</div>`;
+  const titleTable=`<table class="doc-title-table"><tr><td class="doc-title" style="width:68%;">REGISTRO HISTÓRICO DE EQUIPAMENTOS DE<br>MÁQUINAS</td><td style="width:14%;text-align:center;"><span class="box-label">FICHA Nº</span><br>${escapeHtml(ficha.fichaNumero||'')}</td><td style="width:18%;text-align:center;"><span class="box-label">FOLHA Nº</span><br>${pageNumber}</td></tr></table>`;
+  const metaTable=isFirst?`<table class="meta-table"><tr><td colspan="2"><span class="box-label">NAVIO:</span> ${escapeHtml(ficha.navio||'')}</td></tr><tr><td colspan="2"><span class="box-label">SISTEMA:</span> ${escapeHtml(ficha.sistemaFicha||'')}</td></tr><tr><td colspan="2"><span class="box-label">EQUIPAMENTO:</span> ${escapeHtml(ficha.equipamentoFicha||'')}</td></tr><tr><td colspan="2"><span class="box-label">MANUAL E/OU PLANO:</span> ${escapeHtml(ficha.manualPlano||'')}</td></tr><tr><td colspan="2"><span class="box-label">FABRICANTE:</span> ${escapeHtml(ficha.fabricante||'')}</td></tr><tr><td colspan="2"><span class="box-label">DADOS DE PLACA:</span> ${escapeHtml(ficha.dadosPlaca||'')}</td></tr><tr><td><span class="box-label">LOCALIZAÇÃO:</span> ${escapeHtml(ficha.localizacao||'')}</td><td><span class="box-label">Nº DE SÉRIE:</span> ${escapeHtml(ficha.numeroSerie||'')}</td></tr></table>`:'';
+  return `<div class="official-sheet">${headerTop}<div class="page-code">${pageCode}</div>${titleTable}${metaTable}<table class="hist-table" style="margin-top:${isFirst?'0':'8px'};"><thead><tr><th style="width:30%;">DATA E Nº DE HORAS DE FUNCIONAMENTO</th><th style="width:70%;">REGISTRO HISTÓRICO</th></tr></thead><tbody>${rowsHtml || `<tr><td class="left-col">&nbsp;</td><td class="right-col"><div class="rh-block"><b>Avaria:</b><br><br><b>Solução:</b><br><br><b>Observação:</b></div></td></tr>`}</tbody></table><div class="signature-bar"><div class="signature-box"><div class="signature-line"></div>Encarregado do Sistema MO-1</div><div class="signature-box"><div class="signature-line"></div>Encarregado da Divisão de Máquinas</div></div></div>`;
+}
+function getPrintableOpenRecords(){ return getFilteredRecords().filter(r=>r.status!=='fechado'); }
+function renderDocument(){
+  const host=$('printHost'), records=getPrintableOpenRecords(), ficha=getFichaForSelected(), initialPage=Math.max(1, parseInt(ficha.folhaInicial||1,10)||1), perPage=4, pages=[];
+  if(!records.length) pages.push(makePage(initialPage,'',true));
+  else for(let i=0;i<records.length;i+=perPage) pages.push(makePage(initialPage+(i/perPage), buildRowsHtml(records.slice(i,i+perPage)), i===0));
+  host.innerHTML=pages.join('');
+}
+function openPrintChoiceModal(){ $('printChoiceModal').classList.add('show'); }
+function closePrintChoiceModal(){ $('printChoiceModal').classList.remove('show'); }
+function previewPdfOnly(){
+  closePrintChoiceModal();
+  closeConflictModal();
+  closeImportReportModal();
+  closeAppMessageModal();
+  resolveAppConfirm(false);
+  printOfficialDocument(false);
+}
+function confirmPrintAndClose(){
+  closePrintChoiceModal();
+  closeConflictModal();
+  closeImportReportModal();
+  closeAppMessageModal();
+  resolveAppConfirm(false);
+  printOfficialDocument(true);
+}
+function printOfficialDocument(markPrinted=false){
+  renderDocument();
+  const printableRecords = getPrintableOpenRecords();
+  const content = $('printHost').innerHTML;
+  if(!content || !content.trim()){
+    showAppMessage('Documento oficial','Não há conteúdo para imprimir.');
+    return;
+  }
+
+  const printableIds = printableRecords.map(r=>r.id);
+  let finalized = false;
+  const finalize = ()=>{
+    if(finalized || !markPrinted) return;
+    finalized = true;
+    AppState.data.registros.forEach(r=>{
+      if(printableIds.includes(r.id)){
+        r.status='fechado';
+        r.updatedAt=Date.now();
+      }
+    });
+    AppState.save();
+    renderHistory();
+    renderDocument();
+  };
+
+  const after = ()=>{
+    window.removeEventListener('afterprint', after);
+    finalize();
+  };
+  window.addEventListener('afterprint', after);
+
+  setTimeout(()=>{
+    try{
+      window.print();
+      setTimeout(()=>{
+        window.removeEventListener('afterprint', after);
+        finalize();
+      }, 1500);
+    }catch(err){
+      window.removeEventListener('afterprint', after);
+      console.error(err);
+      showAppMessage('Documento oficial','Não foi possível abrir a impressão.');
+    }
+  }, 80);
+}
+
+function openRelatorio(){
+  closeMainMenu();
+  UI.currentScreen = 'relatorio';
+  ['home','dashboard','novo','historico','ficha','documento','relatorio'].forEach(s => $('screen-'+s).classList.toggle('hidden', s!=='relatorio'));
+  renderRelatorio();
+  updateTopbar(); updateSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderRelatorio(){
+  const host = $('relatorioContent');
+  const bigramas = AppState.data.bigramas;
+  if(!bigramas.length){
+    host.innerHTML = '<div class="empty">Nenhum bigrama cadastrado.</div>';
+    return;
+  }
+  const rows = bigramas.map(b => {
+    const regs = AppState.data.registros.filter(r => r.bigramaId === b.id);
+    const naoSolucionadas = regs.filter(r => !r.solucao || r.solucao.trim() === '').length;
+    const disponiveis = regs.filter(r => r.status === 'aberto').length;
+    return {b, naoSolucionadas, disponiveis};
+  });
+  const totalNaoSol = rows.reduce((s,r)=>s+r.naoSolucionadas,0);
+  const totalDisp   = rows.reduce((s,r)=>s+r.disponiveis,0);
+  host.innerHTML = `
+    <div class="card" style="overflow-x:hidden;width:100%;max-width:100%;">
+      <table style="width:100%;max-width:100%;border-collapse:collapse;table-layout:fixed;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--gold);">
+            <th style="text-align:left;padding:10px 12px;color:var(--gold);font-size:1rem;">Bigrama</th>
+            <th style="text-align:center;padding:10px 12px;color:var(--gold);font-size:1rem;">Ocorrências não solucionadas</th>
+            <th style="text-align:center;padding:10px 12px;color:var(--gold);font-size:1rem;">Imprimir</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row,i) => `
+          <tr style="border-bottom:1px solid rgba(255,255,255,.08);background:${i%2===0?'rgba(255,255,255,.03)':'transparent'}">
+            <td style="padding:12px;font-weight:800;">
+              <span class="chip" style="margin-right:0;">${escapeHtml(row.b.sigla)}</span>
+            </td>
+            <td style="text-align:center;padding:12px;">
+              <span style="font-size:1.3rem;font-weight:800;color:${row.naoSolucionadas>0?'var(--danger)':'var(--success)'};">${row.naoSolucionadas}</span>
+            </td>
+            <td style="text-align:center;padding:12px;">
+              <span style="font-size:1.3rem;font-weight:800;color:${row.disponiveis>0?'var(--gold)':'var(--muted)'};">${row.disponiveis}</span>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+        <tfoot>
+          <tr style="border-top:2px solid rgba(255,255,255,.15);">
+            <td style="padding:12px;font-weight:800;color:var(--muted);">TOTAL</td>
+            <td style="text-align:center;padding:12px;font-size:1.2rem;font-weight:800;color:${totalNaoSol>0?'var(--danger)':'var(--success)'};">${totalNaoSol}</td>
+            <td style="text-align:center;padding:12px;font-size:1.2rem;font-weight:800;color:${totalDisp>0?'var(--gold)':'var(--muted)'};">${totalDisp}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>`;
+}
+function printRelatorio(){
+  const content = $('relatorioContent').innerHTML;
+  if(!content || !content.trim()){ showAppMessage('Relatório','Nenhum dado para imprimir.'); return; }
+  const styles = `<style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111;padding:24px;}
+    h2{margin:0 0 16px;}
+    table{width:100%;border-collapse:collapse;}
+    th,td{border:1px solid #bbb;padding:10px 12px;font-size:11pt;}
+    th{background:#f2f2f2;font-weight:700;text-align:center;}
+    td:first-child{text-align:left;}
+    td:not(:first-child){text-align:center;}
+    tfoot tr{border-top:2px solid #555;font-weight:800;}
+    .chip{display:inline-block;padding:2px 8px;border-radius:999px;background:#e2e8f0;font-weight:700;margin-right:6px;font-size:10pt;}
+  
+    body.lock-scroll{
+      overflow:hidden;padding-bottom:20px;
+      height:100vh;
+    }
+
+
+    #mainMenuModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+
+
+    .collapsible-toggle{
+      margin-left:auto;
+      width:38px;height:38px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      flex:0 0 auto;
+    }
+    .card-head-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:space-between;
+    }
+
+
+    #historicoFiltroBody{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+    #historicoFiltroBody.hidden{
+      display:none !important;
+    }
+    #historicoFiltroBody .field{
+      gap:6px;
+      margin:0;
+    }
+    #historicoFiltroBody .grid-2{
+      gap:12px;
+      margin:0;
+    }
+    #historicoFiltroBody .toolbar{
+      margin-top:2px !important;
+      gap:10px;
+    }
+    #historicoFiltroBody label{
+      line-height:1.2;
+    }
+
+
+    #historicoFiltroBody{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+    #historicoFiltroBody.hidden{
+      display:none !important;
+    }
+    #historicoFiltroBody .field{
+      gap:4px;
+      margin:0;
+    }
+    #historicoFiltroBody .field label{
+      font-size:.92rem;
+      line-height:1.1;
+    }
+    #historicoFiltroBody .grid-2{
+      gap:8px;
+      margin:0;
+    }
+    #historicoFiltroBody input,
+    #historicoFiltroBody select{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:.95rem;
+    }
+    #historicoFiltroBody .toolbar{
+      margin-top:0 !important;
+      gap:8px;
+    }
+    #historicoFiltroBody .btn{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:.84rem;
+    }
+    .collapsible-toggle{
+      width:34px;
+      height:34px;
+      border-radius:10px;
+      font-size:.92rem;
+    }
+
+
+    #manageEquipModal,
+    #addEquipModal,
+    #reminderPickerModal,
+    #reminderModal,
+    #dueReminderModal,
+    #horasReminderActionModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+
+
+    #manageEquipModal .modal-box,
+    #addEquipModal .modal-box,
+    #reminderPickerModal .modal-box,
+    #reminderModal .modal-box,
+    #dueReminderModal .modal-box,
+    #horasReminderActionModal .modal-box{
+      display:flex;
+      flex-direction:column;
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 90px));
+      overflow:hidden;padding-bottom:20px;
+    }
+    #manageEquipModal .modal-box h3,
+    #addEquipModal .modal-box h3,
+    #reminderPickerModal .modal-box h3,
+    #reminderModal .modal-box h3,
+    #dueReminderModal .modal-box h3,
+    #horasReminderActionModal .modal-box h3{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:linear-gradient(180deg, rgba(24,60,107,.99), rgba(18,52,92,.99));
+      padding-bottom:8px;
+      margin-bottom:8px;
+      flex:0 0 auto;
+    }
+    #manageEquipModal .modal-box > p,
+    #addEquipModal .modal-box > p,
+    #reminderPickerModal .modal-box > p,
+    #reminderModal .modal-box > p,
+    #dueReminderModal .modal-box > p,
+    #horasReminderActionModal .modal-box > p{
+      flex:0 0 auto;
+      margin-bottom:12px;
+    }
+    #manageEquipList,
+    #reminderEquipList,
+    #dueReminderContent,
+    #horasReminderActionContent,
+    #addEquipModal form,
+    #reminderModal form{
+      flex:1 1 auto;
+      min-height:0;
+      overflow-y:auto;
+      padding-right:4px;
+    }
+    #manageEquipModal .toolbar,
+    #addEquipModal .toolbar,
+    #reminderPickerModal .toolbar,
+    #reminderModal .toolbar,
+    #dueReminderModal .toolbar,
+    #horasReminderActionModal .modal-actions,
+    #horasReminderActionModal .toolbar{
+      flex:0 0 auto;
+    }
+
+
+    #exportBackupModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+
+
+    #manageBigramasModal{
+      align-items:flex-start;
+      padding-top:calc(var(--topbar-height, 88px) + 26px);
+    }
+    #manageBigramasModal .modal-box{
+      width:min(520px,100%);
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 90px));
+      overflow:auto;
+      padding:14px;
+      border-radius:18px;
+    }
+    #manageBigramasModal h3{
+      margin:0 0 8px;
+      font-size:1.08rem;
+    }
+    #manageBigramasModal p{
+      margin:0 0 12px;
+      font-size:.92rem;
+      line-height:1.35;
+    }
+    #manageBigramasModal .section{
+      gap:10px;
+    }
+    #manageBigramasModal .grid-2{
+      gap:10px;
+    }
+    #manageBigramasModal .field{
+      gap:4px;
+    }
+    #manageBigramasModal .field label{
+      font-size:.9rem;
+      line-height:1.1;
+    }
+    #manageBigramasModal input{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:.95rem;
+    }
+    #manageBigramasModal .btn-row{
+      gap:8px;
+    }
+    #manageBigramasModal .btn,
+    #manageBigramasModal .toolbar .btn{
+      min-height:42px;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:.82rem;
+    }
+    #manageBigramasModal #bigramaList{
+      gap:10px;
+      margin-top:4px;
+    }
+    #manageBigramasModal .record-card{
+      padding:12px 12px 14px;
+      border-radius:18px;
+    }
+    #manageBigramasModal .record-head{
+      gap:10px;
+    }
+    #manageBigramasModal .sigla{
+      min-width:48px;
+      height:44px;
+      font-size:1.25rem;
+      border-radius:12px;
+    }
+    #manageBigramasModal .record-title .date{
+      font-size:.96rem;
+      margin-bottom:4px;
+    }
+    #manageBigramasModal .record-actions{
+      grid-template-columns:repeat(2,38px);
+      gap:8px;
+    }
+    #manageBigramasModal .icon-btn{
+      width:38px;
+      height:38px;
+      border-radius:10px;
+      font-size:1rem;
+    }
+
+
+    #mainMenuModal .modal-box{
+      width:min(520px,100%);
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 90px));
+      overflow:auto;
+      padding:14px;
+      border-radius:18px;
+    }
+    #mainMenuModal h3{
+      margin:0 0 8px;
+      font-size:1.08rem;
+    }
+    #mainMenuModal p{
+      margin:0 0 12px;
+      font-size:.92rem;
+      line-height:1.35;
+    }
+    #mainMenuModal .menu-list{
+      gap:4px;
+      margin-top:4px;
+    }
+    #mainMenuModal .menu-item{
+      padding:10px 2px;
+      font-size:.95rem;
+    }
+    #mainMenuModal .submenu-panel{
+      margin-top:6px;
+      padding:10px 12px;
+      gap:10px;
+      border-radius:14px;
+    }
+    #mainMenuModal .submenu-title{
+      font-size:.9rem;
+    }
+    #mainMenuModal .home-control-buttons{
+      gap:6px;
+      margin-top:6px !important;
+    }
+    #mainMenuModal .chip{
+      padding:6px 9px;
+      font-size:.8rem;
+    }
+
+
+.topbar{
+  padding:10px 14px !important;
+}
+.topbar-title{
+  font-size:1.1rem !important;
+  line-height:1.1 !important;
+}
+
+
+    #relatorioContent{
+      width:100%;
+      max-width:100%;
+      overflow-x:auto;
+    }
+    #relatorioContent table{
+      width:100%;
+      max-width:100%;
+      table-layout:fixed;
+      border-collapse:collapse;
+    }
+    #relatorioContent th,
+    #relatorioContent td{
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      white-space:normal;
+    }
+    @media print{
+      #relatorioContent{
+        overflow:visible !important;
+      }
+      #relatorioContent table{
+        width:100% !important;
+        max-width:100% !important;
+        table-layout:fixed !important;
+      }
+      #relatorioContent th,
+      #relatorioContent td{
+        font-size:9pt !important;
+        padding:6px 8px !important;
+        word-break:break-word !important;
+        overflow-wrap:anywhere !important;
+        white-space:normal !important;
+      }
+    }
+
+
+    #screen-relatorio{
+      margin-top:0 !important;
+      padding-top:0 !important;
+    }
+    #screen-relatorio .card{
+      margin-top:0 !important;
+    }
+    #relatorioContent{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden !important;
+    }
+    #relatorioContent table{
+      width:100% !important;
+      max-width:100% !important;
+      table-layout:fixed !important;
+      border-collapse:collapse;
+    }
+    #relatorioContent th,
+    #relatorioContent td{
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      white-space:normal;
+      font-size:.92rem;
+      padding:8px 10px;
+    }
+    @media(min-width:960px){
+      #relatorioContent th,
+      #relatorioContent td{
+        padding:8px 10px !important;
+      }
+    }
+    @media print{
+      #relatorioContent{
+        overflow:visible !important;
+      }
+      #relatorioContent table{
+        width:100% !important;
+        max-width:100% !important;
+        table-layout:fixed !important;
+      }
+      #relatorioContent th,
+      #relatorioContent td{
+        font-size:8.6pt !important;
+        padding:5px 6px !important;
+        word-break:break-word !important;
+        overflow-wrap:anywhere !important;
+        white-space:normal !important;
+      }
+    }
+
+
+    #screen-relatorio .card{
+      margin-top:8px !important;
+    }
+
+    #screen-relatorio,
+    #relatorioContent,
+    #relatorioContent > div,
+    #relatorioContent .card,
+    #relatorioContent .banner{
+      max-width:100% !important;
+      overflow-x:hidden !important;
+    }
+    #relatorioContent table{
+      width:100% !important;
+      max-width:100% !important;
+      table-layout:fixed !important;
+      border-collapse:collapse !important;
+    }
+    #relatorioContent th,
+    #relatorioContent td{
+      max-width:0;
+      white-space:normal !important;
+      word-break:break-word !important;
+      overflow-wrap:anywhere !important;
+    }
+
+
+#relatorioContent table{
+  table-layout:auto !important;
+}
+#relatorioContent th:nth-child(1),
+#relatorioContent td:nth-child(1){
+  width:80px;
+  white-space:nowrap;
+}
+#relatorioContent th:nth-child(2),
+#relatorioContent td:nth-child(2){
+  width:45%;
+  white-space:normal;
+  word-break:normal;
+}
+#relatorioContent th:nth-child(3),
+#relatorioContent td:nth-child(3){
+  width:25%;
+  white-space:nowrap;
+}
+
+
+#relatorioContent th:nth-child(3),
+#relatorioContent td:nth-child(3){
+  width:32%;
+  white-space:nowrap !important;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+}
+#relatorioContent th:nth-child(2),
+#relatorioContent td:nth-child(2){
+  width:38%;
+  white-space:normal;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+}
+
+
+    #psModal{
+      align-items:flex-start !important;
+      padding-top:calc(var(--topbar-height, 88px) + 20px) !important;
+    }
+
+    #psModal .modal-box{
+      width:min(560px,100%) !important;
+      max-height:calc(100vh - (var(--topbar-height, 88px) + 80px)) !important;
+      overflow:hidden !important;
+      display:flex !important;
+      flex-direction:column !important;
+      padding:14px !important;
+      border-radius:18px !important;
+      margin:0 !important;
+    }
+
+    #psModal h3{
+      position:sticky !important;
+      top:0 !important;
+      z-index:2 !important;
+      background:linear-gradient(180deg, rgba(24,60,107,.99), rgba(18,52,92,.99)) !important;
+      padding-bottom:6px !important;
+      margin-bottom:8px !important;
+      font-size:1.08rem !important;
+    }
+
+    #psForm{
+      flex:1 1 auto !important;
+      overflow-y:auto !important;
+      min-height:0 !important;
+      padding-right:4px !important;
+      gap:8px !important;
+    }
+
+    #psForm .field{
+      gap:4px !important;
+    }
+
+    #psForm label{
+      font-size:.9rem !important;
+      line-height:1.1 !important;
+    }
+
+    #psForm input,
+    #psForm select,
+    #psForm textarea{
+      min-height:42px !important;
+      padding:10px 12px !important;
+      border-radius:12px !important;
+      font-size:.95rem !important;
+    }
+
+    #psForm textarea{
+      min-height:90px !important;
+    }
+
+    #psForm .btn{
+      min-height:44px !important;
+      padding:10px 12px !important;
+      font-size:.82rem !important;
+      border-radius:14px !important;
+    }
+
+    #psAttachmentPreview{
+      gap:6px !important;
+    }
+
+</style>`;
+  const bigramas = AppState.data.bigramas;
+  const rows = bigramas.map(b => {
+    const regs = AppState.data.registros.filter(r => r.bigramaId === b.id);
+    const naoSolucionadas = regs.filter(r => !r.solucao || r.solucao.trim() === '').length;
+    const disponiveis = regs.filter(r => r.status === 'aberto').length;
+    return {b, naoSolucionadas, disponiveis};
+  });
+  const totalNaoSol = rows.reduce((s,r)=>s+r.naoSolucionadas,0);
+  const totalDisp   = rows.reduce((s,r)=>s+r.disponiveis,0);
+  const tableHtml = `
+    <h2>Relatório Geral — Livro Histórico</h2>
+    <table>
+      <thead><tr><th>Bigrama</th><th>Ocorrências não solucionadas</th><th>Imprimir</th></tr></thead>
+      <tbody>${rows.map(row=>`<tr><td><span class="chip">${escapeHtml(row.b.sigla)}</span>${escapeHtml(row.b.nome)}</td><td>${row.naoSolucionadas}</td><td>${row.disponiveis}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><td>TOTAL</td><td>${totalNaoSol}</td><td>${totalDisp}</td></tr></tfoot>
+    </table>`;
+  let iframe = document.getElementById('printFrame'); if(iframe) iframe.remove();
+  iframe = document.createElement('iframe'); iframe.id='printFrame';
+  iframe.style.cssText='position:fixed;width:1px;height:1px;right:0;bottom:0;opacity:0;border:0;';
+  document.body.appendChild(iframe);
+  const doc = iframe.contentWindow.document;
+  doc.open(); doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório Geral</title>${styles}</head><body>${tableHtml}</body></html>`); doc.close();
+  iframe.onload = () => setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 250);
+  setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 700);
+}
+
+
+function openExportModal(){
+  const now=new Date(); const pad=n=>String(n).padStart(2,'0');
+  const stamp=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+  $('exportFileName').value=`Livro H- Backup ${stamp}`;
+  $('exportFsaWarning').classList.add('hidden');
+  $('exportBackupModal').classList.add('show');
+}
+function closeExportModal(){ $('exportBackupModal').classList.remove('show'); }
+async function getExportBlob(){
+  const payload = JSON.parse(JSON.stringify(AppState.data));
+  payload.__images = await imageDbExportAll();
+  return new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+}
+function getExportFileName(){
+  const name=($('exportFileName').value||'Livro H- Backup').trim().replace(/\.json$/i,'');
+  return name+'.json';
+}
+async function exportWithFolderPicker(){
+  if(!window.showSaveFilePicker){
+    $('exportFsaWarning').classList.remove('hidden');
+    return;
+  }
+  try{
+    const handle=await window.showSaveFilePicker({
+      suggestedName: getExportFileName(),
+      types:[{description:'Arquivo JSON',accept:{'application/json':['.json']}}]
+    });
+    const writable=await handle.createWritable();
+    await writable.write(await getExportBlob());
+    await writable.close();
+    closeExportModal();
+    showAppMessage('Backup exportado','Arquivo salvo com sucesso na pasta escolhida.');
+  }catch(e){
+    if(e.name!=='AbortError') showAppMessage('Exportar backup','Não foi possível salvar o arquivo: '+e.message);
+  }
+}
+async function exportToDownloads(){
+  const blob=await getExportBlob();
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download=getExportFileName(); a.click(); URL.revokeObjectURL(url);
+  closeExportModal();
+}
+
+function conflictField(label, mine, theirs, useBackup=false){
+  const diff=String(mine??'')!==String(theirs??''); const value=useBackup?theirs:mine;
+  return `<div class="conflict-field ${diff?'conflict-diff':''}"><b>${escapeHtml(label)}</b><div>${nl2br(value===''||value===null||typeof value==='undefined'?'—':String(value))}</div></div>`;
+}
+function openNextConflict(){
+  if(!UI.conflictQueue.length){ finalizeImportReport(); return; }
+  const item=UI.conflictQueue[0], local=AppState.data.registros.find(r=>r.id===item.localId), backup=item.backupRecord;
+  if(!local){ UI.conflictQueue.shift(); openNextConflict(); return; }
+  $('conflictContent').innerHTML = `<div class="conflict-grid">
+    <div class="conflict-col"><h4>Meu registro</h4>
+      ${conflictField('Data início', local.dataInicio, backup.dataInicio)}
+      ${conflictField('Data fim', local.dataFim, backup.dataFim)}
+      ${conflictField('Horas', local.horasFunc, backup.horasFunc)}
+      ${conflictField('Equipamento', local.equipamento, backup.equipamento)}
+      ${conflictField('Tipo', local.tipoRegistroLabel||local.tipoRegistro, backup.tipoRegistroLabel||backup.tipoRegistro)}
+      ${conflictField('Avaria', local.avaria, backup.avaria)}
+      ${conflictField('Solução', local.solucao, backup.solucao)}
+      ${conflictField('Observação', local.observacao, backup.observacao)}
+      ${conflictField('Status', local.status, backup.status)}
+    </div>
+    <div class="conflict-col"><h4>Registro do backup</h4>
+      ${conflictField('Data início', local.dataInicio, backup.dataInicio, true)}
+      ${conflictField('Data fim', local.dataFim, backup.dataFim, true)}
+      ${conflictField('Horas', local.horasFunc, backup.horasFunc, true)}
+      ${conflictField('Equipamento', local.equipamento, backup.equipamento, true)}
+      ${conflictField('Tipo', local.tipoRegistroLabel||local.tipoRegistro, backup.tipoRegistroLabel||backup.tipoRegistro, true)}
+      ${conflictField('Avaria', local.avaria, backup.avaria, true)}
+      ${conflictField('Solução', local.solucao, backup.solucao, true)}
+      ${conflictField('Observação', local.observacao, backup.observacao, true)}
+      ${conflictField('Status', local.status, backup.status, true)}
+    </div>
+  </div>`;
+  $('conflictModal').classList.add('show');
+}
+function closeConflictModal(){ $('conflictModal').classList.remove('show'); }
+function resolveConflictChoice(choice){
+  if(!UI.conflictQueue.length){ closeConflictModal(); finalizeImportReport(); return; }
+  const item=UI.conflictQueue.shift(); const local=AppState.data.registros.find(r=>r.id===item.localId);
+  if(choice==='backup' && local){ Object.assign(local, item.backupRecord); UI.pendingImportReport.updated++; }
+  else UI.pendingImportReport.ignored++;
+  AppState.save(); closeConflictModal(); bootstrapUI(); if(UI.conflictQueue.length) openNextConflict(); else finalizeImportReport();
+}
+function showImportReportModal(report){
+  $('importReportContent').innerHTML = `<div class="report-list">
+    <div class="report-item"><span>Entradas no backup</span><span>${report.totalIncoming}</span></div>
+    <div class="report-item"><span>Novos</span><span>${report.added}</span></div>
+    <div class="report-item"><span>Atualizados</span><span>${report.updated}</span></div>
+    <div class="report-item"><span>Ignorados</span><span>${report.ignored}</span></div>
+    <div class="report-item"><span>Conflitos revisados</span><span>${report.conflicts}</span></div>
+  </div>`;
+  $('importReportModal').classList.add('show');
+}
+function closeImportReportModal(){ $('importReportModal').classList.remove('show'); }
+function finalizeImportReport(){
+  const report=UI.pendingImportReport || {added:0,updated:0,ignored:0,conflicts:0,totalIncoming:0};
+  UI.pendingImportReport=null; UI.conflictQueue=[];
+  AppState.save(); bootstrapUI(); showImportReportModal(report);
+}
+function importBackup(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const parsed = JSON.parse(reader.result);
+      const incoming = Array.isArray(parsed.registros) ? parsed.registros : [];
+      const incomingBigramas = Array.isArray(parsed.bigramas) ? parsed.bigramas : [];
+      const incomingFichas = parsed.fichas && typeof parsed.fichas === 'object' ? parsed.fichas : {};
+      const incomingImages = Array.isArray(parsed.__images) ? parsed.__images : [];
+      const report = { added:0, updated:0, ignored:0, conflicts:0, totalIncoming: incoming.length };
+      const compareKeys = ['dataInicio','dataFim','horasFunc','equipamento','tipoRegistro','tipoRegistroLabel','avaria','solucao','observacao','status','bigramaId'];
+
+      incomingBigramas.forEach(extB => {
+        const byId = AppState.data.bigramas.find(b => b.id === extB.id);
+        const bySigla = AppState.data.bigramas.find(b => b.sigla === extB.sigla);
+        if(!byId && !bySigla){
+          AppState.data.bigramas.push(extB);
+        }
+      });
+
+      Object.keys(incomingFichas).forEach(key => {
+        if(!AppState.data.fichas[key]){
+          AppState.data.fichas[key] = incomingFichas[key];
+        }
+      });
+
+      UI.conflictQueue = [];
+      UI.pendingImportReport = report;
+
+      incoming.forEach(ext => {
+        const local = AppState.data.registros.find(r => r.id === ext.id);
+        if(!local){
+          AppState.data.registros.push(ext);
+          report.added++;
+          return;
+        }
+
+        const different = compareKeys.some(k => String(local[k] ?? '') !== String(ext[k] ?? ''));
+        if(!different){
+          report.ignored++;
+          return;
+        }
+
+        UI.conflictQueue.push({ localId: local.id, backupRecord: ext });
+        report.conflicts++;
+      });
+
+      imageDbImportMany(incomingImages).then(()=>{});
+      AppState.save();
+      bootstrapUI();
+
+      if(UI.conflictQueue.length > 0){
+        openNextConflict();
+      }else{
+        finalizeImportReport();
+      }
+    }catch(e){
+      showAppMessage('Importação de backup', 'Arquivo de backup inválido.');
+    }
+  };
+  reader.onerror = () => {
+    showAppMessage('Importação de backup', 'Não foi possível ler o arquivo selecionado.');
+  };
+  reader.readAsText(file);
+}
+
+
+// ═══════════════════════ PEDIDO DE SERVIÇO ═══════════════════════
+let pendingPsAttachments = [];
+let editingPsId = null;
+
+function getPsListForBigrama(bigramaId){
+  if(!AppState.data.psData) AppState.data.psData = {};
+  if(!Array.isArray(AppState.data.psData[bigramaId])) AppState.data.psData[bigramaId] = [];
+  return AppState.data.psData[bigramaId];
+}
+function openPsModal(id){
+  resetPsForm();
+  if(id){
+    const list = getPsListForBigrama(AppState.data.selectedBigramaId);
+    const ps = list.find(x=>x.id===id);
+    if(!ps) return;
+    editingPsId = id;
+    $('psModalTitle').textContent = 'Editar Pedido de Serviço';
+    $('psSubmitBtn').textContent = 'Salvar Edição';
+    $('psOm').value=ps.om||''; $('psData').value=ps.data||''; $('psNumero').value=ps.numero||'';
+    $('psPrioridade').value=ps.prioridade||'A'; $('psDescricao').value=ps.descricao||'';
+    $('psTipoManutencao').value=ps.tipoManutencao||'corretiva'; $('psSobressalentes').value=ps.sobressalentes||'nao';
+    $('psCodigoMrc').value=ps.codigoMrc||''; $('psCodigoLcn').value=ps.codigoLcn||'';
+    $('psCompartimento').value=ps.compartimento||''; $('psFunctionalMark').value=ps.functionalMark||'';
+    $('psDadosPlaca').value=ps.dadosPlaca||''; $('psHorasFuncionamento').value=ps.horasFuncionamento||'';
+    $('psDataUltimaManutencao').value=ps.dataUltimaManutencao||'';
+    $('psEncarregado').value=ps.encarregado||''; $('psOficial').value=ps.oficial||'';
+    $('psDivisao').value=ps.divisao||''; $('psInfoComplementares').value=ps.infoComplementares||'';
+    pendingPsAttachments=(ps.anexos||[]).map(a=>({...a}));
+    renderPsAttachmentPreview();
+  } else {
+    $('psModalTitle').textContent='Novo Pedido de Serviço';
+    $('psSubmitBtn').textContent='Salvar Pedido';
+    $('psData').value=new Date().toISOString().slice(0,10);
+  }
+  $('psModal').classList.add('show');
+}
+function closePsModal(){ $('psModal').classList.remove('show'); resetPsForm(); }
+function resetPsForm(){
+  editingPsId=null; pendingPsAttachments=[];
+  if($('psForm')) $('psForm').reset();
+  renderPsAttachmentPreview();
+}
+async function handlePsSubmit(e){
+  e.preventDefault();
+  const bigramaId=AppState.data.selectedBigramaId;
+  if(!bigramaId){ setStatus('psStatus','Selecione um bigrama antes.',true); return; }
+  const descricao=($('psDescricao').value||'').trim();
+  if(!descricao){ setStatus('psStatus','Informe a descrição do serviço.',true); return; }
+  const normalizedAnexos=pendingPsAttachments.map(img=>({id:img.id,name:img.name||'Imagem',type:img.type||'image/jpeg'}));
+  for(const item of pendingPsAttachments){
+    if(item.fullDataUrl||item.thumbDataUrl){
+      await imageDbPut({id:item.id,name:item.name||'Imagem',type:item.type||'image/jpeg',
+        fullDataUrl:item.fullDataUrl||'',thumbDataUrl:item.thumbDataUrl||'',createdAt:Date.now()});
+    }
+  }
+  const payload={bigramaId,om:($('psOm').value||'').trim(),data:$('psData').value,
+    numero:($('psNumero').value||'').trim(),prioridade:$('psPrioridade').value,descricao,
+    tipoManutencao:$('psTipoManutencao').value,sobressalentes:$('psSobressalentes').value,
+    codigoMrc:($('psCodigoMrc').value||'').trim(),codigoLcn:($('psCodigoLcn').value||'').trim(),
+    compartimento:($('psCompartimento').value||'').trim(),functionalMark:($('psFunctionalMark').value||'').trim(),
+    dadosPlaca:($('psDadosPlaca').value||'').trim(),horasFuncionamento:($('psHorasFuncionamento').value||'').trim(),
+    dataUltimaManutencao:$('psDataUltimaManutencao').value,encarregado:($('psEncarregado').value||'').trim(),
+    oficial:($('psOficial').value||'').trim(),divisao:($('psDivisao').value||'').trim(),
+    infoComplementares:($('psInfoComplementares').value||'').trim(),anexos:normalizedAnexos};
+  const list=getPsListForBigrama(bigramaId);
+  if(editingPsId){
+    const idx=list.findIndex(x=>x.id===editingPsId);
+    if(idx>=0) list[idx]={...list[idx],...payload,updatedAt:Date.now()};
+  } else {
+    list.unshift({id:uid('ps'),...payload,createdAt:Date.now(),updatedAt:Date.now()});
+  }
+  AppState.save(); renderPsList(); setStatus('psStatus','Pedido salvo.');
+  setTimeout(closePsModal,700);
+}
+function renderPsList(){
+  const wrap=$('psList'); if(!wrap) return;
+  const list=getPsListForBigrama(AppState.data.selectedBigramaId);
+  if(!list.length){ wrap.innerHTML='<div class="empty">Nenhum pedido cadastrado.</div>'; return; }
+  wrap.innerHTML=[...list].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(ps=>{
+    const dataFmt=ps.data?formatDateBR(ps.data):'—';
+    const tipo=ps.tipoManutencao==='preventiva'?'Preventiva':'Corretiva';
+    return `<div class="record-card">
+      <div class="record-head">
+        <div class="record-head-left">
+          <div class="sigla" style="font-size:1rem;min-width:42px;height:42px;">${escapeHtml(ps.prioridade||'A')}</div>
+          <div class="record-title">
+            <div class="date">${escapeHtml(ps.numero||'S/N')} · ${dataFmt}</div>
+            <div class="meta"><span class="chip">${escapeHtml(tipo)}</span><span class="chip">${escapeHtml(ps.om||'—')}</span></div>
+          </div>
+        </div>
+        <div class="record-actions" style="grid-template-columns:repeat(3,42px);">
+          <button class="icon-btn view" title="Imprimir" onclick="printPs('${ps.id}')">🖨️</button>
+          <button class="icon-btn edit" title="Editar" onclick="openPsModal('${ps.id}')">✎</button>
+          <button class="icon-btn delete" title="Excluir" onclick="deletePs('${ps.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="record-body">
+        <div class="label-block"><b>Descrição:</b> ${escapeHtml((ps.descricao||'').substring(0,150))}${(ps.descricao||'').length>150?'…':''}</div>
+        ${ps.encarregado?`<div class="label-block"><b>Encarregado:</b> ${escapeHtml(ps.encarregado)}</div>`:''}
+        ${ps.oficial?`<div class="label-block"><b>Oficial:</b> ${escapeHtml(ps.oficial)}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+async function deletePs(id){
+  const ok=await showAppConfirm('Excluir pedido','Deseja realmente excluir este pedido?');
+  if(!ok) return;
+  const bigramaId=AppState.data.selectedBigramaId;
+  const list=getPsListForBigrama(bigramaId);
+  const ps=list.find(x=>x.id===id);
+  if(ps&&Array.isArray(ps.anexos)) for(const a of ps.anexos) await imageDbDelete(a.id);
+  AppState.data.psData[bigramaId]=list.filter(x=>x.id!==id);
+  AppState.save(); renderPsList();
+}
+async function handlePsAttachmentInput(event){
+  const files=Array.from(event.target.files||[]).filter(f=>f.type&&f.type.startsWith('image/'));
+  if(!files.length){ renderPsAttachmentPreview(); return; }
+  try{
+    for(const file of files){
+      const versions=await createCompressedImageVersions(file);
+      pendingPsAttachments.push({id:uid('psi'),name:file.name,type:file.type||'image/jpeg',
+        thumbDataUrl:versions.thumbDataUrl,fullDataUrl:versions.fullDataUrl});
+    }
+    renderPsAttachmentPreview(); event.target.value='';
+  }catch(e){ showAppMessage('Imagem','Não foi possível processar a imagem.'); }
+}
+function renderPsAttachmentPreview(){
+  const wrap=$('psAttachmentPreview'); if(!wrap) return;
+  if(!pendingPsAttachments.length){ wrap.innerHTML=''; return; }
+  wrap.innerHTML=pendingPsAttachments.map((img,i)=>`
+    <div style="position:relative;text-align:center;">
+      <img src="${img.thumbDataUrl||''}" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.15);" />
+      <button type="button" onclick="removePsAttachment(${i})"
+        style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:none;background:#ff6b6b;color:#fff;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">✕</button>
+    </div>`).join('');
+}
+function removePsAttachment(idx){ pendingPsAttachments.splice(idx,1); renderPsAttachmentPreview(); }
+
+async function printPs(id){
+  const bigramaId=AppState.data.selectedBigramaId;
+  const list=getPsListForBigrama(bigramaId);
+  const ps=list.find(x=>x.id===id);
+  if(!ps){
+    showAppMessage('Imprimir','Pedido não encontrado.');
+    return;
+  }
+
+  const tipoCorr=ps.tipoManutencao!=='preventiva';
+  const tipoPrev=ps.tipoManutencao==='preventiva';
+  const dataFmt=ps.data?formatDateBR(ps.data):'';
+  const dataUltFmt=ps.dataUltimaManutencao?formatDateBR(ps.dataUltimaManutencao):'N/A';
+  const sobreS=ps.sobressalentes==='sim', sobreN=ps.sobressalentes==='nao', sobreNA=ps.sobressalentes==='na';
+  const prioA=ps.prioridade==='A', prioB=ps.prioridade==='B';
+
+  let imgRows='';
+  if(Array.isArray(ps.anexos)&&ps.anexos.length){
+    const imgs=[];
+    for(const a of ps.anexos){
+      const stored=await imageDbGet(a.id);
+      if(stored&&(stored.fullDataUrl||stored.thumbDataUrl)){
+        imgs.push({src:stored.fullDataUrl||stored.thumbDataUrl,name:stored.name||a.name||''});
+      }
+    }
+    for(let i=0;i<imgs.length;i+=2){
+      const cell=img=>`<td style="width:50%;padding:5px;border:1px solid #bbb;text-align:center;vertical-align:middle;"><img src="${img.src}" style="max-width:100%;max-height:185px;object-fit:contain;"/><div style="font-size:7.5pt;color:#555;margin-top:2px;">${escapeHtml(img.name)}</div></td>`;
+      imgRows+=`<tr>${cell(imgs[i])}${imgs[i+1]?cell(imgs[i+1]):'<td style="width:50%;border:1px solid #bbb;"></td>'}</tr>`;
+    }
+  }
+  const imgSection=imgRows
+    ?`<table style="width:100%;border-collapse:collapse;">${imgRows}</table>`
+    :`<p style="text-align:center;color:#888;padding:20px 0;font-size:9pt;">Nenhuma imagem anexada.</p>`;
+
+  const cb=v=>`<span style="display:inline-block;width:11px;height:11px;border:1px solid #000;text-align:center;line-height:10px;font-size:8.5pt;vertical-align:middle;">${v?'X':''}</span>`;
+  const hdr=`<div style="text-align:center;border-top:2px solid #8B0000;border-bottom:1px solid #8B0000;padding:2px 0;margin-bottom:4mm;"><div style="font-weight:700;font-size:8pt;color:#8B0000;letter-spacing:.03em;">DOCUMENTO PREPARATÓRIO – ACESSO RESTRITO</div><div style="font-size:7pt;color:#8B0000;">Art. 3º, Inciso XII, e Art. 20 do Dec nº 7.724, de 16 de maio de 2012</div></div>`;
+  const ftr=(pg,total)=>`<div style="margin-top:auto;padding-top:3mm;text-align:center;border-top:1px solid #8B0000;border-bottom:2px solid #8B0000;"><div style="font-weight:700;font-size:8pt;color:#8B0000;">DOCUMENTO PREPARATÓRIO – ACESSO RESTRITO</div><div style="font-size:7pt;color:#8B0000;">Art. 3º, Inciso XII, e Art. 20 do Dec nº 7.724, de 16 de maio de 2012</div><div style="font-size:8pt;font-weight:700;margin-top:1mm;">- ${pg} de ${total} -</div></div>`;
+
+  const host = $('psPrintHost');
+  if(!host){
+    showAppMessage('Imprimir','Área de impressão não encontrada.');
+    return;
+  }
+
+  host.innerHTML = `
+    <style>
+      #psPrintHost .ps-page{width:210mm;min-height:297mm;margin:0 auto 18px;background:#ececec;padding:10mm 8mm 8mm;box-sizing:border-box;position:relative;display:flex;flex-direction:column;page-break-after:always;font-family:Arial,Helvetica,sans-serif;color:#111}
+      #psPrintHost .ps-sheet{margin-top:14mm;border:1px solid #222;background:#fff}
+      #psPrintHost .ps-title-row{border-top:1px solid #222;border-bottom:1px solid #222;text-align:center;font-size:11.2pt;font-weight:700;padding:4.5mm 4mm 4mm;background:#fff}
+      #psPrintHost .ps-table{width:100%;border-collapse:collapse;table-layout:fixed}
+      #psPrintHost .ps-table td{border-right:1px solid #222;border-bottom:1px solid #222;vertical-align:top;padding:2.2mm 1.8mm;font-size:8.4pt}
+      #psPrintHost .ps-table tr td:last-child{border-right:none}
+      #psPrintHost .lbl{font-size:8.2pt;font-weight:400;text-transform:uppercase;line-height:1.2;margin-bottom:1.4mm}
+      #psPrintHost .val{font-size:8.3pt;font-weight:700;line-height:1.22}
+      #psPrintHost .h-desc{height:27mm}
+      #psPrintHost .h-info{height:33mm}
+      #psPrintHost .img-box{border:1px solid #222;background:#fff}
+      #psPrintHost .img-box-title{border-bottom:1px solid #222;padding:2.2mm 1.8mm;font-size:8.5pt;text-transform:uppercase}
+      #psPrintHost .img-box-body{min-height:126mm;padding:0}
+    </style>
+    <div class="ps-page">
+      ${hdr}
+      <div class="ps-sheet">
+        <div style="padding:4mm 4mm 0 4mm;font-size:8.1pt;text-align:right;">CÓDIGO DE CONTROLE DO EMIM: ____________________________</div>
+        <div class="ps-title-row">PEDIDO DE SERVIÇO DA OM SOLICITANTE</div>
+        <table class="ps-table">
+          <tr>
+            <td style="width:32%;"><div class="lbl">1. OM SOLICITANTE:</div><div class="val">${escapeHtml(ps.om||'')}</div></td>
+            <td style="width:20%;"><div class="lbl">2. DATA:</div><div class="val">${dataFmt}</div></td>
+            <td style="width:18%;"><div class="lbl">3. NÚMERO:</div><div class="val">${escapeHtml(ps.numero||'')}</div></td>
+            <td style="width:30%;"><div class="lbl">4. PRIORIDADE:</div><div class="val">${cb(prioA)} A &nbsp;&nbsp; ${cb(prioB)} B</div></td>
+          </tr>
+          <tr><td colspan="4" class="h-desc"><div class="lbl">5. DESCRIÇÃO DO SERVIÇO:</div><div class="val">${nl2br(escapeHtml(ps.descricao||''))}</div></td></tr>
+          <tr>
+            <td><div class="lbl">6. TIPO DE MANUTENÇÃO:</div><div class="val">${cb(tipoCorr)} CORRETIVA<br>${cb(tipoPrev)} PREVENTIVA</div></td>
+            <td><div class="lbl">7. SE CORRETIVA, POSSUI SOBRESSALENTES DISPONÍVEIS?</div><div class="val">${cb(sobreS)} SIM ${cb(sobreNA)} NÃO SE APLICA<br>${cb(sobreN)} NÃO</div></td>
+            <td colspan="2"><div class="lbl">8. CÓDIGO MRC:</div><div class="val">${escapeHtml(ps.codigoMrc||'N/A')}</div></td>
+          </tr>
+          <tr>
+            <td><div class="lbl">9. CÓDIGO LCN:</div><div class="val">${escapeHtml(ps.codigoLcn||'N/A')}</div></td>
+            <td><div class="lbl">10. COMPARTIMENTO:</div><div class="val">${escapeHtml(ps.compartimento||'')}</div></td>
+            <td colspan="2"><div class="lbl">11. FUNCTIONAL MARK:</div><div class="val">${nl2br(escapeHtml(ps.functionalMark||''))}</div></td>
+          </tr>
+          <tr>
+            <td><div class="lbl">12. DADOS DA PLACA DO FABRICANTE:</div><div class="val">${escapeHtml(ps.dadosPlaca||'N/A')}</div></td>
+            <td><div class="lbl">13. HORAS DE FUNCIONAMENTO DO EQUIPAMENTO:</div><div class="val">${escapeHtml(ps.horasFuncionamento||'N/A')}</div></td>
+            <td colspan="2"><div class="lbl">14. DATA DA ÚLTIMA MANUTENÇÃO:</div><div class="val">${dataUltFmt}</div></td>
+          </tr>
+          <tr>
+            <td><div class="lbl">15. ENCARREGADO DA INCUMBÊNCIA:</div><div class="val">${nl2br(escapeHtml(ps.encarregado||''))}</div></td>
+            <td><div class="lbl">16. OFICIAL RESPONSÁVEL:</div><div class="val">${escapeHtml(ps.oficial||'')}</div></td>
+            <td colspan="2"><div class="lbl">17. DIVISÃO RESPONSÁVEL:</div><div class="val">${escapeHtml(ps.divisao||'')}</div></td>
+          </tr>
+          <tr><td colspan="4" class="h-info"><div class="lbl">18. INFORMAÇÕES COMPLEMENTARES SOBRE O REPARO:</div><div class="val">${nl2br(escapeHtml(ps.infoComplementares||''))}</div></td></tr>
+        </table>
+      </div>
+      ${ftr(1,2)}
+    </div>
+    <div class="ps-page">
+      ${hdr}
+      <div style="margin-top:12mm;">
+        <div class="img-box"><div class="img-box-title">19. FOTOS/IMAGENS DOS EQUIPAMENTOS:</div><div class="img-box-body">${imgSection}</div></div>
+        <div style="text-align:center;margin-top:14mm;font-family:'Times New Roman',Times,serif;">
+          <div style="font-size:10pt;font-weight:700;">${escapeHtml(ps.oficial||'')}</div>
+          <div style="font-size:9pt;">Primeiro-Tenente</div>
+          <div style="font-size:8.5pt;">${escapeHtml(ps.divisao||'')}</div>
+          <div style="font-size:7.5pt;letter-spacing:.05em;margin-top:3px;">ASSINADO DIGITALMENTE</div>
+        </div>
+      </div>
+      ${ftr(2,2)}
+    </div>`;
+
+  document.body.classList.add('ps-print-mode');
+  host.classList.remove('hidden');
+
+  const cleanup = ()=>{
+    window.removeEventListener('afterprint', cleanup);
+    document.body.classList.remove('ps-print-mode');
+    host.classList.add('hidden');
+    host.innerHTML = '';
+  };
+  window.addEventListener('afterprint', cleanup);
+
+  setTimeout(()=>{
+    try{
+      window.print();
+      setTimeout(cleanup, 1500);
+    }catch(err){
+      cleanup();
+      console.error(err);
+      showAppMessage('Imprimir','Não foi possível abrir a impressão do pedido de serviço.');
+    }
+  }, 80);
+}
+function bootstrapUI(){
+  try{ ensureBigramasIntegrity(true); }catch(e){}
+  try{ ensureHomeFoldersRendered(); }catch(e){}
+  if(AppState.data.selectedBigramaId) updateContextUI();
+  fillFichaForm();
+  $('filtroBusca').value=AppState.data.filtros.busca||''; $('filtroStatus').value=AppState.data.filtros.status||'TODOS'; $('filtroDataInicio').value=AppState.data.filtros.dataInicio||''; $('filtroDataFim').value=AppState.data.filtros.dataFim||'';
+  renderBigramaList(); renderHistory(); renderDocument(); updateTopbar(); updateSidebar();
+}
+
+window.addEventListener('resize', applyFixedTopbarLayoutStable);
+
+function previewPdfOnlyDirect(){
+  try{
+    closePrintChoiceModal();
+  }catch(e){}
+  renderDocument();
+  const content = $('printHost') ? $('printHost').innerHTML : '';
+  if(!content || !content.trim()){
+    showAppMessage('Documento oficial','Não há conteúdo para imprimir.');
+    return;
+  }
+  setTimeout(function(){
+    try{
+      window.print();
+    }catch(err){
+      console.error(err);
+      showAppMessage('Documento oficial','Não foi possível abrir a impressão.');
+    }
+  }, 120);
+}
+
+function confirmPrintAndCloseDirect(){
+  try{
+    closePrintChoiceModal();
+  }catch(e){}
+  renderDocument();
+  const printableRecords = getPrintableOpenRecords ? getPrintableOpenRecords() : [];
+  const content = $('printHost') ? $('printHost').innerHTML : '';
+  if(!content || !content.trim()){
+    showAppMessage('Documento oficial','Não há conteúdo para imprimir.');
+    return;
+  }
+
+  let finalized = false;
+  const finalize = function(){
+    if(finalized) return;
+    finalized = true;
+    printableRecords.forEach(function(r){
+      r.status = 'fechado';
+      r.updatedAt = Date.now();
+    });
+    AppState.save();
+    if(typeof renderHistory === 'function') renderHistory();
+    if(typeof renderDocument === 'function') renderDocument();
+  };
+
+  const after = function(){
+    window.removeEventListener('afterprint', after);
+    finalize();
+  };
+  window.addEventListener('afterprint', after);
+
+  setTimeout(function(){
+    try{
+      window.print();
+      setTimeout(function(){
+        window.removeEventListener('afterprint', after);
+        finalize();
+      }, 1500);
+    }catch(err){
+      window.removeEventListener('afterprint', after);
+      console.error(err);
+      showAppMessage('Documento oficial','Não foi possível abrir a impressão.');
+    }
+  }, 120);
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  AppState.load();
+  ensureBigramasIntegrity(true);
+  $('recordForm').addEventListener('submit', handleRecordSubmit);
+  $('bigramaForm').addEventListener('submit', handleBigramaSubmit);
+  $('fichaForm').addEventListener('submit', handleFichaSubmit);
+  if($('horasForm')) $('horasForm').addEventListener('submit', handleHorasSubmit);
+  if($('reminderForm')) $('reminderForm').addEventListener('submit', handleReminderSubmit);
+  $('importBackup').addEventListener('change', e=>{ const file=e.target.files&&e.target.files[0]; if(file) importBackup(file); e.target.value=''; });
+  if($('importBackupSidebar')) $('importBackupSidebar').addEventListener('change', e=>{ const file=e.target.files&&e.target.files[0]; if(file) importBackup(file); e.target.value=''; });
+  if($('anexosImagem')) $('anexosImagem').addEventListener('change', handleAttachmentInput);
+  if($('psAnexosImagem')) $('psAnexosImagem').addEventListener('change', handlePsAttachmentInput);
+  if($('psForm')) $('psForm').addEventListener('submit', handlePsSubmit);
+  $('importBackupSidebar').addEventListener('change', e=>{ const file=e.target.files&&e.target.files[0]; if(file) importBackup(file); e.target.value=''; });
+  bindFilterInputs();
+  requestReminderPermission();
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMainMenu(); closeManageBigramas(); closePrintChoiceModal(); closeConflictModal(); closeImportReportModal(); closeAppMessageModal(); resolveAppConfirm(false); closeConflictModal(); closeImportReportModal(); closeAppMessageModal(); resolveAppConfirm(false); closeExportModal(); closePsModal(); } });
+  resetRecordForm();
+  bindImageViewerSwipe();
+  bootstrapUI();
+
+  const savedScreen = (AppState.data && AppState.data.lastScreen) || 'home';
+  const canRestoreSelected = !!AppState.data.selectedBigramaId;
+  const restorableScreens = ['dashboard','novo','historico','ficha','documento'];
+
+  if(canRestoreSelected && restorableScreens.includes(savedScreen)){
+    UI.currentScreen = savedScreen;
+    showScreen(savedScreen);
+  }else{
+    UI.currentScreen = 'home';
+    showScreen('home');
+  }
+
+  setTimeout(ensureHomeFoldersRendered, 50);
+  setTimeout(ensureHomeFoldersRendered, 300);
+  migrateLegacyAttachmentsToIndexedDB().then(() => {
+    hydrateAttachmentThumbs();
+  });
+});
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => console.error("Falha ao registrar service worker:", err));
+  });
+}
+</script>
+</body>
+</html>
