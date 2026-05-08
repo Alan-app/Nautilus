@@ -1,4 +1,4 @@
-const CACHE_NAME = 'livro-historico-v21-app-v01-word-mobile-20260507-1';
+const CACHE_NAME = 'livro-historico-v29-app-v08-20260508-2';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
