@@ -1,8 +1,0 @@
-{
-  "VERSÃO V18": true,
-  "FAB default display none": true,
-  "FAB only notes-screen": true,
-  "Esvaziar lixeira": true,
-  "delete individual": true,
-  "cache v44": true
-}
