@@ -1,4 +1,4 @@
-const CACHE_NAME = 'livro-historico-v35-app-v09-assinatura-zoom-20260508-1';
+const CACHE_NAME = 'livro-historico-v38-app-v12-notas-backup-20260509-1';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
