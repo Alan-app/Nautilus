@@ -1,4 +1,4 @@
-const CACHE_NAME = 'livro-historico-v44-app-v18-notas-fab-lixeira-real-20260509-2';
+const CACHE_NAME = 'livro-historico-v45-app-v19-notas-lixeira-fab-ok-20260509-1';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
