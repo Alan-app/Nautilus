@@ -1,3 +1,2 @@
-Livro Histórico — v39 / App V13
-
-Bloco de Notas estilo Google Keep: cards em grade, cores, fixar, arquivar, lixeira, busca e backup/importação com notas.
+Livro Histórico — v41 / App V15
+Correção real da rolagem vertical do Bloco de Notas.
