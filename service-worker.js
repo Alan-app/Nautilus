@@ -1,4 +1,4 @@
-const CACHE_NAME = 'livro-historico-v42-app-v16-notas-keep-fab-20260509-1';
+const CACHE_NAME = 'livro-historico-v47-app-v21-docx-v34-notas-fix-20260509-1';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));

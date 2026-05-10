@@ -74,15 +74,15 @@
     .equipment-card-title,.equipment-card-title *,.record-title,.record-title *,.record-head,.record-head-left{min-width:0;}
     .equipment-card-title,.record-title .date,.record-title .meta,.record-title .meta *{white-space:normal !important;word-break:break-word !important;overflow-wrap:anywhere !important;}
     .keep-shell{display:grid;gap:14px}.keep-composer{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:12px;box-shadow:var(--shadow);display:grid;gap:8px}.keep-composer input,.keep-composer textarea{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);border-radius:14px;min-height:44px;padding:10px 12px}.keep-composer textarea{min-height:84px;resize:vertical}.keep-topbar{display:grid;gap:10px;grid-template-columns:1fr}@media(min-width:700px){.keep-topbar{grid-template-columns:1fr auto;align-items:center}}.keep-tabs{display:flex;gap:8px;flex-wrap:wrap}.keep-tab{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;border-radius:999px;padding:8px 12px;font-weight:800}.keep-tab.active{background:var(--gold);color:#111}.keep-grid{display:grid;grid-template-columns:1fr;gap:12px;align-items:start}@media(min-width:560px){.keep-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:960px){.keep-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}.keep-section-title{font-size:.9rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 2px 2px}.keep-note{border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px;min-height:118px;box-shadow:0 10px 24px rgba(0,0,0,.20);position:relative;overflow:hidden;color:#0b1220;display:flex;flex-direction:column;gap:8px}.keep-note[data-color="default"]{background:#fff;color:#111}.keep-note[data-color="yellow"]{background:#fff3bf;color:#111}.keep-note[data-color="green"]{background:#d3f9d8;color:#111}.keep-note[data-color="blue"]{background:#d0ebff;color:#111}.keep-note[data-color="red"]{background:#ffe3e3;color:#111}.keep-note[data-color="purple"]{background:#e5dbff;color:#111}.keep-note-title{font-weight:900;font-size:1.02rem;line-height:1.25;white-space:normal;word-break:break-word;overflow-wrap:anywhere}.keep-note-text{font-size:.95rem;line-height:1.36;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;flex:1}.keep-note-meta{font-size:.72rem;opacity:.65}.keep-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}.keep-action-group{display:flex;gap:6px;flex-wrap:wrap}.keep-icon{width:34px;height:34px;border-radius:11px;border:1px solid rgba(0,0,0,.10);background:rgba(255,255,255,.55);color:#111;display:flex;align-items:center;justify-content:center;font-size:1rem}.keep-icon.active{background:#111;color:#fff}.keep-colors{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.color-dot{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 2px 8px rgba(0,0,0,.2)}.color-dot.active{outline:3px solid var(--gold)}.color-default{background:#fff}.color-yellow{background:#fff3bf}.color-green{background:#d3f9d8}.color-blue{background:#d0ebff}.color-red{background:#ffe3e3}.color-purple{background:#e5dbff}.keep-empty{padding:24px;border-radius:18px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.18);color:var(--muted);text-align:center}
-    /* v41/App V15: correção da rolagem da tela Bloco de Notas */
+    /* v41/App V21: correção da rolagem da tela Bloco de Notas */
     #screen-notas{min-height:calc(100vh - var(--topbar-height, 88px));overflow:visible !important;padding-bottom:110px;}
     #screen-notas .card{overflow:visible !important;}
     #screen-notas .keep-shell,#screen-notas .keep-grid{overflow:visible !important;}
     body.notes-screen{overflow-y:auto !important;height:auto !important;}
 
-    /* v42/App V16: Notas estilo Keep com FAB, modal de adicionar e edição inline */
+    /* v42/App V21: Notas estilo Keep com FAB, modal de adicionar e edição inline */
     #screen-notas .card > p{display:none !important;}
-    .notes-fab{position:fixed;right:22px;bottom:24px;z-index:900;width:62px;height:62px;border-radius:50%;border:none;background:var(--gold);color:#0b1220;font-size:2.15rem;font-weight:900;line-height:1;box-shadow:0 12px 28px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;}
+    .notes-fab{position:fixed !important;left:auto !important;right:calc(18px + env(safe-area-inset-right)) !important;bottom:calc(82px + env(safe-area-inset-bottom)) !important;z-index:2500 !important;width:62px !important;height:62px !important;min-width:62px !important;max-width:62px !important;min-height:62px !important;max-height:62px !important;border-radius:50% !important;border:none !important;background:var(--gold) !important;color:#0b1220 !important;font-size:2.15rem !important;font-weight:900 !important;line-height:1 !important;box-shadow:0 12px 28px rgba(0,0,0,.35) !important;display:flex !important;align-items:center !important;justify-content:center !important;padding:0 !important;margin:0 !important;grid-column:auto !important;justify-self:auto !important;align-self:auto !important;flex:0 0 auto !important;}
     .notes-fab:active{transform:scale(.96);}
     .keep-note.editing{outline:3px solid rgba(240,196,25,.95);}
     .keep-inline-title,.keep-inline-text{width:100%;border:none !important;box-shadow:none !important;background:transparent !important;color:#111 !important;border-radius:8px !important;padding:0 !important;min-height:auto !important;outline:none !important;}
@@ -90,7 +90,7 @@
     .keep-inline-text{font-size:.95rem;line-height:1.36;min-height:96px !important;resize:vertical;white-space:pre-wrap;}
     #noteModal .keep-composer{box-shadow:none;margin-top:8px;}
     #noteModal .modal-box{max-height:88vh;overflow:auto;}
-    @media(min-width:960px){.notes-fab{right:32px;bottom:28px;}}
+    @media(min-width:960px){.notes-fab{right:32px !important;bottom:32px !important;}}
 
 
     .record-card{background:linear-gradient(180deg, rgba(31,67,116,.98), rgba(28,63,109,.98));border-radius:22px;padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden;padding-bottom:20px;border:1px solid rgba(255,255,255,.08)}
@@ -1164,7 +1164,7 @@
 }
 
 
-/* v25/App V04: Livro Histórico - margens DOCX/visualização, numeração no rodapé, assinaturas separadas */
+/* v25/App V21: Livro Histórico - margens DOCX/visualização, numeração no rodapé, assinaturas separadas */
 .official-sheet{padding:18mm 8mm 18mm 12mm !important;}
 #pdfViewerContent .official-sheet{padding:18mm 8mm 18mm 12mm !important;}
 .official-page-body{height:224mm !important;max-height:224mm !important;overflow:hidden !important;}
@@ -1174,7 +1174,7 @@
 .official-sheet .signature-line{border-top:1px solid #222 !important;margin:0 auto 4px auto !important;width:100% !important;height:0 !important;}
 
 
-/* v36/App V10: quebra global dos cards de equipamento, independente do bigrama */
+/* v36/App V21: quebra global dos cards de equipamento, independente do bigrama */
 .equip-group,.equip-group-btn,.equip-group-title{min-width:0!important;max-width:100%!important;overflow:hidden!important}
 .equip-group-btn{align-items:flex-start!important;white-space:normal!important}
 .equip-group-name,.equip-group-sub{white-space:normal!important;word-break:break-word!important;overflow-wrap:anywhere!important;max-width:100%!important;display:block!important}
@@ -1184,7 +1184,7 @@ html,body,.app{touch-action:manipulation;overscroll-behavior:none}
 #imageViewerSwipeArea{touch-action:none!important;overflow:hidden!important}
 #imageViewerImg{transform-origin:center center;will-change:transform;max-width:none!important;max-height:none!important}
 
-    /* v41/App V15: rolagem vertical real e isolada do Bloco de Notas */
+    /* v41/App V21: rolagem vertical real e isolada do Bloco de Notas */
     html.notes-screen,
     body.notes-screen{
       width:100% !important;
@@ -1225,6 +1225,26 @@ html,body,.app{touch-action:manipulation;overscroll-behavior:none}
     body.notes-screen #notesList{
       padding-bottom:150px !important;
     }
+
+
+/* V21: Notas - FAB real só na tela Bloco de Notas, sem faixa/container */
+#addNoteFab.notes-fab,
+#addNoteFab{
+  position:fixed !important;
+  right:22px !important;
+  bottom:calc(22px + env(safe-area-inset-bottom, 0px)) !important;
+  width:64px !important;height:64px !important;min-width:64px !important;max-width:64px !important;min-height:64px !important;max-height:64px !important;
+  padding:0 !important;margin:0 !important;border:0 !important;border-radius:50% !important;
+  background:#f0c419 !important;color:#0b1220 !important;font-size:2.1rem !important;font-weight:900 !important;line-height:1 !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.35) !important;z-index:2500 !important;
+  align-items:center !important;justify-content:center !important;text-transform:none !important;letter-spacing:0 !important;
+  flex:0 0 auto !important;grid-column:auto !important;justify-self:auto !important;align-self:auto !important;
+}
+#addNoteFab.hidden{display:none !important;}
+body.notes-screen #addNoteFab:not(.hidden){display:flex !important;}
+body:not(.notes-screen) #addNoteFab{display:none !important;}
+.keep-trash-empty{background:#7c1f1f !important;color:#fff !important;border-color:rgba(255,255,255,.20) !important;}
+.keep-trash-empty.hidden{display:none !important;}
 
 </style>
 
@@ -1488,13 +1508,13 @@ html,body,.app{touch-action:manipulation;overscroll-behavior:none}
         <div class="keep-shell">
           <div class="keep-topbar">
             <div class="field"><label for="noteSearch">Buscar notas</label><input id="noteSearch" type="text" placeholder="Buscar por título ou texto" oninput="renderNotes()" /></div>
-            <div class="keep-tabs"><button id="notesTabActive" class="keep-tab active" type="button" onclick="setNotesView('active')">Notas</button><button id="notesTabArchive" class="keep-tab" type="button" onclick="setNotesView('archive')">Arquivo</button><button id="notesTabTrash" class="keep-tab" type="button" onclick="setNotesView('trash')">Lixeira</button></div>
+            <div class="keep-tabs"><button id="notesTabActive" class="keep-tab active" type="button" onclick="setNotesView('active')">Notas</button><button id="notesTabArchive" class="keep-tab" type="button" onclick="setNotesView('archive')">Arquivo</button><button id="notesTabTrash" class="keep-tab" type="button" onclick="setNotesView('trash')">Lixeira</button><button id="emptyNotesTrashBtn" class="keep-tab keep-trash-empty hidden" type="button" onclick="emptyNotesTrash()">Esvaziar lixeira</button></div>
           </div>
         </div>
       </div>
       <div id="notesList" class="keep-grid"></div>
-      <button id="addNoteFab" class="notes-fab" type="button" onclick="openNoteModal()" title="Adicionar nota">+</button>
     </section>
+    <button id="addNoteFab" class="notes-fab hidden" type="button" onclick="openNoteModal()" title="Adicionar nota" aria-label="Adicionar nota">+</button>
 
   <div id="noteModal" class="modal-overlay" onclick="if(event.target.id==='noteModal')closeNoteModal()">
     <div class="modal-box" onclick="event.stopPropagation()">
@@ -1625,7 +1645,7 @@ html,body,.app{touch-action:manipulation;overscroll-behavior:none}
           <span class="menu-item-arrow">›</span>
         </button>
       </div>
-      <div class="app-version">VERSÃO V16</div>
+      <div class="app-version">VERSÃO V21</div>
     </div>
   </div>
 
@@ -3002,6 +3022,7 @@ function showScreen(screen){
   if(screen!=='home' && screen!=='relatorio' && screen!=='notas' && !AppState.data.selectedBigramaId){ showAppMessage('Bigrama','Selecione primeiro um bigrama.'); return; }
   document.body.classList.toggle('notes-screen', screen==='notas');
   document.documentElement.classList.toggle('notes-screen', screen==='notas');
+  if($('addNoteFab')) $('addNoteFab').classList.toggle('hidden', screen!=='notas');
   if(screen==='notas'){
     closeMainMenu();
     document.body.classList.remove('lock-scroll');
@@ -4210,7 +4231,7 @@ function nowIso(){return new Date().toISOString();}
 function openNoteModal(){resetNoteForm();const m=$('noteModal');if(m)m.classList.add('show');setTimeout(()=>{const t=$('noteText');if(t)t.focus();},80);}
 function closeNoteModal(){const m=$('noteModal');if(m)m.classList.remove('show');resetNoteForm();}
 function setNoteColor(color){currentNoteColor=KEEP_COLORS.includes(color)?color:'default';document.querySelectorAll('#noteColorPicker .color-dot').forEach(btn=>btn.classList.toggle('active',btn.dataset.color===currentNoteColor));}
-function setNotesView(view){currentNotesView=['active','archive','trash'].includes(view)?view:'active';UI.editingNoteId=null;if($('notesTabActive'))$('notesTabActive').classList.toggle('active',currentNotesView==='active');if($('notesTabArchive'))$('notesTabArchive').classList.toggle('active',currentNotesView==='archive');if($('notesTabTrash'))$('notesTabTrash').classList.toggle('active',currentNotesView==='trash');renderNotes();}
+function setNotesView(view){currentNotesView=['active','archive','trash'].includes(view)?view:'active';UI.editingNoteId=null;if($('notesTabActive'))$('notesTabActive').classList.toggle('active',currentNotesView==='active');if($('notesTabArchive'))$('notesTabArchive').classList.toggle('active',currentNotesView==='archive');if($('notesTabTrash'))$('notesTabTrash').classList.toggle('active',currentNotesView==='trash');if($('emptyNotesTrashBtn'))$('emptyNotesTrashBtn').classList.toggle('hidden',currentNotesView!=='trash');renderNotes();}
 function resetNoteForm(){ensureNotas();['noteId','noteTitle','noteText'].forEach(id=>{if($(id))$(id).value='';});if($('saveNoteBtn'))$('saveNoteBtn').textContent='Adicionar';if($('noteStatus'))$('noteStatus').textContent='';setNoteColor('default');}
 function noteActionButtons(n){if(currentNotesView==='trash')return `<button class="keep-icon" type="button" onclick="restoreNote('${n.id}')" title="Restaurar">↩</button><button class="keep-icon" type="button" onclick="deleteNoteForever('${n.id}')" title="Excluir definitivo">🗑</button>`;return `<button class="keep-icon ${n.pinned?'active':''}" type="button" onclick="togglePinNote('${n.id}')" title="Fixar">📌</button><button class="keep-icon" type="button" onclick="cycleNoteColor('${n.id}')" title="Mudar cor">🎨</button><button class="keep-icon" type="button" onclick="archiveNote('${n.id}')" title="Arquivar">${currentNotesView==='archive'?'↩':'📥'}</button><button class="keep-icon" type="button" onclick="moveNoteToTrash('${n.id}')" title="Lixeira">🗑</button>`;}
 function renderNotes(){ensureNotas();const list=$('notesList');if(!list)return;const q=String(($('noteSearch')&&$('noteSearch').value)||'').trim().toLowerCase();const notas=[...AppState.data.notas].filter(n=>(n.status||'active')===currentNotesView).filter(n=>!q||String(n.titulo||'').toLowerCase().includes(q)||String(n.texto||'').toLowerCase().includes(q)).sort((a,b)=>(Number(!!b.pinned)-Number(!!a.pinned))||String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||'')));if(!notas.length){list.innerHTML='<div class="keep-empty">'+(currentNotesView==='archive'?'Nenhuma nota arquivada.':currentNotesView==='trash'?'Nenhuma nota na lixeira.':'Nenhuma nota encontrada.')+'</div>';return;}let lastPinned=null;list.innerHTML=notas.map(n=>{let section='';if(currentNotesView==='active'){const p=!!n.pinned;if(lastPinned!==p){section='<div class="keep-section-title" style="grid-column:1/-1;">'+(p?'Fixadas':'Outras')+'</div>';lastPinned=p;}}const title=String(n.titulo||'').trim(),body=String(n.texto||'').trim(),date=n.updatedAt?formatDateTimeBr(n.updatedAt):'',color=KEEP_COLORS.includes(n.color)?n.color:'default',isEditing=UI.editingNoteId===n.id&&currentNotesView!=='trash';const actions=noteActionButtons(n);if(isEditing){return section+`<article class="keep-note editing" data-color="${escapeHtml(color)}"><input class="keep-inline-title" value="${escapeHtml(title)}" placeholder="Título" oninput="updateNoteInline('${n.id}','titulo',this.value)" /><textarea id="noteInlineText_${n.id}" class="keep-inline-text" placeholder="Criar uma nota..." oninput="updateNoteInline('${n.id}','texto',this.value)">${escapeHtml(body)}</textarea><div class="keep-note-meta">${escapeHtml(date)}</div><div class="keep-actions" onclick="event.stopPropagation()"><div class="keep-action-group">${actions}</div></div></article>`;}return section+`<article class="keep-note" data-color="${escapeHtml(color)}" onclick="editNote('${n.id}')">${title?`<div class="keep-note-title">${escapeHtml(title)}</div>`:''}<div class="keep-note-text">${escapeHtml(body||'Nota vazia')}</div><div class="keep-note-meta">${escapeHtml(date)}</div><div class="keep-actions" onclick="event.stopPropagation()"><div class="keep-action-group">${actions}</div></div></article>`;}).join('');}
@@ -4223,7 +4244,8 @@ function cycleNoteColor(id){const n=AppState.data.notas.find(x=>x.id===id);if(!n
 function archiveNote(id){const n=AppState.data.notas.find(x=>x.id===id);if(!n)return;n.status=(n.status==='archive')?'active':'archive';n.updatedAt=nowIso();AppState.save();UI.editingNoteId=null;renderNotes();}
 function moveNoteToTrash(id){const n=AppState.data.notas.find(x=>x.id===id);if(!n)return;n.status='trash';n.pinned=false;n.updatedAt=nowIso();AppState.save();UI.editingNoteId=null;renderNotes();}
 function restoreNote(id){const n=AppState.data.notas.find(x=>x.id===id);if(!n)return;n.status='active';n.updatedAt=nowIso();AppState.save();renderNotes();}
-async function deleteNoteForever(id){const ok=await confirmApp('Excluir nota','Excluir esta nota definitivamente?');if(!ok)return;AppState.data.notas=AppState.data.notas.filter(n=>n.id!==id);AppState.save();renderNotes();}
+async function deleteNoteForever(id){const ok=await showAppConfirm('Excluir nota','Excluir esta nota definitivamente?');if(!ok)return;ensureNotas();AppState.data.notas=AppState.data.notas.filter(n=>n.id!==id);AppState.save();renderNotes();}
+async function emptyNotesTrash(){ensureNotas();const qtd=AppState.data.notas.filter(n=>(n.status||'active')==='trash').length;if(!qtd){showAppMessage('Lixeira','A lixeira já está vazia.');return;}const ok=await showAppConfirm('Esvaziar lixeira','Excluir definitivamente todas as notas da lixeira?');if(!ok)return;AppState.data.notas=AppState.data.notas.filter(n=>(n.status||'active')!=='trash');AppState.save();renderNotes();}
 async function deleteNote(id){moveNoteToTrash(id);}
 
 // ═══════════════════════ PEDIDO DE SERVIÇO ═══════════════════════
@@ -4371,7 +4393,7 @@ function removePsAttachment(idx){ pendingPsAttachments.splice(idx,1); renderPsAt
 
 async function printPs(id){ return exportPsPdf(id, 'inline'); }
 
-// v36/App V10: bloqueia zoom no app e libera zoom apenas no visualizador de imagens.
+// v36/App V21: bloqueia zoom no app e libera zoom apenas no visualizador de imagens.
 let imageZoomState = {scale:1,x:0,y:0,startDist:0,startScale:1,lastTap:0,drag:false,lastX:0,lastY:0};
 function applyImageZoom(){
   const img = $('imageViewerImg'); if(!img) return;
@@ -4624,7 +4646,7 @@ function buildOfficialDocHtml(){
     @page{size:A4;margin:0}
     html,body{margin:0;padding:0;background:#fff;color:#111;font-family:"Times New Roman",Times,serif}
     *{box-sizing:border-box}
-    .official-sheet{background:#fff;color:#111;padding:18mm 12mm 18mm 12mm;width:210mm;height:297mm;min-height:297mm;margin:0;box-shadow:none;page-break-after:always;font-family:"Times New Roman",Times,serif;position:relative;overflow:hidden}
+    .official-sheet{background:#fff;color:#111;padding:18mm 8mm 18mm 12mm;width:210mm;height:297mm;min-height:297mm;margin:0;box-shadow:none;page-break-after:always;font-family:"Times New Roman",Times,serif;position:relative;overflow:hidden}
     .official-page-body{height:224mm;max-height:224mm;overflow:hidden}
     .sheet-top-right{text-align:right;font-size:11pt;line-height:1.2;margin-bottom:8px;color:#000}
     .page-code{position:absolute;left:0;right:0;bottom:4mm;margin:0;text-align:center;font-size:12pt;letter-spacing:.16em;color:#000}
@@ -4640,14 +4662,14 @@ function buildOfficialDocHtml(){
     .rh-block,.rh-block p,.rh-block b{color:#000;line-height:1.18}
     .rh-block{min-height:0;display:block;page-break-inside:auto;break-inside:auto}
     .rh-block p{margin:0 0 2px 0;page-break-inside:auto;break-inside:auto}
-    .signature-bar{position:absolute;left:12mm;right:12mm;bottom:16mm;display:flex;justify-content:space-between;align-items:flex-end;gap:18mm;margin-top:0;color:#000}
+    .signature-bar{position:absolute;left:12mm;right:8mm;bottom:16mm;display:flex;justify-content:space-between;align-items:flex-end;gap:16mm;margin-top:0;color:#000}
     .signature-box{width:42%;text-align:center;font-size:10pt;color:#000}
     .signature-line{border-top:1px solid #222;margin:0 auto 4px auto;width:100%;height:0}
   </style></head><body>${content}</body></html>`;
 }
 
 function buildOfficialDocxBlob(){
-  // v34/App V08: o arquivo DOCX do Livro Histórico é gerado por altChunk HTML,
+  // v34/App V21: o arquivo DOCX do Livro Histórico é gerado por altChunk HTML,
   // usando exatamente o mesmo documento renderizado em tela pela visualização.
   return buildHtmlAltChunkDocxBlob(buildOfficialDocHtml());
 }
