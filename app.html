@@ -74,13 +74,13 @@
     .equipment-card-title,.equipment-card-title *,.record-title,.record-title *,.record-head,.record-head-left{min-width:0;}
     .equipment-card-title,.record-title .date,.record-title .meta,.record-title .meta *{white-space:normal !important;word-break:break-word !important;overflow-wrap:anywhere !important;}
     .keep-shell{display:grid;gap:14px}.keep-composer{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:12px;box-shadow:var(--shadow);display:grid;gap:8px}.keep-composer input,.keep-composer textarea{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);border-radius:14px;min-height:44px;padding:10px 12px}.keep-composer textarea{min-height:84px;resize:vertical}.keep-topbar{display:grid;gap:10px;grid-template-columns:1fr}@media(min-width:700px){.keep-topbar{grid-template-columns:1fr auto;align-items:center}}.keep-tabs{display:flex;gap:8px;flex-wrap:wrap}.keep-tab{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;border-radius:999px;padding:8px 12px;font-weight:800}.keep-tab.active{background:var(--gold);color:#111}.keep-grid{display:grid;grid-template-columns:1fr;gap:12px;align-items:start}@media(min-width:560px){.keep-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:960px){.keep-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}.keep-section-title{font-size:.9rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 2px 2px}.keep-note{border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px;min-height:118px;box-shadow:0 10px 24px rgba(0,0,0,.20);position:relative;overflow:hidden;color:#0b1220;display:flex;flex-direction:column;gap:8px}.keep-note[data-color="default"]{background:#fff;color:#111}.keep-note[data-color="yellow"]{background:#fff3bf;color:#111}.keep-note[data-color="green"]{background:#d3f9d8;color:#111}.keep-note[data-color="blue"]{background:#d0ebff;color:#111}.keep-note[data-color="red"]{background:#ffe3e3;color:#111}.keep-note[data-color="purple"]{background:#e5dbff;color:#111}.keep-note-title{font-weight:900;font-size:1.02rem;line-height:1.25;white-space:normal;word-break:break-word;overflow-wrap:anywhere}.keep-note-text{font-size:.95rem;line-height:1.36;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;flex:1}.keep-note-meta{font-size:.72rem;opacity:.65}.keep-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}.keep-action-group{display:flex;gap:6px;flex-wrap:wrap}.keep-icon{width:34px;height:34px;border-radius:11px;border:1px solid rgba(0,0,0,.10);background:rgba(255,255,255,.55);color:#111;display:flex;align-items:center;justify-content:center;font-size:1rem}.keep-icon.active{background:#111;color:#fff}.keep-colors{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.color-dot{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 2px 8px rgba(0,0,0,.2)}.color-dot.active{outline:3px solid var(--gold)}.color-default{background:#fff}.color-yellow{background:#fff3bf}.color-green{background:#d3f9d8}.color-blue{background:#d0ebff}.color-red{background:#ffe3e3}.color-purple{background:#e5dbff}.keep-empty{padding:24px;border-radius:18px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.18);color:var(--muted);text-align:center}
-    /* v41/App V22: correção da rolagem da tela Bloco de Notas */
+    /* v41/App V23: correção da rolagem da tela Bloco de Notas */
     #screen-notas{min-height:calc(100vh - var(--topbar-height, 88px));overflow:visible !important;padding-bottom:110px;}
     #screen-notas .card{overflow:visible !important;}
     #screen-notas .keep-shell,#screen-notas .keep-grid{overflow:visible !important;}
     body.notes-screen{overflow-y:auto !important;height:auto !important;}
 
-    /* v42/App V22: Notas estilo Keep com FAB, modal de adicionar e edição inline */
+    /* v42/App V23: Notas estilo Keep com FAB, modal de adicionar e edição inline */
     #screen-notas .card > p{display:none !important;}
     .notes-fab{position:fixed !important;left:auto !important;right:calc(18px + env(safe-area-inset-right)) !important;bottom:calc(82px + env(safe-area-inset-bottom)) !important;z-index:2500 !important;width:62px !important;height:62px !important;min-width:62px !important;max-width:62px !important;min-height:62px !important;max-height:62px !important;border-radius:50% !important;border:none !important;background:var(--gold) !important;color:#0b1220 !important;font-size:2.15rem !important;font-weight:900 !important;line-height:1 !important;box-shadow:0 12px 28px rgba(0,0,0,.35) !important;display:flex !important;align-items:center !important;justify-content:center !important;padding:0 !important;margin:0 !important;grid-column:auto !important;justify-self:auto !important;align-self:auto !important;flex:0 0 auto !important;}
     .notes-fab:active{transform:scale(.96);}
@@ -1164,7 +1164,7 @@
 }
 
 
-/* v25/App V22: Livro Histórico - margens DOCX/visualização, numeração no rodapé, assinaturas separadas */
+/* v25/App V23: Livro Histórico - margens DOCX/visualização, numeração no rodapé, assinaturas separadas */
 .official-sheet{padding:18mm 8mm 18mm 12mm !important;}
 #pdfViewerContent .official-sheet{padding:18mm 8mm 18mm 12mm !important;}
 .official-page-body{height:224mm !important;max-height:224mm !important;overflow:hidden !important;}
@@ -1174,7 +1174,7 @@
 .official-sheet .signature-line{border-top:1px solid #222 !important;margin:0 auto 4px auto !important;width:100% !important;height:0 !important;}
 
 
-/* v36/App V22: quebra global dos cards de equipamento, independente do bigrama */
+/* v36/App V23: quebra global dos cards de equipamento, independente do bigrama */
 .equip-group,.equip-group-btn,.equip-group-title{min-width:0!important;max-width:100%!important;overflow:hidden!important}
 .equip-group-btn{align-items:flex-start!important;white-space:normal!important}
 .equip-group-name,.equip-group-sub{white-space:normal!important;word-break:break-word!important;overflow-wrap:anywhere!important;max-width:100%!important;display:block!important}
@@ -1184,7 +1184,7 @@ html,body,.app{touch-action:manipulation;overscroll-behavior:none}
 #imageViewerSwipeArea{touch-action:none!important;overflow:hidden!important}
 #imageViewerImg{transform-origin:center center;will-change:transform;max-width:none!important;max-height:none!important}
 
-    /* v41/App V22: rolagem vertical real e isolada do Bloco de Notas */
+    /* v41/App V23: rolagem vertical real e isolada do Bloco de Notas */
     html.notes-screen,
     body.notes-screen{
       width:100% !important;
@@ -1247,37 +1247,21 @@ body:not(.notes-screen) #addNoteFab{display:none !important;}
 .keep-trash-empty.hidden{display:none !important;}
 
 
-/* V22_SCROLL_ONLY: destrava rolagem vertical global */
-html,
-body{
-  height:auto !important;
-  min-height:100% !important;
-  max-height:none !important;
+/* V23: correção cirúrgica da rolagem vertical */
+html, body{
+  overflow-y:auto !important;
   overflow-x:hidden !important;
-  overflow-y:auto !important;
-  touch-action:pan-y !important;
-  overscroll-behavior-y:auto !important;
-  -webkit-overflow-scrolling:touch !important;
-}
-
-body.lock-scroll:not(.modal-open):not(.image-zoom-open){
   height:auto !important;
   max-height:none !important;
+}
+body.lock-scroll{
   overflow-y:auto !important;
+  height:auto !important;
+  max-height:none !important;
   position:static !important;
 }
-
-.app,
-.content{
-  height:auto !important;
-  min-height:100vh !important;
-  max-height:none !important;
+.app, .content{
   overflow-x:hidden !important;
-  overflow-y:visible !important;
-}
-
-.section:not(.hidden){
-  overflow:visible !important;
 }
 
 </style>
@@ -1679,7 +1663,7 @@ body.lock-scroll:not(.modal-open):not(.image-zoom-open){
           <span class="menu-item-arrow">›</span>
         </button>
       </div>
-      <div class="app-version">VERSÃO V22</div>
+      <div class="app-version">VERSÃO V23</div>
     </div>
   </div>
 
@@ -3057,20 +3041,14 @@ function showScreen(screen){
   document.body.classList.toggle('notes-screen', screen==='notas');
   document.documentElement.classList.toggle('notes-screen', screen==='notas');
   if($('addNoteFab')) $('addNoteFab').classList.toggle('hidden', screen!=='notas');
-  if(screen==='notas'){
-    closeMainMenu();
-    document.body.classList.remove('lock-scroll');
-    document.documentElement.style.overflow='hidden';
-    document.body.style.overflow='hidden';
-    document.body.style.overflowY='hidden';
-    document.body.style.height='100dvh';
-  }else{
-    document.body.classList.remove('lock-scroll');
-    document.documentElement.style.overflow='';
-    document.body.style.overflow='';
-    document.body.style.overflowY='';
-    document.body.style.height='';
-  }
+  closeMainMenu();
+  document.body.classList.remove('lock-scroll');
+  document.documentElement.style.overflow='';
+  document.body.style.overflow='';
+  document.body.style.overflowY='';
+  document.body.style.height='';
+  document.body.style.maxHeight='';
+  document.body.style.position='';
   UI.currentScreen=screen;
   AppState.data.lastScreen = screen;
   AppState.save();
@@ -4072,34 +4050,7 @@ function printRelatorio(){
   iframe.style.cssText='position:fixed;width:1px;height:1px;right:0;bottom:0;opacity:0;border:0;';
   document.body.appendChild(iframe);
   const doc = iframe.contentWindow.document;
-  doc.open(); doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório Geral</title>${styles}</head><body>${tableHtml}
-<script>
-/* V22_SCROLL_ONLY: remove lock-scroll preso sem modal */
-(function(){
-  function fixScrollLock(){
-    var modalOpen = !!document.querySelector('.modal-overlay.show');
-    var imageOpen = document.body.classList.contains('image-zoom-open');
-    document.body.classList.toggle('modal-open', modalOpen);
-
-    if (!modalOpen && !imageOpen) {
-      document.body.classList.remove('lock-scroll');
-      document.documentElement.style.overflowY = 'auto';
-      document.body.style.overflowY = 'auto';
-      document.body.style.height = 'auto';
-      document.body.style.maxHeight = 'none';
-      document.body.style.position = 'static';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', fixScrollLock);
-  window.addEventListener('load', fixScrollLock);
-  window.addEventListener('pageshow', fixScrollLock);
-  document.addEventListener('click', function(){ setTimeout(fixScrollLock, 60); }, true);
-  document.addEventListener('touchend', function(){ setTimeout(fixScrollLock, 60); }, true);
-})();
-</script>
-
-</body></html>`); doc.close();
+  doc.open(); doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório Geral</title>${styles}</head><body>${tableHtml}</body></html>`); doc.close();
   iframe.onload = () => setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 250);
   setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 700);
 }
@@ -4454,7 +4405,7 @@ function removePsAttachment(idx){ pendingPsAttachments.splice(idx,1); renderPsAt
 
 async function printPs(id){ return exportPsPdf(id, 'inline'); }
 
-// v36/App V22: bloqueia zoom no app e libera zoom apenas no visualizador de imagens.
+// v36/App V23: bloqueia zoom no app e libera zoom apenas no visualizador de imagens.
 let imageZoomState = {scale:1,x:0,y:0,startDist:0,startScale:1,lastTap:0,drag:false,lastX:0,lastY:0};
 function applyImageZoom(){
   const img = $('imageViewerImg'); if(!img) return;
@@ -4698,7 +4649,7 @@ function buildHtmlAltChunkDocxBlob(html){
   ]);
 }
 function buildOfficialDocHtml(){
-  // v34/App V22: DOCX do Livro Histórico passa a usar o mesmo HTML/CSS final da visualização.
+  // v34/App V23: DOCX do Livro Histórico passa a usar o mesmo HTML/CSS final da visualização.
   // Isso elimina a divergência do gerador OOXML nativo: margens, rodapé, assinatura e numeração
   // ficam definidos pelo mesmo modelo visual exibido no app.
   renderDocument();
@@ -4730,7 +4681,7 @@ function buildOfficialDocHtml(){
 }
 
 function buildOfficialDocxBlob(){
-  // v34/App V22: o arquivo DOCX do Livro Histórico é gerado por altChunk HTML,
+  // v34/App V23: o arquivo DOCX do Livro Histórico é gerado por altChunk HTML,
   // usando exatamente o mesmo documento renderizado em tela pela visualização.
   return buildHtmlAltChunkDocxBlob(buildOfficialDocHtml());
 }
