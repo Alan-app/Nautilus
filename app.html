@@ -2102,6 +2102,7 @@ function openLivroHistorico(){
   $('livroHistoricoFolders').classList.remove('hidden');
   $('appLauncherGrid').classList.add('hidden');
   updateTopbar();
+  applyFixedTopbarLayoutStable();
   renderHomeFolders();
 }
 function closeLivroHistorico(){
@@ -2985,7 +2986,7 @@ function updateTopbar(){
   const topSubtitle = $('topSubtitle');
   const topMenuBtn = $('topMenuBtn');
 
-  topBackBtn.classList.toggle('ghost', UI.currentScreen==='home' || UI.currentScreen==='relatorio');
+  topBackBtn.classList.toggle('ghost', UI.currentScreen==='home');
 
   // reset shared styles first
   topTitle.style.fontSize = '';
@@ -3073,7 +3074,7 @@ function showScreen(screen){
     requestAnimationFrame(() => window.scrollTo({top:0, behavior:'auto'}));
   } applyFixedTopbarLayoutStable();
 }
-function goBack(){ if(UI.currentScreen==='home') return; if(UI.currentScreen==='livrohistorico'){ closeLivroHistorico(); UI.currentScreen='home'; updateTopbar(); return; } if(UI.currentScreen==='dashboard' || UI.currentScreen==='relatorio' || UI.currentScreen==='notas') showScreen('home'); else showScreen('dashboard'); }
+function goBack(){ if(UI.currentScreen==='home') return; if(UI.currentScreen==='livrohistorico'){ closeLivroHistorico(); UI.currentScreen='home'; updateTopbar(); applyFixedTopbarLayoutStable(); return; } if(UI.currentScreen==='dashboard' || UI.currentScreen==='relatorio' || UI.currentScreen==='notas') showScreen('home'); else showScreen('dashboard'); }
 function goHome(){ closeMainMenu(); closeManageBigramas(); closeLivroHistorico(); showScreen('home'); }
 function toggleVisualPrefsMenu(){
   const panel = $('visualPrefsPanel');
