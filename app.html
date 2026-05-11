@@ -3111,21 +3111,10 @@ function showScreen(screen){
 }
 function voltarHorasParaInicioLivroHistorico(){
   if($('horasMenuModal')) closeHorasMenu();
-  if($('livroHistoricoFolders')) $('livroHistoricoFolders').classList.remove('hidden');
-  if($('appLauncherGrid')) $('appLauncherGrid').classList.add('hidden');
-  ['home','dashboard','novo','historico','ficha','documento','horas','relatorio','ps','notas'].forEach(s => {
-    const el = $('screen-'+s);
-    if(el) el.classList.toggle('hidden', s !== 'home');
-  });
   AppState.data.selectedBigramaId = null;
-  UI.currentScreen = 'livrohistorico';
-  AppState.data.lastScreen = 'livrohistorico';
   AppState.save();
-  renderHomeFolders();
-  updateContextUI();
-  updateTopbar();
-  updateSidebar();
-  applyFixedTopbarLayoutStable();
+  closeLivroHistorico();
+  showScreen('home');
   window.scrollTo({top:0, behavior:'auto'});
 }
 function goBack(){
