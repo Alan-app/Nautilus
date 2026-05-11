@@ -1597,7 +1597,7 @@ body:not(.notes-screen) #addNoteFab{display:none !important;}
       <p>Ações gerais do aplicativo.</p>
       <div class="menu-list">
         <button id="menuOrganizacaoBtn" class="menu-item hidden" type="button" onclick="toggleVisualPrefsMenu()">
-          <span class="menu-item-label"><span>⚙️</span><span>Organização da tela</span></span>
+          <span class="menu-item-label"><span>⚙️</span><span>Organização das pastas</span></span>
           <span class="menu-item-arrow" id="visualPrefsArrow">▾</span>
         </button>
         <div id="visualPrefsPanel" class="submenu-panel hidden">
@@ -3092,8 +3092,7 @@ function toggleVisualPrefsMenu(){
 function openMainMenu(){
   const orgBtn = $('menuOrganizacaoBtn');
   if(orgBtn){
-    const showOrg = UI.currentScreen === 'home' || UI.currentScreen === 'livrohistorico';
-    orgBtn.classList.toggle('hidden', !showOrg);
+    orgBtn.classList.toggle('hidden', UI.currentScreen !== 'livrohistorico');
   }
   $('mainMenuModal').classList.add('show');
 }
