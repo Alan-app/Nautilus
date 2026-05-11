@@ -1605,12 +1605,8 @@ body:not(.app-ready) .app{visibility:hidden;}
       <h3>Menu</h3>
       <p>Ações gerais do aplicativo.</p>
       <div class="menu-list">
-        <button class="menu-item" type="button" onclick="openManageBigramas()">
-          <span class="menu-item-label"><span>➕</span><span>Adicionar Bigrama</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <button class="menu-item" type="button" onclick="toggleVisualPrefsMenu()">
-          <span class="menu-item-label"><span>⚙️</span><span>Organização da tela inicial</span></span>
+        <button id="menuOrganizacaoBtn" class="menu-item hidden" type="button" onclick="toggleVisualPrefsMenu()">
+          <span class="menu-item-label"><span>⚙️</span><span>Organização das pastas</span></span>
           <span class="menu-item-arrow" id="visualPrefsArrow">▾</span>
         </button>
         <div id="visualPrefsPanel" class="submenu-panel hidden">
@@ -1642,10 +1638,6 @@ body:not(.app-ready) .app{visibility:hidden;}
           <span class="menu-item-arrow">›</span>
         </label>
         <input id="importBackup" class="hidden" type="file" accept=".json" />
-        <button class="menu-item" type="button" onclick="goHome()">
-          <span class="menu-item-label"><span>↩️</span><span>Trocar bigrama</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
         <button class="menu-item" type="button" onclick="closeMainMenu()">
           <span class="menu-item-label"><span>✖</span><span>Fechar</span></span>
           <span class="menu-item-arrow">›</span>
@@ -3140,7 +3132,11 @@ function toggleVisualPrefsMenu(){
   if(arrow) arrow.textContent = panel.classList.contains('hidden') ? '▾' : '▴';
 }
 
-function openMainMenu(){ $('mainMenuModal').classList.add('show'); }
+function openMainMenu(){
+  const orgBtn = $('menuOrganizacaoBtn');
+  if(orgBtn){ orgBtn.classList.toggle('hidden', UI.currentScreen !== 'livrohistorico'); }
+  $('mainMenuModal').classList.add('show');
+}
 function closeMainMenu(){
   $('mainMenuModal').classList.remove('show');
   const panel = $('visualPrefsPanel');
