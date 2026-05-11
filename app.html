@@ -3109,10 +3109,29 @@ function showScreen(screen){
     requestAnimationFrame(() => window.scrollTo({top:0, behavior:'auto'}));
   } applyFixedTopbarLayoutStable();
 }
+function voltarHorasParaInicioLivroHistorico(){
+  if($('horasMenuModal')) closeHorasMenu();
+  if($('livroHistoricoFolders')) $('livroHistoricoFolders').classList.remove('hidden');
+  if($('appLauncherGrid')) $('appLauncherGrid').classList.add('hidden');
+  ['home','dashboard','novo','historico','ficha','documento','horas','relatorio','ps','notas'].forEach(s => {
+    const el = $('screen-'+s);
+    if(el) el.classList.toggle('hidden', s !== 'home');
+  });
+  AppState.data.selectedBigramaId = null;
+  UI.currentScreen = 'livrohistorico';
+  AppState.data.lastScreen = 'livrohistorico';
+  AppState.save();
+  renderHomeFolders();
+  updateContextUI();
+  updateTopbar();
+  updateSidebar();
+  applyFixedTopbarLayoutStable();
+  window.scrollTo({top:0, behavior:'auto'});
+}
 function goBack(){
   if(UI.currentScreen==='home') return;
   if(UI.currentScreen==='livrohistorico'){ closeLivroHistorico(); showScreen('home'); return; }
-  if(UI.currentScreen==='horas'){ openLivroHistorico(); return; }
+  if(UI.currentScreen==='horas'){ voltarHorasParaInicioLivroHistorico(); return; }
   if(UI.currentScreen==='relatorio'){
     if(typeof closeRelatorio === 'function'){
       closeRelatorio();
