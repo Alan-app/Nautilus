@@ -1643,7 +1643,7 @@ body:not(.app-ready) .app{visibility:hidden;}
           <span class="menu-item-arrow">›</span>
         </button>
       </div>
-      <div class="app-version">VERSÃO v03</div>
+      <div class="app-version">VERSÃO v04</div>
     </div>
   </div>
 
@@ -1697,12 +1697,12 @@ body:not(.app-ready) .app{visibility:hidden;}
     </div>
   </div>
 
-  <div id="conflictModal" class="modal-overlay" onclick="if(event.target.id==='conflictModal')closeConflictModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
+  <div id="conflictModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='conflictModal')closeConflictModal()">
+    <div class="modal-box" style="max-height:calc(100vh - var(--topbar-height, 88px) - 32px);overflow-y:auto;display:flex;flex-direction:column;" onclick="event.stopPropagation()">
       <h3>Ver conflito</h3>
       <p>Compare seu registro com o registro do backup e escolha qual versão deve permanecer.</p>
-      <div id="conflictContent"></div>
-      <div class="toolbar" style="margin-top:14px;">
+      <div id="conflictContent" style="flex:1;overflow-y:auto;"></div>
+      <div class="toolbar" style="margin-top:14px;flex-shrink:0;">
         <button class="btn btn-primary" type="button" onclick="resolveConflictChoice('backup')">Usar registro do backup</button>
         <button class="btn btn-secondary" type="button" onclick="resolveConflictChoice('local')">Manter meu registro</button>
         <button class="btn btn-ghost" type="button" onclick="closeConflictModal()">Cancelar</button>
@@ -1861,15 +1861,15 @@ body:not(.app-ready) .app{visibility:hidden;}
     </div>
   </div>
 
-  <div id="imageViewerModal" class="modal-overlay" onclick="if(event.target.id==='imageViewerModal')closeImageViewer()">
-    <div class="modal-box" onclick="event.stopPropagation()" style="width:min(96vw,760px);padding:14px;">
-      <h3>Imagem anexada</h3>
-      <div id="imageViewerSwipeArea" style="display:flex;justify-content:center;align-items:center;overflow:hidden;padding-bottom:20px;touch-action:none;height:70vh;">
-        <img id="imageViewerImg" src="" alt="Imagem anexada" style="max-width:100%;width:auto;height:auto;max-height:70vh;border-radius:16px;display:block;transform:translate(0px,0px) scale(1);" />
+  <div id="imageViewerModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='imageViewerModal')closeImageViewer()">
+    <div class="modal-box" onclick="event.stopPropagation()" style="width:min(96vw,760px);padding:14px;max-height:calc(100vh - var(--topbar-height, 88px) - 32px);display:flex;flex-direction:column;overflow:hidden;">
+      <h3 style="flex-shrink:0;">Imagem anexada</h3>
+      <div id="imageViewerSwipeArea" style="display:flex;justify-content:center;align-items:center;overflow:hidden;touch-action:none;flex:1;min-height:0;">
+        <img id="imageViewerImg" src="" alt="Imagem anexada" style="max-width:100%;width:auto;height:auto;max-height:calc(100vh - var(--topbar-height, 88px) - 200px);object-fit:contain;border-radius:16px;display:block;transform:translate(0px,0px) scale(1);" />
       </div>
-      <div id="imageViewerCounter" style="text-align:center;margin-top:10px;color:var(--muted);font-size:.9rem;"></div>
-      <div style="text-align:center;margin-top:8px;color:var(--muted);font-size:.85rem;">Use pinça ou duplo toque para ampliar. Arraste para mover a imagem ampliada.</div>
-      <div class="toolbar" style="margin-top:14px;">
+      <div id="imageViewerCounter" style="text-align:center;margin-top:8px;color:var(--muted);font-size:.9rem;flex-shrink:0;"></div>
+      <div style="text-align:center;margin-top:6px;color:var(--muted);font-size:.85rem;flex-shrink:0;">Use pinça ou duplo toque para ampliar. Arraste para mover a imagem ampliada.</div>
+      <div class="toolbar" style="margin-top:12px;flex-shrink:0;">
         <button class="btn btn-primary" type="button" onclick="closeImageViewer()">Fechar</button>
       </div>
     </div>
@@ -3226,14 +3226,16 @@ async function handleRecordSubmit(e){
     return;
   }
 
+  const wasEditing = !!UI.editingRecordId;
   if(UI.editingRecordId){
     const idx=AppState.data.registros.findIndex(r=>r.id===UI.editingRecordId);
-    if(idx>=0){ AppState.data.registros[idx]={...AppState.data.registros[idx], ...payload, updatedAt:Date.now()}; setStatus('recordStatus','Registro atualizado.'); }
+    if(idx>=0){ AppState.data.registros[idx]={...AppState.data.registros[idx], ...payload, updatedAt:Date.now()}; setStatus('recordStatus','Registro atualizado.'); }\
   }else{
     AppState.data.registros.push({id:uid('rec'), ...payload, createdAt:Date.now(), updatedAt:Date.now()});
     setStatus('recordStatus','Registro salvo.');
   }
   AppState.save(); syncEquipmentSuggestions(); resetRecordForm(); renderHistory(); renderDocument();
+  if(wasEditing){ showScreen('historico'); }
 }
 function getCurrentRecords(){ return AppState.data.registros.filter(r=>r.bigramaId===AppState.data.selectedBigramaId); }
 function getFilteredRecords(){
