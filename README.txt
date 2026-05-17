@@ -59,3 +59,6 @@ Registro v55:
 - “Novo Registro” passa a aceitar somente equipamento selecionado da lista cadastrada.
 - Folha 01 / A-1 passa a usar os dados do equipamento selecionado.
 - README/changelog, cache e versão visual atualizados para v55.
+
+
+v57 - Horas de funcionamento: unificação adicionar/editar equipamentos e nova tela adicionar/editar bigramas.
