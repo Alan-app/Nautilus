@@ -1,4 +1,4 @@
-Livro Histórico v52 / App v52
+Livro Histórico v53 / App v53
 
 Alterações desta versão:
 - LDS: removido o botão redundante “Atualizar LDS”.
@@ -29,11 +29,20 @@ Observações técnicas:
 - A busca LDS, os cards e o compartilhamento LDS foram preservados.
 - A estrutura IndexedDB foi mantida.
 - O progresso é calculado por fases e por lotes durante a gravação, evitando atualização de DOM a cada registro.
-- A versão visual do app/menu foi atualizada para v52.
+- A versão visual do app/menu foi atualizada para v53.
 
 Histórico recente:
 - v48: módulo LDS offline com IndexedDB e busca corrigida.
 - v49: Bloco de Notas com altura automática, sem rolagem interna na nota, botão expandir/recolher e persistência individual.
 - v50: LDS com botão Compartilhar em cada card de resultado.
 - v51: LDS com compartilhamento refinado nos cards.
-- v52: LDS com importação única e modal de progresso bloqueante.
+- v53: LDS com importação única e modal de progresso bloqueante.
+
+
+Correção v53:
+- Corrigida a importação LDS no IndexedDB para evitar o erro “Failed to execute put on IDBObjectStore: The transaction is not active”.
+- A gravação dos registros LDS agora é feita em lotes com uma nova transação readwrite por lote.
+- O modal de progresso foi mantido, mas as atualizações de interface ocorrem fora das transações IndexedDB.
+- Aceite de arquivo atualizado para XLSX/XLSM quando suportado pelo parser interno.
+- Módulos preservados: Launcher, Livro Histórico, Livro Histórico DA, Horas, Relatórios, Dashboard, Notas, Backup, PDFs, Topbar, busca LDS, cards LDS e compartilhamento LDS.
+- Versão visual do app/menu atualizada para v53.
