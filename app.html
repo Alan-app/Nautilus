@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Livro Histórico</title>
+  <title>Nautilus</title>
   <meta name="theme-color" content="#012544" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Livro Histórico" />
+  <meta name="apple-mobile-web-app-title" content="Nautilus" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
   <style>
@@ -65,7 +65,7 @@
     input::placeholder,textarea::placeholder{color:#9bb0c8}
     input:focus,select:focus,textarea:focus{border-color:#8dc5ff;box-shadow:0 0 0 3px rgba(105,183,255,.15)}
 
-/* v57: conversão anos/dias/horas no módulo Horas e backup das horas de funcionamento */
+/* v58: conversão anos/dias/horas no módulo Horas e backup das horas de funcionamento */
 .equipment-picker{position:relative;width:100%;}
 .equipment-picker input{padding-right:56px;}
 .equipment-picker-toggle{
@@ -1263,7 +1263,7 @@
 }
 
 
-/* v25/App V21: Livro Histórico - margens DOCX/visualização, numeração no rodapé, assinaturas separadas */
+/* v25/App V21: Nautilus - margens DOCX/visualização, numeração no rodapé, assinaturas separadas */
 .official-sheet{padding:18mm 8mm 18mm 12mm !important;}
 #pdfViewerContent .official-sheet{padding:18mm 8mm 18mm 12mm !important;}
 .official-page-body{height:224mm !important;max-height:224mm !important;overflow:hidden !important;}
@@ -1380,7 +1380,7 @@ body:not(.app-ready) .app{visibility:hidden;}
   <!-- Sidebar desktop -->
   <aside class="desktop-sidebar">
     <div class="sidebar-brand">
-      <h1>Livro Histórico</h1>
+      <h1>Nautilus</h1>
       <p>Registro histórico de equipamentos</p>
     </div>
     <div class="sidebar-gold"></div>
@@ -1399,7 +1399,7 @@ body:not(.app-ready) .app{visibility:hidden;}
         <span class="nav-icon">🗂️</span> Cadastrar/Editar Equipamentos
       </button>
       <button class="sidebar-nav-item" id="sideDocumento" type="button" onclick="closeMainMenu();showScreen('documento')">
-        <span class="nav-icon">🖨️</span> Imprimir Livro Histórico
+        <span class="nav-icon">🖨️</span> Imprimir Nautilus
       </button>
       <button class="sidebar-nav-item" id="sideHoras" type="button" onclick="closeMainMenu();showScreen('horas')">
         <span class="nav-icon">⏱️</span> Horas de Funcionamento
@@ -1451,7 +1451,7 @@ body:not(.app-ready) .app{visibility:hidden;}
       <div id="appLauncherGrid" class="app-launcher-grid">
         <button class="app-launcher-btn" type="button" onclick="openLivroHistorico()">
           <div class="app-launcher-icon">📚</div>
-          <div class="app-launcher-label">Livro Histórico</div>
+          <div class="app-launcher-label">Nautilus</div>
         </button>
         <button class="app-launcher-btn" type="button" onclick="showScreen('notas')">
           <div class="app-launcher-icon">🗒️</div>
@@ -1477,7 +1477,7 @@ body:not(.app-ready) .app{visibility:hidden;}
         <button class="menu-card" type="button" onclick="showScreen('novo')"><div class="menu-icon">📝</div><div class="menu-text"><h2>Novo Registro</h2><p>Lançar nova avaria, manutenção ou ocorrência.</p></div></button>
         <button class="menu-card secondary" type="button" onclick="showScreen('historico')"><div class="menu-icon">📚</div><div class="menu-text"><h2>Ver Histórico</h2><p>Visualizar, filtrar, editar, concluir e exportar registros.</p></div></button>
         <button class="menu-card tertiary" type="button" onclick="showScreen('ficha')"><div class="menu-icon">🗂️</div><div class="menu-text"><h2>Cadastrar/Editar Equipamentos</h2><p>Cadastrar, listar e editar equipamentos do modelo oficial.</p></div></button>
-        <button class="menu-card secondary" type="button" onclick="showScreen('documento')"><div class="menu-icon">🖨️</div><div class="menu-text"><h2>Imprimir Livro Histórico</h2><p>Gerar visualização pronta e baixar em DOCX.</p></div></button>
+        <button class="menu-card secondary" type="button" onclick="showScreen('documento')"><div class="menu-icon">🖨️</div><div class="menu-text"><h2>Imprimir Nautilus</h2><p>Gerar visualização pronta e baixar em DOCX.</p></div></button>
         <button class="menu-card secondary" type="button" onclick="showScreen('ps')"><div class="menu-icon">📋</div><div class="menu-text"><h2>Pedido de Serviço</h2><p>Criar, visualizar e imprimir pedidos de serviço.</p></div></button>
       </div>
     </section>
@@ -1610,7 +1610,7 @@ body:not(.app-ready) .app{visibility:hidden;}
 
     <section id="screen-documento" class="section hidden">
       <div class="card">
-        <h2>Imprimir Livro Histórico</h2>
+        <h2>Imprimir Nautilus</h2>
         <p style="margin-bottom:14px;">Somente registros em aberto do bigrama selecionado entram no documento.</p>
         <div class="toolbar" style="display:grid;grid-template-columns:1fr;gap:10px;">
           <button class="btn btn-primary" type="button" onclick="previewPdfOnly()">Visualizar / Baixar DOCX</button>
@@ -3308,7 +3308,7 @@ function checkDueReminders(){
   renderHorasReminderActionModal(dueItems);
   $('horasReminderActionModal').classList.add('show');
 
-  showDeviceNotification('Livro Histórico', 'Atualize as horas de funcionamento dos equipamentos!');
+  showDeviceNotification('Nautilus', 'Atualize as horas de funcionamento dos equipamentos!');
 }
 function updateSidebar(){
   const screen = UI.currentScreen;
@@ -3359,8 +3359,8 @@ function updateTopbar(){
     topSubtitle.style.display = 'none';
     topMenuBtn.style.visibility = 'hidden';
   }else{
-    const map={novo:'Novo Registro',historico:'Histórico',ficha:'Cadastrar/Editar Equipamentos',documento:'Imprimir Livro Histórico',horas:'Horas de Funcionamento',relatorio:'Relatório Geral',ps:'Pedido de Serviço',notas:'Bloco de Notas',lds:'LDS'};
-    topTitle.innerHTML = UI.currentScreen==='horas' ? 'HORAS<br>DE<br>FUNCIONAMENTO' : (map[UI.currentScreen] || 'Livro Histórico');
+    const map={novo:'Novo Registro',historico:'Histórico',ficha:'Cadastrar/Editar Equipamentos',documento:'Imprimir Nautilus',horas:'Horas de Funcionamento',relatorio:'Relatório Geral',ps:'Pedido de Serviço',notas:'Bloco de Notas',lds:'LDS'};
+    topTitle.innerHTML = UI.currentScreen==='horas' ? 'HORAS<br>DE<br>FUNCIONAMENTO' : (map[UI.currentScreen] || 'Nautilus');
     topSubtitle.textContent = UI.currentScreen==='relatorio' ? '' : (b ? getBigramaLabel(b.id) : '');
     if(UI.currentScreen==='notas' || UI.currentScreen==='lds'){
       topSubtitle.textContent = '';
@@ -3879,7 +3879,7 @@ function previewPdfOnly(){
   renderDocument();
   const content = $('printHost') ? $('printHost').innerHTML : '';
   if(!content || !content.trim()){
-    showAppMessage('Livro Histórico','Não há conteúdo para visualizar.');
+    showAppMessage('Nautilus','Não há conteúdo para visualizar.');
     return;
   }
   const sigla = (getSelectedBigrama()||{}).sigla || 'Bigrama';
@@ -3887,7 +3887,7 @@ function previewPdfOnly(){
   const modal = $('pdfViewerModal');
   const title = $('pdfViewerTitle');
   const stage = $('pdfViewerStage');
-  title.textContent = 'Livro Histórico — ' + sigla;
+  title.textContent = 'Nautilus — ' + sigla;
   stage.innerHTML = content;
   modal.classList.add('show');
   requestAnimationFrame(fitOfficialViewerToScreen);
@@ -4556,7 +4556,7 @@ function printRelatorio(){
   const totalNaoSol = rows.reduce((s,r)=>s+r.naoSolucionadas,0);
   const totalDisp   = rows.reduce((s,r)=>s+r.disponiveis,0);
   const tableHtml = `
-    <h2>Relatório Geral — Livro Histórico</h2>
+    <h2>Relatório Geral — Nautilus</h2>
     <table>
       <thead><tr><th>Bigrama</th><th>Ocorrências não solucionadas</th><th>Imprimir</th></tr></thead>
       <tbody>${rows.map(row=>`<tr><td><span class="chip">${escapeHtml(row.b.sigla)}</span>${escapeHtml(row.b.nome)}</td><td>${row.naoSolucionadas}</td><td>${row.disponiveis}</td></tr>`).join('')}</tbody>
@@ -5237,12 +5237,12 @@ function buildHtmlAltChunkDocxBlob(html){
   ]);
 }
 function buildOfficialDocHtml(){
-  // v34/App V08: DOCX do Livro Histórico passa a usar o mesmo HTML/CSS final da visualização.
+  // v34/App V08: DOCX do Nautilus passa a usar o mesmo HTML/CSS final da visualização.
   // Isso elimina a divergência do gerador OOXML nativo: margens, rodapé, assinatura e numeração
   // ficam definidos pelo mesmo modelo visual exibido no app.
   renderDocument();
   const content = ($('printHost') && $('printHost').innerHTML) ? $('printHost').innerHTML : '';
-  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Livro Histórico</title><style>
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Nautilus</title><style>
     @page{size:A4;margin:0}
     html,body{margin:0;padding:0;background:#fff;color:#111;font-family:"Times New Roman",Times,serif}
     *{box-sizing:border-box}
@@ -5269,7 +5269,7 @@ function buildOfficialDocHtml(){
 }
 
 function buildOfficialDocxBlob(){
-  // v34/App V21: o arquivo DOCX do Livro Histórico é gerado por altChunk HTML,
+  // v34/App V21: o arquivo DOCX do Nautilus é gerado por altChunk HTML,
   // usando exatamente o mesmo documento renderizado em tela pela visualização.
   return buildHtmlAltChunkDocxBlob(buildOfficialDocHtml());
 }
@@ -5286,7 +5286,7 @@ function downloadOfficialDocx(markPrinted=false){
   const data = getOfficialPdfPages();
   const usados = Array.isArray(data.records) ? data.records.filter(r => r.status === 'aberto') : [];
   if(!usados.length){
-    showAppMessage('Livro Histórico','Não há lançamentos em aberto para baixar.');
+    showAppMessage('Nautilus','Não há lançamentos em aberto para baixar.');
     return;
   }
   const sigla = (getSelectedBigrama()||{}).sigla || 'Bigrama';
@@ -5301,7 +5301,7 @@ function downloadOfficialDocx(markPrinted=false){
   if($('pdfViewerModal') && $('pdfViewerModal').classList.contains('show')){
     closePdfViewerModal();
   }
-  showAppMessage('Livro Histórico','Documento baixado. Lançamentos usados foram marcados como fechados.');
+  showAppMessage('Nautilus','Documento baixado. Lançamentos usados foram marcados como fechados.');
 }
 
 function getJsPdfCtor(){
