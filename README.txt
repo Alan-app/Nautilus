@@ -1,23 +1,25 @@
-Livro Histórico v54 / App v54
+Livro Histórico v55 / App v55
 
 Alterações desta versão:
-- Ajuste visual do ícone de compartilhar nos cards LDS para símbolo de três pontos conectados no estilo ChatGPT.
-- Alteração limitada ao ícone do botão; função de compartilhamento, texto compartilhado, busca, cards, IndexedDB e importação LDS preservados.
-- LDS: removido o botão redundante “Atualizar LDS”.
-- LDS: mantido apenas o botão “Importar LDS”.
-- LDS: o botão “Importar LDS” agora cobre primeira importação e substituição completa da base existente.
-- LDS: adicionada importação com modal bloqueante de progresso percentual por etapas.
-- LDS: modal exibe etapa atual, percentual e barra de progresso durante leitura/processamento/indexação.
-- LDS: navegação interna fica bloqueada durante a importação para evitar inconsistência.
-- LDS: importação valida o XLSX antes de apagar a base anterior, reduzindo risco de perda por arquivo inválido.
+- Renomeada a opção “Dados da Ficha” para “Cadastrar/Editar Equipamentos”.
+- Adicionado fluxo de cadastro de equipamentos com botão “Adicionar equipamento”.
+- O formulário antigo de “Dados da ficha” foi preservado e passa a abrir somente ao adicionar ou editar um equipamento.
+- Equipamentos salvos aparecem em lista abaixo do botão principal, com botão “Editar” ao lado de cada item.
+- O campo “Equipamento” em “Novo Registro” agora é somente seleção: não permite digitação manual.
+- A lista do campo “Equipamento” em “Novo Registro” passa a exibir os equipamentos cadastrados em “Cadastrar/Editar Equipamentos”.
+- Ao gerar a Folha 01 / A-1 de um equipamento, os dados cadastrais do equipamento selecionado são usados no cabeçalho da folha.
+- Dados antigos de ficha são migrados de forma retrocompatível para a nova lista de equipamentos quando houver equipamento cadastrado.
 
 Módulo alterado:
-- LDS
+- Livro Histórico / Cadastro de Equipamentos / Novo Registro / Documento Oficial.
 
 Módulos preservados:
+- LDS offline
+- Importação XLSX/XLSM
+- Compartilhamento LDS
+- Cards LDS
+- Modal de progresso LDS
 - Launcher/tela inicial
-- Livro Histórico
-- Livro Histórico DA
 - Horas
 - Relatórios
 - Dashboard
@@ -26,12 +28,15 @@ Módulos preservados:
 - PDFs
 - Topbar
 - Navegação geral
+- app_documento_oficial_impressao_direta_forcada.html
 
 Observações técnicas:
-- A busca LDS, os cards e o compartilhamento LDS foram preservados.
-- A estrutura IndexedDB foi mantida.
-- O progresso é calculado por fases e por lotes durante a gravação, evitando atualização de DOM a cada registro.
-- A versão visual do app/menu foi atualizada para v54.
+- Alteração isolada no módulo de equipamentos e integração do campo “Equipamento”.
+- Não houve alteração na base IndexedDB da LDS.
+- Persistência continua via dados locais do app, com leitura retrocompatível de fichas antigas.
+- O dropdown de equipamentos funciona mesmo quando não há equipamentos cadastrados.
+- A versão visual do app/menu foi atualizada para v55.
+- Cache offline atualizado para v55.
 
 Histórico recente:
 - v48: módulo LDS offline com IndexedDB e busca corrigida.
@@ -39,19 +44,11 @@ Histórico recente:
 - v50: LDS com botão Compartilhar em cada card de resultado.
 - v51: LDS com compartilhamento refinado nos cards.
 - v53: LDS com importação única e modal de progresso bloqueante.
+- v54: ícone de compartilhar LDS ajustado para estilo ChatGPT.
 
-
-Correção v53:
-- Corrigida a importação LDS no IndexedDB para evitar o erro “Failed to execute put on IDBObjectStore: The transaction is not active”.
-- A gravação dos registros LDS agora é feita em lotes com uma nova transação readwrite por lote.
-- O modal de progresso foi mantido, mas as atualizações de interface ocorrem fora das transações IndexedDB.
-- Aceite de arquivo atualizado para XLSX/XLSM quando suportado pelo parser interno.
-- Módulos preservados: Launcher, Livro Histórico, Livro Histórico DA, Horas, Relatórios, Dashboard, Notas, Backup, PDFs, Topbar, busca LDS, cards LDS e compartilhamento LDS.
-- Versão visual do app/menu atualizada para v53.
-
-
-Registro v54:
-- Módulo alterado: LDS.
-- Ajuste: ícone de compartilhar dos cards de resultado alterado para SVG inline local de três pontos conectados, sem texto e sem dependência externa.
-- Módulos preservados: Launcher, Livro Histórico, Livro Histórico DA, Horas, Relatórios, Dashboard, Notas, Backup, PDFs, Topbar e navegação geral.
-- Busca, importação, modal de progresso, IndexedDB, cards e texto compartilhado da LDS mantidos sem alteração funcional.
+Registro v55:
+- “Dados da Ficha” renomeado para “Cadastrar/Editar Equipamentos”.
+- Cadastro/listagem/edição de equipamentos implementado.
+- “Novo Registro” passa a aceitar somente equipamento selecionado da lista cadastrada.
+- Folha 01 / A-1 passa a usar os dados do equipamento selecionado.
+- README/changelog, cache e versão visual atualizados para v55.
