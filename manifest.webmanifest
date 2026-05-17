@@ -1,6 +1,6 @@
 {
-  "name": "Livro Histórico",
-  "short_name": "Livro Histórico",
+  "name": "Nautilus",
+  "short_name": "Nautilus",
   "description": "Registro histórico de equipamentos de máquinas com exportação para PDF.",
   "start_url": "./index.html",
   "scope": "./",

@@ -1873,7 +1873,7 @@ body:not(.app-ready) .app{visibility:hidden;}
           <span class="menu-item-label"><span>➕</span><span>Adicionar/Editar Equipamentos</span></span>
           <span class="menu-item-arrow">›</span>
         </button>
-        <button class="menu-item" type="button" onclick="requestReminderPermission()">
+                <button class="menu-item" type="button" onclick="requestReminderPermission()">
           <span class="menu-item-label"><span>🔔</span><span>Ativar notificações</span></span>
           <span class="menu-item-arrow">›</span>
         </button>
@@ -1881,11 +1881,7 @@ body:not(.app-ready) .app{visibility:hidden;}
           <span class="menu-item-label"><span>⏰</span><span>Configurar lembrete</span></span>
           <span class="menu-item-arrow">›</span>
         </button>
-        <button class="menu-item" type="button" onclick="openManageBigramaModal()">
-          <span class="menu-item-label"><span>🛠️</span><span>Adicionar/Editar Bigramas</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <button class="menu-item" type="button" onclick="testReminderNotification(); closeHorasMenu();">
+                <button class="menu-item" type="button" onclick="testReminderNotification(); closeHorasMenu();">
           <span class="menu-item-label"><span>🧪</span><span>Testar notificação</span></span>
           <span class="menu-item-arrow">›</span>
         </button>
@@ -1899,7 +1895,7 @@ body:not(.app-ready) .app{visibility:hidden;}
 
   
   <div id="manageBigramaModal" class="modal-overlay" onclick="if(event.target.id==='manageBigramaModal')closeManageBigramaModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-box" style="max-height:calc(100vh - 90px);margin-top:70px;overflow:auto;" onclick="event.stopPropagation()">
       <h3>Adicionar/Editar Bigramas</h3>
       <div class="field"><label for="novoBigramaSigla">Sigla</label><input id="novoBigramaSigla" type="text"></div>
       <div class="field"><label for="novoBigramaNome">Nome</label><input id="novoBigramaNome" type="text"></div>
@@ -2782,7 +2778,8 @@ function saveManagedBigrama(){
   renderManageBigramaList();
 }
 function deleteManagedBigrama(id){
-  AppState.data.bigramas = (AppState.data.bigramas || []).filter(b=>b.id!==id);
+  if(!id) return;
+  AppState.data.bigramas = (AppState.data.bigramas || []).filter(b=>String(b.id)!==String(id));
   persistAppData();
   renderManageBigramaList();
 }

@@ -1,4 +1,4 @@
-Livro Histórico v56 / App v56
+Nautilus v56 / App v56
 
 Alterações desta versão:
 - Renomeada a opção “Dados da Ficha” para “Cadastrar/Editar Equipamentos”.
@@ -11,7 +11,7 @@ Alterações desta versão:
 - Dados antigos de ficha são migrados de forma retrocompatível para a nova lista de equipamentos quando houver equipamento cadastrado.
 
 Módulo alterado:
-- Livro Histórico / Cadastro de Equipamentos / Novo Registro / Documento Oficial.
+- Nautilus / Cadastro de Equipamentos / Novo Registro / Documento Oficial.
 
 Módulos preservados:
 - LDS offline
