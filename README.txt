@@ -1,4 +1,4 @@
-Nautilus v56 / App v56
+Nautilus v61 / App v61
 
 Alterações desta versão:
 - Renomeada a opção “Dados da Ficha” para “Cadastrar/Editar Equipamentos”.
@@ -35,8 +35,8 @@ Observações técnicas:
 - Não houve alteração na base IndexedDB da LDS.
 - Persistência continua via dados locais do app, com leitura retrocompatível de fichas antigas.
 - O dropdown de equipamentos funciona mesmo quando não há equipamentos cadastrados.
-- A versão visual do app/menu foi atualizada para v56.
-- Cache offline atualizado para v56.
+- A versão visual do app/menu foi atualizada para v61.
+- Cache offline atualizado para v61.
 
 Histórico recente:
 - v48: módulo LDS offline com IndexedDB e busca corrigida.
@@ -64,3 +64,11 @@ Registro v55:
 v57 - Horas de funcionamento: unificação adicionar/editar equipamentos e nova tela adicionar/editar bigramas.
 
 v60 - Correções: restaurado nome Livro Histórico em módulos internos; ajuste menu Bigramas.
+
+v61 - Correção efetiva da v60:
+- Restaurada a opção “Adicionar/Editar Bigramas” no menu de Horas de funcionamento, logo abaixo de “Adicionar/Editar Equipamentos”.
+- Corrigido o botão “Excluir” da tela “Adicionar/Editar Bigramas”, com remoção do item correto, atualização imediata da lista e persistência.
+- Mantido “Nautilus” apenas como branding/nome do app/PWA/instalação.
+- Preservado “Livro Histórico” em módulos internos, incluindo “Imprimir Livro Histórico” e relatórios/documentos do módulo.
+- Modal de bigramas ajustado para respeitar a topbar/linha amarela.
+- Versão visual, README/changelog, service worker/cache e ZIP atualizados para v61.
