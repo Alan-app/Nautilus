@@ -72,3 +72,6 @@ v61 - Correção efetiva da v60:
 - Preservado “Livro Histórico” em módulos internos, incluindo “Imprimir Livro Histórico” e relatórios/documentos do módulo.
 - Modal de bigramas ajustado para respeitar a topbar/linha amarela.
 - Versão visual, README/changelog, service worker/cache e ZIP atualizados para v61.
+
+
+v62 - Correção do menu Livro Histórico e exclusão de Bigramas.
