@@ -83,3 +83,5 @@ Alterações desta versão:
 - Ajustado espaçamento no Bloco de Notas para listas de notas excluídas/lixeira.
 - Preservados os botões Salvar, Editar e Excluir dos bigramas e demais módulos do app.
 - Versão visual, cache e pacote ZIP incrementados para v64.
+
+- v66: removido botão fechar superior duplicado em Adicionar/Editar Bigramas.
