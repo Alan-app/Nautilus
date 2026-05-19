@@ -94,3 +94,7 @@ v70 - LDS: corrigida a seção 'Aplicação em outros Equipamentos' para consult
 
 v71 - LDS: otimizada a seção 'Aplicação em outros Equipamentos' com índice/cache por NSN da aba Configured Items Tree, busca limitada à coluna NSN, remoção dos rótulos Functional Mark/Parent Functional Mark nos resultados e versionamento/ZIP atualizados para v71.
 v72 - LDS: removidos traços/linhas vazias da seção 'Aplicação em outros Equipamentos' e texto de compartilhamento LDS compactado em formato técnico para WhatsApp, preservando performance e compatibilidade offline/mobile.
+v73 - Histórico: cards de Ver Histórico passam a exibir todas as informações diretamente no card, sem botão/ícone Visualizar e sem repetir Equipamento no corpo do card. Versão visual/cache/ZIP atualizados para v73.
+
+
+v74 - LDS: restaurado o formato anterior do compartilhamento dos cards e ajustada a seção de aplicações relacionadas para exibir o título 'N° DE IDENTIFICAÇÃO' com apenas os valores válidos, sem rótulos Functional Mark/Parent Functional Mark. Versão visual/cache/ZIP atualizados para v74.
