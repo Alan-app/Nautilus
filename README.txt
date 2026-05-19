@@ -98,3 +98,5 @@ v73 - Histórico: cards de Ver Histórico passam a exibir todas as informações
 
 
 v74 - LDS: restaurado o formato anterior do compartilhamento dos cards e ajustada a seção de aplicações relacionadas para exibir o título 'N° DE IDENTIFICAÇÃO' com apenas os valores válidos, sem rótulos Functional Mark/Parent Functional Mark. Versão visual/cache/ZIP atualizados para v74.
+
+v75 - LDS: restaurado o título correto da seção 'Aplicação em outros Equipamentos:' nos cards, desfazendo a substituição indevida por 'N° DE IDENTIFICAÇÃO', mantendo a lista de códigos e a busca NSN otimizada. Versão visual/cache/ZIP atualizados para v75.
