@@ -65,7 +65,7 @@
     input::placeholder,textarea::placeholder{color:#9bb0c8}
     input:focus,select:focus,textarea:focus{border-color:#8dc5ff;box-shadow:0 0 0 3px rgba(105,183,255,.15)}
 
-/* v58: conversão anos/dias/horas no módulo Horas e backup das horas de funcionamento */
+/* v83: conversão anos/dias/horas no módulo Horas e backup das horas de funcionamento */
 .equipment-picker{position:relative;width:100%;}
 .equipment-picker input{padding-right:56px;}
 .equipment-picker-toggle{
@@ -1979,12 +1979,16 @@ body:not(.app-ready) .app{visibility:hidden;}
     </div>
   </div>
 
-<div id="manageEquipModal" class="modal-overlay" onclick="if(event.target.id==='manageEquipModal')closeManageEquipModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Gerenciar equipamentos</h3>
-      <p>Escolha o equipamento para editar ou excluir.</p>
+<div id="manageEquipModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='manageEquipModal')closeManageEquipModal()">
+    <div class="modal-box" style="max-height:calc(100vh - var(--topbar-height, 88px) - 32px);overflow:auto;" onclick="event.stopPropagation()">
+      <div style="display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-bottom:8px;">
+        <h3 style="margin:0;">Adicionar/Editar Equipamentos</h3>
+      </div>
+      <p>Gerencie equipamentos igual aos Bigramas.</p>
       <div id="manageEquipList" class="hours-list"></div>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeManageEquipModal()">Fechar</button></div>
+      <div class="toolbar" style="margin-top:10px;">
+        <button class="btn btn-ghost" type="button" onclick="closeManageEquipModal()">Fechar</button>
+      </div>
     </div>
   </div>
 
@@ -1996,9 +2000,9 @@ body:not(.app-ready) .app{visibility:hidden;}
         <div class="grid-2">
           <div class="field"><label for="horasEquipBigrama">Bigrama *</label><select id="horasEquipBigrama" required></select></div>
           <div class="field"><label for="horasEquipNome">Equipamento *</label><input id="horasEquipNome" type="text" placeholder="Ex.: Bomba de esgoto BB1" required /></div>
-          <div class="field"><label for="horasEquipAnos">Anos</label><input id="horasEquipAnos" type="number" min="0" step="1" placeholder="0" oninput="updateHorasFormResultado()" /></div>
-          <div class="field"><label for="horasEquipDias">Dias</label><input id="horasEquipDias" type="number" min="0" step="1" placeholder="0" oninput="updateHorasFormResultado()" /></div>
-          <div class="field"><label for="horasEquipValor">Horas</label><input id="horasEquipValor" type="number" min="0" step="0.1" placeholder="Ex.: 1500" oninput="updateHorasFormResultado()" /></div>
+          <div class="field"><label for="horasEquipAnos">Anos</label><input id="horasEquipAnos" onclick="this.select()" onfocus="this.select()" type="number" min="0" step="1" placeholder="0" oninput="updateHorasFormResultado()" /></div>
+          <div class="field"><label for="horasEquipDias">Dias</label><input id="horasEquipDias" onclick="this.select()" onfocus="this.select()" type="number" min="0" step="1" placeholder="0" oninput="updateHorasFormResultado()" /></div>
+          <div class="field"><label for="horasEquipValor">Horas</label><input id="horasEquipValor" onclick="this.select()" onfocus="this.select()" type="number" min="0" step="0.1" placeholder="Ex.: 1500" oninput="updateHorasFormResultado()" /></div>
           <div class="field"><label for="horasEquipResultado">Resultado em horas</label><input id="horasEquipResultado" type="text" readonly placeholder="0" /></div>
         </div>
         <div class="btn-row">
@@ -6467,3 +6471,64 @@ if($('noteForm')) $('noteForm').addEventListener('submit', saveNoteFromForm);
   </div>
 
 </body>
+<script>
+(function(){
+function attachRealtimeRemoval(){
+  const list=document.getElementById('manageEquipList');
+  if(!list)return;
+  list.addEventListener('click',function(e){
+    const btn=e.target.closest('[data-delete-equip]');
+    if(btn){
+      const item=btn.closest('.hours-item,.list-item,.card,div');
+      if(item){ item.remove(); }
+    }
+  },true);
+}
+function attachAutoSelect(){
+ ['horasEquipAnos','horasEquipDias','horasEquipValor'].forEach(function(id){
+   const el=document.getElementById(id);
+   if(!el)return;
+   ['focus','click'].forEach(function(ev){
+      el.addEventListener(ev,function(){
+        try{ this.select(); }catch(e){}
+      });
+   });
+ });
+}
+function injectReorderButtons(){
+ ['manageEquipList','manageBigramaList'].forEach(function(id){
+   const list=document.getElementById(id);
+   if(!list)return;
+   const observer=new MutationObserver(function(){
+     Array.from(list.children).forEach(function(item){
+       if(item.querySelector('.reorder-tools')) return;
+       const wrap=document.createElement('div');
+       wrap.className='reorder-tools';
+       wrap.style='display:flex;gap:6px;margin-top:6px;';
+       const up=document.createElement('button');
+       up.type='button'; up.textContent='↑';
+       const down=document.createElement('button');
+       down.type='button'; down.textContent='↓';
+       [up,down].forEach(function(b){b.className='btn btn-ghost'; b.style.padding='4px 8px';});
+       up.onclick=function(){
+         const prev=item.previousElementSibling;
+         if(prev) item.parentNode.insertBefore(item,prev);
+       };
+       down.onclick=function(){
+         const next=item.nextElementSibling;
+         if(next) item.parentNode.insertBefore(next,item);
+       };
+       wrap.appendChild(up);wrap.appendChild(down);
+       item.appendChild(wrap);
+     });
+   });
+   observer.observe(list,{childList:true});
+ });
+}
+document.addEventListener('DOMContentLoaded',function(){
+ attachRealtimeRemoval();
+ attachAutoSelect();
+ injectReorderButtons();
+});
+})();
+</script>
