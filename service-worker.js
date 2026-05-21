@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nautilus-v95-notas-lds-reference-20260521';
+const CACHE_NAME = 'nautilus-v96-notas-lds-reference-real-20260521';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
@@ -23,4 +23,4 @@ self.addEventListener('fetch', event => {
 
 // v92-checklist-visual-limpo
 
-// v95-notas-lds-reference
+// v96-notas-lds-reference-real

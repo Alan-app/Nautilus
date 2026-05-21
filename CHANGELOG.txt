@@ -18,4 +18,4 @@ v92 - Restaurada somente a opção Adicionar Bigrama no menu do Livro Histórico
 v94 - Corrigido menu Horas de Funcionamento: Adicionar/Editar Equipamentos com listagem real, editar e excluir; removido Adicionar Bigrama do menu da página inicial, mantendo somente no Livro Histórico.
 
 
-v95 - Corrigido crescimento exagerado dos cards ao editar notas, atualizado versionamento visual/cache e adicionada busca LDS por Reference Number.
+v96 - Bloco de Notas: corrigido aumento artificial do card ao editar; LDS agora busca por Reference Number; versão visual e cache atualizados.
