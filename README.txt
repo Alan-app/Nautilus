@@ -1,4 +1,4 @@
-Nautilus v64 / App v64
+Nautilus v86 / App v86
 
 Alterações desta versão:
 - Renomeada a opção “Dados da Ficha” para “Cadastrar/Editar Equipamentos”.
@@ -116,3 +116,9 @@ v81 - Bloco de Notas: corrigido o autoajuste em tempo real durante a edição in
 v82 - Bloco de Notas: corrigido o ponto de entrada no modo edição. Ao clicar em uma nota, a altura atual do card é capturada antes da renderização, aplicada como altura mínima da edição, e a textarea recebe altura via setProperty com !important para não ser sobrescrita por CSS anterior. A nota não deve reduzir nem esconder texto ao clicar em editar; continua podendo crescer em tempo real. ZIP limpo, sem ZIP interno indevido.
 
 v84 - Bloco de Notas: adicionados botões para marcadores e caixas de seleção/checklist. Checkboxes marcados agora riscam o texto da linha e exibem um botão ✕ para apagar somente a linha concluída. Mantido editor leve, compatível com mobile/offline, sem alterar LDS, Horas de Funcionamento, topbar, launcher ou IndexedDB fora do escopo. Versão visual/cache/ZIP atualizados para v84.
+
+
+v85 - Correção complementar: botões de Marcadores e Checklist agora aparecem também na barra inferior das notas como botões ativáveis, aplicando/removendo formatação em textos já digitados; checklist mantém texto riscado ao marcar e botão ✕ para remover a linha. Em Horas de Funcionamento, a reordenação de Bigramas agora altera a ordem real salva, com botão “Reordenar Bigramas” para mostrar/ocultar controles. A lista de Equipamentos foi reforçada com Editar/Excluir no mesmo padrão dos Bigramas, exclusão em tempo real e campos de anos/dias/horas com seleção automática. Versão visual/cache/ZIP atualizados para v85.
+
+
+v86 - Ajuste visual das notas: botões de Marcadores e Checklist ficam somente com ícones, harmônicos com os demais botões; checklist renderizado com checkbox em coluna fixa e todo o texto do parágrafo alinhado fora da área da caixa, inclusive em quebras de linha. Versão/cache/ZIP atualizados para v86.

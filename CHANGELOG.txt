@@ -1,1 +1,2 @@
+v86 - Botões de Marcadores/Checklist sem texto; checklist das notas alinhado tipo Keep, com texto sempre fora da área do checkbox.
 v85 - Marcadores/Checklist permanentes nas notas; reordenação real de Bigramas; Equipamentos com Editar/Excluir e exclusão em tempo real; campos de horas com seleção automática.
