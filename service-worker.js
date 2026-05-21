@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nautilus-v90-notas-busca-drag-20260521';
+const CACHE_NAME = 'nautilus-v91-checklist-visual-limpo-20260521';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
@@ -20,3 +20,5 @@ self.addEventListener('fetch', event => {
 });
 
 // v90-notas-ui-limpa-real
+
+// v91-checklist-visual-limpo

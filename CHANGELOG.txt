@@ -9,3 +9,5 @@ v89 - Notas: busca com lupa sem título e reordenação mobile com indicador vis
 
 
 v90 - Notas: remoção real do visual novo de arrastar e remoção da data/hora de última alteração da interface. Mantida busca com lupa e ordem estável.
+
+v91 - Notas: checklist com checkbox mais limpo e alinhado; X de exclusão discreto, sem borda e sem fundo.
