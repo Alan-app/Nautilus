@@ -867,18 +867,6 @@
     body.ps-print-mode #psPrintHost .ps-page{margin:0;box-shadow:none;width:210mm;min-height:297mm}
 
 </style>
-
-<style id="v90-clean-ui">
-.drag-handle,
-.reorder-handle,
-.note-last-update,
-.note-updated-at,
-.last-modified,
-.note-modified{
-display:none !important;
-}
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -3541,19 +3529,7 @@ function printRelatorio(){
   iframe.style.cssText='position:fixed;width:1px;height:1px;right:0;bottom:0;opacity:0;border:0;';
   document.body.appendChild(iframe);
   const doc = iframe.contentWindow.document;
-  doc.open(); doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório Geral</title>${styles}
-<style id="v90-clean-ui">
-.drag-handle,
-.reorder-handle,
-.note-last-update,
-.note-updated-at,
-.last-modified,
-.note-modified{
-display:none !important;
-}
-</style>
-
-</head><body>${tableHtml}</body></html>`); doc.close();
+  doc.open(); doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório Geral</title>${styles}</head><body>${tableHtml}</body></html>`); doc.close();
   iframe.onload = () => setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 250);
   setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 700);
 }

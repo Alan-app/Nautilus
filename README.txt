@@ -131,3 +131,6 @@ v89 - Bloco de Notas: a categoria Outras agora preserva a posição das notas ao
 
 
 v89 - Bloco de Notas: removido o título “Buscar notas”, adicionada lupa no campo de busca e indicador visual de arrastar com reordenação mobile persistente tipo Keep.
+
+
+v90 - Notas: remoção real do visual novo de arrastar e remoção da data/hora de última alteração da interface. Mantida busca com lupa e ordem estável.

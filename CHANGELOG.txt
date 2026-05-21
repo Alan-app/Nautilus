@@ -6,3 +6,6 @@ v87 - Ajuste real das cores dos botões ativos das notas para azul padrão Nauti
 v89 - Bloco de Notas: edição, marcadores e checklist não movem mais notas da categoria Outras para o topo; ordenação estável preservada.
 
 v89 - Notas: busca com lupa sem título e reordenação mobile com indicador visual, animação e persistência real.
+
+
+v90 - Notas: remoção real do visual novo de arrastar e remoção da data/hora de última alteração da interface. Mantida busca com lupa e ordem estável.
