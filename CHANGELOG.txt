@@ -26,10 +26,10 @@ v98 - LDS: busca por Reference Number corrigida no importador e na busca real, c
 v99 - LDS: texto explicativo atualizado para incluir Reference Number; card de busca limpo removendo rótulo interno desnecessário.
 
 
-v112 - Horas de Funcionamento: campos de anos, dias e horas agora selecionam todo o valor ao tocar/clicar e substituem imediatamente o valor antigo ao digitar.
+v113 - Horas de Funcionamento: campos de anos, dias e horas agora selecionam todo o valor ao tocar/clicar e substituem imediatamente o valor antigo ao digitar.
 
 
-v112 - Corrigido comportamento seguro dos campos anos/dias/horas: primeiro dígito substitui o valor antigo sem cursor no meio e sem tela branca.
+v113 - Corrigido comportamento seguro dos campos anos/dias/horas: primeiro dígito substitui o valor antigo sem cursor no meio e sem tela branca.
 
 
-v112 - Bloco de Notas: correção local em editNote para manter cursor no ponto tocado e evitar scroll contínuo.
+v113 - Bloco de notas: cursor calculado pelo ponto tocado no texto renderizado e ajuste único baseado na linha do cursor para evitar ficar atrás do teclado sem scroll contínuo.

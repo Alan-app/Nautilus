@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nautilus-v112-horas-campos-selecao-rapida-20260521';
+const CACHE_NAME = 'nautilus-v113-horas-campos-selecao-rapida-20260521';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
@@ -23,4 +23,4 @@ self.addEventListener('fetch', event => {
 
 // v92-checklist-visual-limpo
 
-// v112-horas-campos-selecao-rapida
+// v113-horas-campos-selecao-rapida
