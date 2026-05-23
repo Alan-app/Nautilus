@@ -161,3 +161,6 @@ v114 - Corrigido comportamento seguro dos campos anos/dias/horas: primeiro dígi
 
 
 v114 - Notas: cursor no ponto tocado e ajuste único acima do teclado, sem scroll contínuo.
+
+
+v117 - Notas: versionamento visual/cache atualizado; reforço final para cursor acima do teclado sem delay/rolagem suave e checkbox real preservado no modo edição. ZIP atualizado para v117.
