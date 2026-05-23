@@ -1,8 +1,3 @@
-Nautilus v118 - correção anti-regressão baseada na v115
-- Ajuste instantâneo do cursor acima do teclado nas notas.
-- Checklist preservado como caixa real durante edição.
-- Versão visual/interna/cache atualizados.
-
 Nautilus v114 / App v114
 
 Alterações desta versão:
@@ -166,3 +161,6 @@ v114 - Corrigido comportamento seguro dos campos anos/dias/horas: primeiro dígi
 
 
 v114 - Notas: cursor no ponto tocado e ajuste único acima do teclado, sem scroll contínuo.
+
+
+v116 - Notas: checklist permanece com caixas reais no modo edição, sem aparecer como colchetes.
