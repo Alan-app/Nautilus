@@ -1,3 +1,13 @@
+Nautilus v124 - Ajuste visual das notas
+
+Alterações desta versão:
+- Botão recolher/expandir reposicionado mais próximo da lateral direita superior do card da nota.
+- Removido espaço artificial à direita no cabeçalho das notas.
+- Área útil horizontal do texto ampliada com ajuste de padding direito e largura dos blocos internos.
+- Versão visual, APP_VERSION e cache atualizados para v124.
+
+Base: Nautilus v123 inplace cursor.
+
 Nautilus v120 / App v120
 
 Alterações desta versão:

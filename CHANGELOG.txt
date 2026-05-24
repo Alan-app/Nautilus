@@ -1,3 +1,4 @@
+v124 - Notas: botão recolher/expandir deslocado para a lateral direita superior do card; cabeçalho sem reserva artificial à direita; texto das notas com maior área útil horizontal; versão visual/cache atualizados.
 v123 - CORREÇÃO pisca: card transformado in-place sem renderNotes(). CORREÇÃO cursor checklist: mirror element pixel-perfect. CORREÇÃO teclado: scroll ajustado após abertura do teclado.
 v122 - CORREÇÃO cursor checklist: posição exata do clique calculada a partir do offset absoluto já calculado pelo caretRangeFromPoint, descontando o prefixo raw da linha. Cursor vai exatamente onde clicou.
 v121 - CORREÇÃO: letras iniciais do checklist não são mais cortadas (border-radius:0 aplicado nas textareas). Cursor vai para o ponto aproximado do clique em vez de sempre ir para o final.
