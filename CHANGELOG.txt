@@ -1,3 +1,4 @@
+v122 - CORREÇÃO cursor checklist: posição exata do clique calculada a partir do offset absoluto já calculado pelo caretRangeFromPoint, descontando o prefixo raw da linha. Cursor vai exatamente onde clicou.
 v121 - CORREÇÃO: letras iniciais do checklist não são mais cortadas (border-radius:0 aplicado nas textareas). Cursor vai para o ponto aproximado do clique em vez de sempre ir para o final.
 v120 (rev2) - CORREÇÃO: ao editar nota com checklist, as textareas de cada item agora são auto-redimensionadas imediatamente após o render, fazendo o card crescer naturalmente para exibir todo o conteúdo sem texto cortado nem espaço vazio.
 v120 - CORREÇÃO CRÍTICA: card de notas não encolhe mais ao entrar em modo edição. A altura real do card visualizado é capturada antes do re-render e aplicada como min-height no card editável. Layout, checklist, texto e disposição visual permanecem idênticos à v119.
