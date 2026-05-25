@@ -1,4 +1,8 @@
-v270 - Corrige visualização HTML do Pedido de Serviço: logo inteira, botão Compartilhar DOCX e navegação voltar sem alerta de bigrama. Mantém DOCX v250 intacto.
+## v280 - PS visualização HTML e compartilhar
+- Mantido intacto o DOCX do Pedido de Serviço aprovado na v250.
+- Corrigida logo cortada na visualização HTML do Pedido de Serviço.
+- Adicionado botão Compartilhar para compartilhar o DOCX do PS via Android/WhatsApp quando suportado.
+- Corrigido fluxo do menu/voltar do PS para não exigir seleção de bigrama.
 
 ## v250 - Correção PS: negrito e logo na visualização
 - Itens 9 a 17 do DOCX do Pedido de Serviço: rótulos em negrito e valores sem negrito.
