@@ -1,8 +1,3 @@
-Nautilus v190
+Nautilus v200
 
-Correção aplicada sobre a v180.
-- Botão Baixar DOCX restaurado na visualização do Pedido de Serviço.
-- Botão agora chama exclusivamente a geração DOCX do Pedido de Serviço selecionado.
-- Não chama mais download de lançamentos históricos.
-- Menu próprio do Pedido de Serviço preservado.
-- DOCX do Livro Histórico v150 preservado sem alteração.
+Correção real do Pedido de Serviço DOCX: logo EMIM sem zoom, campo Código de Controle do EMIM alinhado com linha de preenchimento, remoção de linhas vazias indevidas, mantendo botão Baixar DOCX e Livro Histórico v150 intactos.

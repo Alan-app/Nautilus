@@ -1,3 +1,10 @@
+## v200 - Ajuste final visual do Pedido de Serviço DOCX
+- Logo EMIM reduzida para aparecer inteira, sem zoom/corte.
+- Campo Código de Controle do EMIM alinhado à esquerda com linha de preenchimento.
+- Redução de linhas vazias indevidas no cabeçalho do PS.
+- Botão Baixar DOCX do Pedido de Serviço mantido.
+- Livro Histórico v150 preservado.
+
 ## v190 - Restauração correta do botão Baixar DOCX no Pedido de Serviço
 - Restaurado o botão Baixar DOCX na visualização do Pedido de Serviço.
 - Criado controle de contexto do visualizador para diferenciar Livro Histórico e Pedido de Serviço.
