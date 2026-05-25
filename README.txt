@@ -1,6 +1,2 @@
-Nautilus v280
-
-- Corrige visualização HTML do Pedido de Serviço sem alterar o DOCX v250 aprovado.
-- Logo EMIM completa na visualização HTML.
-- Botão Compartilhar DOCX adicionado ao visualizador do Pedido de Serviço.
-- Pedido de Serviço independente de seleção de bigrama; botão voltar retorna à tela inicial sem alerta.
+Nautilus v290
+Correção do Pedido de Serviço: valores dos itens 9 a 17 sem negrito e logo completa na visualização.
