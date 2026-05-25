@@ -1951,7 +1951,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
           <span class="menu-item-arrow">›</span>
         </button>
       </div>
-      <div class="app-version">VERSÃO v250</div>
+      <div class="app-version">VERSÃO v260</div>
     </div>
   </div>
 
@@ -2219,7 +2219,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
         <h3 id="pdfViewerTitle" style="margin:0;font-size:1rem;color:#fff;">Visualização</h3>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-primary" type="button" id="pdfViewerDownloadBtn" onclick="downloadCurrentPdfViewer()" style="min-height:36px;padding:6px 10px;">⬇ Baixar DOCX</button>
-          <button class="btn btn-primary" type="button" id="pdfViewerShareBtn" onclick="shareCurrentPdfViewer()" style="min-height:36px;padding:6px 10px;display:none;">↗ Compartilhar</button>
+          <button class="btn btn-secondary" type="button" id="pdfViewerShareBtn" onclick="shareCurrentPdfViewer()" style="min-height:36px;padding:6px 10px;display:none;">↗ Compartilhar</button>
           <button class="btn btn-ghost" type="button" onclick="closePdfViewerModal()" style="min-height:36px;padding:6px 10px;">✕ Fechar</button>
         </div>
       </div>
@@ -6112,36 +6112,29 @@ function downloadCurrentPdfViewer(){
   downloadOfficialDocx(false);
 }
 
-async function getPsByIdForViewer(id){
-  const bigramaId = AppState.data.selectedBigramaId;
-  const list = getPsListForBigrama(bigramaId);
-  return list.find(x=>x.id===id) || null;
-}
-
 async function shareCurrentPdfViewer(){
   if(currentPdfViewerMode !== 'ps' || !currentPdfViewerPsId){
     downloadCurrentPdfViewer();
     return;
   }
   try{
-    const ps = await getPsByIdForViewer(currentPdfViewerPsId);
+    const bigramaId = AppState.data.selectedBigramaId;
+    const list = getPsListForBigrama(bigramaId);
+    const ps = list.find(x=>x.id===currentPdfViewerPsId);
     if(!ps){ showAppMessage('Compartilhar','Pedido não encontrado.'); return; }
     const numero = String(ps.numero || 'pedido').replace(/[^A-Za-z0-9_-]+/g,'_');
     const filename = `Pedido_Servico_${numero}.docx`;
     const blob = await buildPsDocxBlob(ps);
-    const file = new File([blob], filename, {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+    const file = new File([blob], filename, { type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
     if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
-      await navigator.share({title:'Pedido de Serviço', text:'Pedido de Serviço em DOCX', files:[file]});
-    }else if(navigator.share){
-      await navigator.share({title:'Pedido de Serviço', text:'Pedido de Serviço em DOCX'});
-      downloadBlob(blob, filename);
+      await navigator.share({ title:'Pedido de Serviço', text:'Pedido de Serviço em DOCX', files:[file] });
     }else{
       downloadBlob(blob, filename);
       showAppMessage('Compartilhar','Compartilhamento de arquivo não suportado neste navegador. O DOCX foi baixado.');
     }
   }catch(err){
     console.error(err);
-    showAppMessage('Compartilhar','Não foi possível compartilhar. O download do DOCX será iniciado.');
+    showAppMessage('Compartilhar','Não foi possível compartilhar. O DOCX será baixado.');
     try{ await downloadCurrentPdfViewer(); }catch(e){}
   }
 }
@@ -6872,10 +6865,10 @@ function buildPsPreviewHtml(ps, imgs=[]){
     .hdr .b,.ftr .b{font-size:7pt}
     .ftr{margin-top:auto;padding-top:3mm;border-top:1px solid #8B0000;border-bottom:2px solid #8B0000}
     .sheet{margin-top:4mm;border:1px solid #222;background:#fff}
-    .head-row{display:grid;grid-template-columns:42mm 1fr;min-height:22mm;border-bottom:1px solid #222}
-    .head-left{display:flex;align-items:center;justify-content:center;padding:0;overflow:visible}
-    .head-left img{width:39mm;height:19mm;max-width:39mm;max-height:19mm;display:block;object-fit:contain;object-position:center center}
-    .head-right{display:block;text-align:left;padding:4mm 5mm 0 5mm;font-size:8.1pt;line-height:1.15}
+    .head-row{display:grid;grid-template-columns:54mm 1fr;min-height:28mm;border-bottom:1px solid #222}
+    .head-left{display:flex;align-items:center;justify-content:center;padding:1.5mm 2mm;overflow:visible;min-width:0}
+    .head-left img{max-width:50mm;max-height:25mm;width:100%;height:100%;display:block;object-fit:contain;object-position:center center}
+    .head-right{display:block;text-align:left;padding:5mm 5mm 0 5mm;font-size:8.1pt;line-height:1.15}
     .head-right .line{display:block;border-bottom:1px solid #222;width:68mm;height:6px;margin-top:1mm}
     .title-row{border-bottom:1px solid #222;text-align:center;font-size:11.2pt;font-weight:700;padding:4.5mm 4mm 4mm;background:#fff}
     table{width:100%;border-collapse:collapse;table-layout:fixed}
