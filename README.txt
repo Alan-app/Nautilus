@@ -1,3 +1,4 @@
-Nautilus v230
+Nautilus v240
 
-Correção real do Pedido de Serviço DOCX: logo EMIM sem zoom, campo Código de Controle do EMIM alinhado com linha de preenchimento, remoção de linhas vazias indevidas, mantendo botão Baixar DOCX e Livro Histórico v150 intactos.
+Correção do DOCX de Pedido de Serviço: código de controle do EMIM, remoção do divisor vertical da logo e correção de grid/bordas nos itens 8, 14 e 17.
+Livro Histórico preservado.

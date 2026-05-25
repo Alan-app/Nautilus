@@ -1,11 +1,10 @@
-## v230 - Ajuste final PS DOCX
-- Corrigido bloco CÓDIGO DE CONTROLE DO EMIM conforme modelo.
-- Removido divisor vertical ao lado da logo EMIM no DOCX.
-- Corrigidos gridSpan/células vazias após itens 8, 14 e 17.
-- Mantido botão baixar DOCX do Pedido de Serviço.
-- Livro Histórico v150 preservado.
+## v240 - Correção estrutural PS DOCX
+- Removido divisor vertical entre logo EMIM e bloco de código de controle no cabeçalho do PS.
+- Ajustado bloco CÓDIGO DE CONTROLE DO EMIM com linha de preenchimento.
+- Corrigidos gridSpan/bordas dos itens 8, 14 e 17 para eliminar quadrantes vazios.
+- Preservado DOCX do Livro Histórico v150 e demais módulos.
 
-## v230 - Ajuste final visual do Pedido de Serviço DOCX
+## v200 - Ajuste final visual do Pedido de Serviço DOCX
 - Logo EMIM reduzida para aparecer inteira, sem zoom/corte.
 - Campo Código de Controle do EMIM alinhado à esquerda com linha de preenchimento.
 - Redução de linhas vazias indevidas no cabeçalho do PS.
