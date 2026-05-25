@@ -46,3 +46,5 @@ v119 - Notas: checklist com caixas reais no modo edição, sem conversão para c
 
 
 v119 - Notas: checklist com caixas reais na edição preservando quebra de linha, wrap e largura do card.
+
+v125 - Correção do DOCX do Livro Histórico: margens oficiais, paginação inferior e assinaturas no rodapé via OOXML.
