@@ -1,4 +1,4 @@
-v260 - Corrige logo na visualização HTML do Pedido de Serviço, adiciona botão Compartilhar DOCX e permite abrir PS pelo menu próprio sem exigir bigrama. DOCX do PS v250 preservado.
+v270 - Corrige visualização HTML do Pedido de Serviço: logo inteira, botão Compartilhar DOCX e navegação voltar sem alerta de bigrama. Mantém DOCX v250 intacto.
 
 ## v250 - Correção PS: negrito e logo na visualização
 - Itens 9 a 17 do DOCX do Pedido de Serviço: rótulos em negrito e valores sem negrito.
