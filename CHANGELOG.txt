@@ -1,9 +1,9 @@
-## v250 - Correção PS: negrito e logo na visualização
+## v260 - Correção PS: negrito e logo na visualização
 - Itens 9 a 17 do DOCX do Pedido de Serviço: rótulos em negrito e valores sem negrito.
 - Logo da visualização do Pedido de Serviço ajustada para aparecer inteira, sem corte.
 - Mantidas as correções anteriores do PS e o Livro Histórico v150 intacto.
 
-## v250 - Correção estrutural PS DOCX
+## v260 - Correção estrutural PS DOCX
 - Removido divisor vertical entre logo EMIM e bloco de código de controle no cabeçalho do PS.
 - Ajustado bloco CÓDIGO DE CONTROLE DO EMIM com linha de preenchimento.
 - Corrigidos gridSpan/bordas dos itens 8, 14 e 17 para eliminar quadrantes vazios.
@@ -90,3 +90,9 @@ v119 - Notas: checklist com caixas reais na edição preservando quebra de linha
 - Ajustado espaçamento interno e line-height dos campos.
 - Área de descrição e informações complementares expandidas para espelhar melhor o modelo oficial.
 - Mantida a correção v150 do Livro Histórico sem alterações funcionais.
+
+
+v260 - PS visualização HTML e compartilhamento
+- Corrigida exibição da logo EMIM na visualização HTML do Pedido de Serviço para mostrar inteira, sem corte.
+- Adicionado botão Compartilhar na visualização do Pedido de Serviço para compartilhar o DOCX em apps compatíveis.
+- Mantida intacta a geração DOCX aprovada na v250.
