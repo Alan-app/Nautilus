@@ -1,2 +1,2 @@
-Nautilus v300
-Correção isolada do Pedido de Serviço: logo HTML inteira, voltar/salvar sem exigir bigrama e cache offline atualizado.
+Nautilus v301
+Correção isolada: logo íntegra na visualização HTML do Pedido de Serviço. DOCX e demais funções preservados.

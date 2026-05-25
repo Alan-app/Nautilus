@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nautilus-v300';
+const CACHE_NAME = 'nautilus-v301';
 const APP_ASSETS = ['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)));
@@ -25,4 +25,4 @@ self.addEventListener('fetch', event => {
 
 // v119-horas-campos-selecao-rapida
 
-// v300-ps-logo-html-voltar-salvar-offline
+// v301-ps-logo-html-voltar-salvar-offline

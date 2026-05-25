@@ -1,3 +1,4 @@
+v301 - Correção isolada da logo na visualização HTML do Pedido de Serviço; sem alteração no DOCX, navegação, salvar, voltar ou offline.
 ## v300 - Correção PS HTML/voltar/salvar/offline
 - Corrigida logo da visualização HTML do Pedido de Serviço.
 - Pedido de Serviço não exige bigrama para abrir, salvar ou voltar.
