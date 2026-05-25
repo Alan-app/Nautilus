@@ -1,7 +1,8 @@
-Nautilus v180
+Nautilus v190
 
-Correção real aplicada na base v170.
-- Pedido de Serviço separado do Livro Histórico na tela inicial.
-- Botão baixar indevido removido da visualização do PS.
-- DOCX PS com logo EMIM real e código de controle do EMIM alinhado com linha de preenchimento.
-- DOCX do Livro Histórico v150 preservado.
+Correção aplicada sobre a v180.
+- Botão Baixar DOCX restaurado na visualização do Pedido de Serviço.
+- Botão agora chama exclusivamente a geração DOCX do Pedido de Serviço selecionado.
+- Não chama mais download de lançamentos históricos.
+- Menu próprio do Pedido de Serviço preservado.
+- DOCX do Livro Histórico v150 preservado sem alteração.

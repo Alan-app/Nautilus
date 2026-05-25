@@ -1,3 +1,10 @@
+## v190 - Restauração correta do botão Baixar DOCX no Pedido de Serviço
+- Restaurado o botão Baixar DOCX na visualização do Pedido de Serviço.
+- Criado controle de contexto do visualizador para diferenciar Livro Histórico e Pedido de Serviço.
+- Quando o visualizador está em Pedido de Serviço, o botão baixa o DOCX do PS selecionado.
+- Quando o visualizador está em Livro Histórico, permanece a função original do Livro Histórico.
+- Preservados o menu próprio do PS e o DOCX do Livro Histórico v150.
+
 v180 - Pedido de Serviço menu próprio e DOCX ajustado
 - Adicionado Pedido de Serviço como opção própria da tela inicial.
 - Removido Pedido de Serviço das opções internas do Livro Histórico.
