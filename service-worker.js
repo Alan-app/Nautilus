@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-v310-core';
-const RUNTIME_CACHE = 'nautilus-v310-runtime';
+const CACHE_NAME = 'nautilus-v350-core';
+const RUNTIME_CACHE = 'nautilus-v350-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -66,4 +66,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(cacheFirst(event.request));
 });
 
-// v310-offline-pwa-persistente
+// v350-lds-equipment-code

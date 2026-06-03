@@ -1,3 +1,7 @@
+v350 - LDS Equipment Code corrigido
+- Equipment Code agora é capturado de forma tolerante da coluna Equipment Code da aba Configured Items Tree.
+- Busca e cards LDS preservados. Reimporte a planilha LDS se a base antiga estiver sem o campo gravado.
+
 v310 - Persistência offline reforçada
 - Service Worker refeito com cache-first para assets principais.
 - Fallback offline para navegação.
@@ -103,3 +107,8 @@ v119 - Notas: checklist com caixas reais na edição preservando quebra de linha
 - Ajustado espaçamento interno e line-height dos campos.
 - Área de descrição e informações complementares expandidas para espelhar melhor o modelo oficial.
 - Mantida a correção v150 do Livro Histórico sem alterações funcionais.
+
+## v350 - LDS: Equipment Code nos resultados
+- Adicionado Equipment Code na importação LDS, quando a coluna existir na planilha.
+- Adicionado Equipment Code na busca LDS, nos cards de resultado e no texto de compartilhamento.
+- Atualizada busca para localizar também por Equipment Code.
