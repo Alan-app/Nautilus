@@ -1953,6 +1953,34 @@ body.notes-screen{scroll-padding-bottom:38vh;}
   }
 }
 
+
+/* v389 - Atlas PDF original importado */
+#screen-atlas .card > h2,#screen-atlas .card > p{display:none !important}
+.atlas-top-row{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-bottom:12px;position:relative}
+#atlasMenuBtn{width:44px;min-width:44px;height:44px;padding:0 !important;border-radius:14px !important;font-size:1.25rem;font-weight:900}
+#atlasMenuPanel{position:absolute;top:52px;right:0;z-index:50;width:min(330px,calc(100vw - 36px));border-radius:18px;padding:12px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,rgba(13,35,63,.98),rgba(9,27,49,.98));box-shadow:0 18px 38px rgba(0,0,0,.35)}
+#atlasMenuPanel.hidden{display:none !important}
+.atlas-import-panel{margin:0 !important;padding:0 !important;border:0 !important;background:transparent !important}
+.atlas-viewer{position:fixed !important;inset:0 !important;width:100vw !important;height:100vh !important;background:#101014 !important;z-index:999999 !important}
+.atlas-viewer.show{display:flex !important;flex-direction:column !important}
+.atlas-viewer-bar{min-height:42px !important;flex:0 0 auto !important}
+.atlas-viewer-bar button[onclick="openAtlasExternal()"]{display:none !important}
+.atlas-viewer-tools{min-height:42px !important;flex:0 0 auto !important}
+.atlas-viewer-tools button[onclick="atlasZoomOut()"],.atlas-viewer-tools button[onclick="atlasZoomIn()"],#atlasZoomIndicator{display:none !important}
+.atlas-pdf-stage{flex:1 1 auto;width:100vw;height:calc(100vh - 84px);background:#1c1c22;overflow:hidden}
+#atlasPdfFrame{width:100%;height:100%;border:0;background:#111}
+
+
+/* v390 - correção tela azul Atlas PDF original */
+.atlas-viewer{position:fixed !important;inset:0 !important;width:100vw !important;height:100vh !important;background:#101014 !important;z-index:999999 !important}
+.atlas-viewer.show{display:flex !important;flex-direction:column !important}
+.atlas-viewer-bar{min-height:42px !important;flex:0 0 auto !important}
+.atlas-viewer-tools{min-height:42px !important;flex:0 0 auto !important}
+.atlas-viewer-bar button[onclick="openAtlasExternal()"]{display:none !important}
+.atlas-pdf-stage{flex:1 1 auto !important;width:100vw !important;height:calc(100vh - 84px) !important;background:#111 !important;overflow:hidden !important}
+#atlasPdfFrame{display:block !important;width:100% !important;height:100% !important;border:0 !important;background:#111 !important}
+#screen-atlas .card > h2,#screen-atlas .card > p{display:none !important}
+
 </style>
 
 <style id="pdf-viewer-overlay-fix">
@@ -2256,593 +2284,16 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
       <div class="atlas-viewer-bar">
         <button class="btn btn-ghost" type="button" onclick="closeAtlasViewer()">←</button>
         <div id="atlasViewerTitle" class="atlas-viewer-title">Atlas</div>
-        <button class="btn btn-secondary" type="button" onclick="openAtlasExternal()">Abrir</button>
       </div>
       <div class="atlas-viewer-tools">
         <button class="btn btn-ghost" type="button" onclick="atlasPrevPage()">‹</button>
         <div id="atlasPageIndicator" class="atlas-page-indicator">Pág. -</div>
         <button class="btn btn-ghost" type="button" onclick="atlasNextPage()">›</button>
-        <button class="btn btn-ghost" type="button" onclick="atlasZoomOut()">−</button>
-        <div id="atlasZoomIndicator" class="atlas-zoom-indicator">100%</div>
-        <button class="btn btn-ghost" type="button" onclick="atlasZoomIn()">+</button>
       </div>
-      <div id="atlasImageStage" class="atlas-image-stage"><img id="atlasViewerImage" alt="Página do Atlas" /></div>
-    </div>
-
-
-    <section id="screen-lds" class="section hidden">
-      <div class="card lds-wrap">
-        <div class="lds-head-row">
-          
-          <div class="lds-menu-wrap">
-            <button id="ldsMenuBtn" class="btn btn-secondary" type="button" aria-label="Menu LDS" onclick="toggleLdsMenu(event)">☰</button>
-            <div id="ldsMenuPanel" class="hidden" onclick="event.stopPropagation()">
-              <div class="lds-toolbar">
-                <button class="btn btn-primary" type="button" onclick="openLdsFilePicker()">Importar LDS</button>
-                <input id="ldsFileInput" class="hidden" type="file" accept=".xlsx,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.macroEnabled.12" />
-              </div>
-              <div class="lds-meta">
-                <div class="lds-meta-box"><div class="lds-meta-label">Arquivo</div><div id="ldsMetaFileName" class="lds-meta-value">Nenhum</div></div>
-                <div class="lds-meta-box"><div class="lds-meta-label">Itens indexados</div><div id="ldsMetaTotalItems" class="lds-meta-value">0</div></div>
-                <div class="lds-meta-box"><div class="lds-meta-label">Provisioning</div><div id="ldsMetaProvisioningCount" class="lds-meta-value">0</div></div>
-                <div class="lds-meta-box"><div class="lds-meta-label">Importação</div><div id="ldsMetaImportedAt" class="lds-meta-value">-</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p>Busca por <b>Functional Mark</b>, <b>Parent Functional Mark</b> ou <b>Reference Number</b>.</p>
-        <div class="lds-search-row">
-          <input id="ldsSearchInput" type="search" autocomplete="off" aria-label="Buscar LDS" placeholder="Buscar Functional Mark, Parent Functional Mark, Reference Number ou Equipment Code" />
-        </div>
-        <div id="ldsStatus" class="lds-status"></div>
-        <div id="ldsResults" class="lds-results"></div>
-      </div>
-    </section>
-  <div id="ldsProgressModal" class="lds-progress-overlay hidden" aria-modal="true" role="dialog" aria-labelledby="ldsProgressTitle" onclick="event.stopPropagation()">
-    <div class="lds-progress-box" onclick="event.stopPropagation()">
-      <h3 id="ldsProgressTitle">Importando LDS</h3>
-      <div id="ldsProgressPercent" class="lds-progress-percent">0%</div>
-      <div id="ldsProgressStage" class="lds-progress-stage">Preparando importação...</div>
-      <div class="lds-progress-bar" aria-hidden="true"><div id="ldsProgressFill" class="lds-progress-fill"></div></div>
-    </div>
-  </div>
-
-
-    <section id="screen-novo" class="section hidden">
-      <div class="card">
-        <h2 id="formHeading">Novo Registro</h2>
-        <p style="margin-bottom:14px;">O registro será salvo no bigrama selecionado.</p>
-        <div style="margin-bottom:14px;"><span id="selectedBigramaChip" class="chip"></span></div>
-        <form id="recordForm" class="section">
-          <div class="grid-2">
-            <div class="field"><label for="dataInicio">Data de Início *</label><input id="dataInicio" type="date" required /></div>
-            <div class="field"><label for="dataFim">Data de Fechamento</label><input id="dataFim" type="date" /></div>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="horasFunc">Horas de Funcionamento</label><input id="horasFunc" type="text" placeholder="Ex.: 1500" /></div>
-            <div class="field"><label for="tipoRegistro">Tipo de Registro</label>
-              <select id="tipoRegistro">
-                <option value="avaria">Avaria</option><option value="manutencao">Manutenção</option><option value="rotina">Rotina de manutenção</option><option value="ocorrencia">Ocorrência</option><option value="anotacao">Anotação</option>
-              </select>
-            </div>
-          </div>
-          <div class="field"><label for="equipamento"></label><div class="equipment-picker"><input id="equipamento" type="text" autocomplete="off" readonly inputmode="none" placeholder="Selecione na seta ao lado" onfocus="openEquipmentDropdown()" /><button id="equipamentoDropdownBtn" class="equipment-picker-toggle" type="button" aria-label="Mostrar equipamentos registrados" onclick="toggleEquipmentDropdown(event)">▾</button><div id="equipamentoDropdownList" class="equipment-picker-list hidden"></div></div></div>
-          <div class="field"><label for="sistemaEncarregado">Sistema do Encarregado</label><input id="sistemaEncarregado" type="text" placeholder="Ex.: MO-1, MO-2, L-1, L-2" /><div style="font-size:.86rem;color:var(--muted);line-height:1.3;">Usado na assinatura da folha inicial do equipamento.</div></div>
-          <div class="field"><label for="avaria">Avaria / Registro *</label><textarea id="avaria" placeholder="Descreva a avaria ocorrida ou o fato histórico." required></textarea></div>
-          <div class="field"><label for="solucao">Solução</label><textarea id="solucao" placeholder="Descreva a solução aplicada"></textarea></div>
-          <div class="field"><label for="observacao">Observação</label><textarea id="observacao" placeholder="Observações adicionais"></textarea></div>
-          <div class="field">
-            <label for="anexosImagem">Anexar imagens</label>
-            <div class="attachment-box">
-              <input id="anexosImagem" type="file" accept="image/*" multiple />
-              <div id="anexosPreview" class="attachment-preview-wrap"></div>
-              <div style="font-size:.88rem;color:var(--muted);line-height:1.35;">As imagens ficam salvas para consulta dentro do app e não entram no PDF.</div>
-            </div>
-          </div>
-          <div class="btn-row"><button id="submitRecordBtn" class="btn btn-primary" type="submit">Salvar Registro</button><button class="btn btn-secondary" type="button" onclick="resetRecordForm()">Limpar</button></div>
-          <div id="recordStatus" class="status-msg"></div>
-        </form>
-      </div>
-    </section>
-
-    <section id="screen-historico" class="section hidden">
-      <div class="card">
-        <div class="card-head-row">
-          <h2 style="margin:0;">Filtrar Historico</h2>
-          <button id="historicoFiltroToggle" class="collapsible-toggle" type="button" onclick="toggleHistoricoFiltros()" aria-label="Expandir ou recolher filtros">▾</button>
-        </div>
-        <div id="historicoFiltroBody" class="hidden">
-          <div class="field"><label for="filtroBusca">Busca livre</label><input id="filtroBusca" type="text" placeholder="Buscar por equipamento, avaria, solução..." /></div>
-          <div class="field"><label for="filtroStatus">Status</label>
-            <select id="filtroStatus"><option value="TODOS">Todos</option><option value="aberto">Em aberto</option><option value="fechado">Fechado</option></select>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="filtroDataInicio">Data inicial</label><input id="filtroDataInicio" type="date" /></div>
-            <div class="field"><label for="filtroDataFim">Data final</label><input id="filtroDataFim" type="date" /></div>
-          </div>
-          <div class="toolbar"><button class="btn btn-secondary" type="button" onclick="clearFilters()">Limpar filtros</button><button class="btn btn-ghost" type="button" onclick="showScreen('documento')">Ir para documento oficial</button></div>
-        </div>
-      </div>
-      <div id="historyStats" class="banner"></div>
-      <div id="recordList" class="record-list"></div>
-    </section>
-
-    <section id="screen-ficha" class="section hidden">
-      <div class="card">
-        <h2>Cadastrar/Editar Equipamentos</h2>
-        <p style="margin-bottom:14px;">Cadastre os equipamentos do bigrama selecionado. Estes dados preenchem a Folha 01 / A-1 no primeiro lançamento do equipamento.</p>
-        <div class="toolbar" style="margin-bottom:12px;"><button id="addEquipmentBtn" class="btn btn-primary" type="button" onclick="startAddEquipmentFicha()">Adicionar equipamento</button></div>
-        <form id="fichaForm" class="section hidden">
-          <div class="grid-2">
-            <div class="field"><label for="navio">Navio</label><input id="navio" type="text" /></div>
-            <div class="field"><label for="fichaNumero">Ficha Nº</label><input id="fichaNumero" type="text" placeholder="Ex.: 01" /></div>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="folhaInicial">Folha Inicial</label><input id="folhaInicial" type="number" min="1" step="1" /></div>
-            <div class="field"><label for="anexoPrimeiraPagina">Anexo da 1ª página</label><select id="anexoPrimeiraPagina"><option value="A">Anexo A</option><option value="B">Anexo B</option></select></div>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="sistemaFicha">Sistema</label><input id="sistemaFicha" type="text" /></div>
-            <div class="field"><label for="equipamentoFicha"></label><input id="equipamentoFicha" type="text" /></div>
-          </div>
-          <div class="field"><label for="manualPlano">Manual e/ou Plano</label><input id="manualPlano" type="text" /></div>
-          <div class="grid-2">
-            <div class="field"><label for="fabricante">Fabricante</label><input id="fabricante" type="text" /></div>
-            <div class="field"><label for="dadosPlaca">Dados de Placa</label><input id="dadosPlaca" type="text" /></div>
-          </div>
-          <div class="grid-2">
-            <div class="field"><label for="localizacao">Localização</label><input id="localizacao" type="text" /></div>
-            <div class="field"><label for="numeroSerie">Nº de Série</label><input id="numeroSerie" type="text" /></div>
-          </div>
-          <div class="btn-row"><button id="saveFichaBtn" class="btn btn-primary" type="submit">Salvar Equipamento</button><button class="btn btn-secondary" type="button" onclick="cancelEquipmentFichaEdit()">Cancelar</button><button class="btn btn-secondary" type="button" onclick="aplicarPadraoFicha()">Restaurar padrão</button></div>
-          <div id="fichaStatus" class="status-msg"></div>
-        </form>
-        <div id="equipmentFichaList" class="record-list" style="margin-top:14px;"></div>
-      </div>
-    </section>
-
-    <section id="screen-documento" class="section hidden">
-      <div class="card">
-        <h2>Imprimir Livro Histórico</h2>
-        <p style="margin-bottom:14px;">Somente registros em aberto do bigrama selecionado entram no documento.</p>
-        <div class="toolbar" style="display:grid;grid-template-columns:1fr;gap:10px;">
-          <button class="btn btn-primary" type="button" onclick="previewPdfOnly()">Visualizar / Baixar DOCX</button>
-        </div>
-        <div class="print-note" style="margin-top:12px;">Visualize o documento no app. Na visualização você pode baixar ou imprimir.</div>
-      </div>
-      <div id="printHost" class="print-zone"></div>
-    </section>
-
-    <section id="screen-horas" class="section hidden" style="margin-top:-22px;">
-      <div id="horasStatus" class="status-msg"></div>
-      <div id="horasList" class="hours-list"></div>
-    </section>
-    <section id="screen-relatorio" class="section hidden" style="margin-top:0;padding-top:0;">
-      <div id="relatorioContent"></div>
-    </section>
-
-
-    <section id="screen-ps" class="section hidden">
-      <div class="card">
-        <h2>Pedido de Serviço</h2>
-        <p style="margin-bottom:14px;">Pedidos do bigrama selecionado.</p>
-        <div class="toolbar">
-          <button class="btn btn-primary" type="button" onclick="openPsModal()">➕ Novo Pedido</button>
-        </div>
-      </div>
-      <div id="psList" class="record-list"></div>
-    </section>
-    <section id="screen-notas" class="section hidden">
-      <div class="card">
-        <div class="keep-shell">
-          <div class="keep-topbar">
-            <div class="field note-search-field"><div class="note-search-box"><span class="note-search-icon" aria-hidden="true">🔎</span><input id="noteSearch" type="text" placeholder="Buscar por título ou texto" oninput="renderNotes()" /></div></div>
-            <div class="keep-tabs"><button id="notesTabActive" class="keep-tab active" type="button" onclick="setNotesView('active')">Notas</button><button id="notesTabArchive" class="keep-tab" type="button" onclick="setNotesView('archive')">Arquivo</button><button id="notesTabTrash" class="keep-tab" type="button" onclick="setNotesView('trash')">Lixeira</button><button id="emptyNotesTrashBtn" class="keep-tab keep-trash-empty hidden" type="button" onclick="emptyNotesTrash()">Esvaziar lixeira</button></div>
-          </div>
-        </div>
-      </div>
-      <div id="notesList" class="keep-grid"></div>
-    </section>
-    <button id="addNoteFab" class="notes-fab hidden" type="button" onclick="openNoteModal()" title="Adicionar nota" aria-label="Adicionar nota">+</button>
-
-  <div id="noteModal" class="modal-overlay" onclick="if(event.target.id==='noteModal')closeNoteModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Adicionar nota</h3>
-      <form id="noteForm" class="keep-composer">
-        <input id="noteId" type="hidden" />
-        <input id="noteTitle" type="text" placeholder="Título" />
-        <div class="keep-format-toolbar"><button class="keep-format-btn" type="button" onclick="insertNoteMarker('noteText','bullet')" title="Inserir marcador" aria-label="Inserir marcador">•</button><button class="keep-format-btn" type="button" onclick="insertNoteMarker('noteText','check')" title="Inserir caixa de seleção" aria-label="Inserir caixa de seleção">☑</button></div><textarea id="noteText" placeholder="Criar uma nota..." required onkeydown="handleNoteListEnter(event,this)"></textarea>
-        <div class="keep-colors" id="noteColorPicker">
-          <button class="color-dot color-default active" type="button" data-color="default" onclick="setNoteColor('default')"></button><button class="color-dot color-yellow" type="button" data-color="yellow" onclick="setNoteColor('yellow')"></button><button class="color-dot color-green" type="button" data-color="green" onclick="setNoteColor('green')"></button><button class="color-dot color-blue" type="button" data-color="blue" onclick="setNoteColor('blue')"></button><button class="color-dot color-red" type="button" data-color="red" onclick="setNoteColor('red')"></button><button class="color-dot color-purple" type="button" data-color="purple" onclick="setNoteColor('purple')"></button>
-        </div>
-        <div class="btn-row"><button id="saveNoteBtn" class="btn btn-primary" type="submit">Adicionar</button><button class="btn btn-secondary" type="button" onclick="closeNoteModal()">Cancelar</button></div>
-        <div id="noteStatus" class="status-msg"></div>
-      </form>
-    </div>
-  </div>
-
-  <div id="psModal" class="modal-overlay" onclick="if(event.target.id==='psModal')closePsModal()">
-    <div class="modal-box" style="width:min(680px,100%);max-height:92vh;overflow-y:auto;" onclick="event.stopPropagation()">
-      <h3 id="psModalTitle">Novo Pedido de Serviço</h3>
-      <form id="psForm" class="section">
-        <div class="grid-2">
-          <div class="field"><label for="psOm">1. OM Solicitante</label><input id="psOm" type="text" placeholder="Ex.: SHumaita" /></div>
-          <div class="field"><label for="psData">2. Data</label><input id="psData" type="date" /></div>
-        </div>
-        <div class="grid-2">
-          <div class="field"><label for="psNumero">3. Número</label><input id="psNumero" type="text" placeholder="Ex.: PS 001/2026" /></div>
-          <div class="field"><label for="psPrioridade">4. Prioridade</label>
-            <select id="psPrioridade"><option value="A">A</option><option value="B">B</option></select>
-          </div>
-        </div>
-        <div class="field"><label for="psDescricao">5. Descrição do Serviço *</label><textarea id="psDescricao" placeholder="Descreva o serviço solicitado" required></textarea></div>
-        <div class="grid-2">
-          <div class="field"><label for="psTipoManutencao">6. Tipo de Manutenção</label>
-            <select id="psTipoManutencao"><option value="corretiva">Corretiva</option><option value="preventiva">Preventiva</option></select>
-          </div>
-          <div class="field"><label for="psSobressalentes">7. Sobressalentes Disponíveis?</label>
-            <select id="psSobressalentes"><option value="sim">Sim</option><option value="nao">Não</option><option value="na">Não se aplica</option></select>
-          </div>
-        </div>
-        <div class="grid-2">
-          <div class="field"><label for="psCodigoMrc">8. Código MRC</label><input id="psCodigoMrc" type="text" placeholder="Ex.: N/A" /></div>
-          <div class="field"><label for="psCodigoLcn">9. Código LCN</label><input id="psCodigoLcn" type="text" placeholder="Ex.: N/A" /></div>
-        </div>
-        <div class="grid-2">
-          <div class="field"><label for="psCompartimento">10. Compartimento</label><input id="psCompartimento" type="text" placeholder="Ex.: Praça de Máquinas" /></div>
-          <div class="field"><label for="psFunctionalMark">11. Functional Mark</label><input id="psFunctionalMark" type="text" placeholder="Ex.: P01436/EJ00202" /></div>
-        </div>
-        <div class="grid-2">
-          <div class="field"><label for="psDadosPlaca">12. Dados da Placa do Fabricante</label><input id="psDadosPlaca" type="text" placeholder="Ex.: N/A" /></div>
-          <div class="field"><label for="psHorasFuncionamento">13. Horas de Funcionamento</label><input id="psHorasFuncionamento" type="text" placeholder="Ex.: N/A" /></div>
-        </div>
-        <div class="field"><label for="psDataUltimaManutencao">14. Data da Última Manutenção</label><input id="psDataUltimaManutencao" type="date" /></div>
-        <div class="grid-2">
-          <div class="field"><label for="psEncarregado">15. Encarregado da Incumbência</label><input id="psEncarregado" type="text" placeholder="Ex.: 2º SG-MO-SB Alan Oliveira" /></div>
-          <div class="field"><label for="psOficial">16. Oficial Responsável</label><input id="psOficial" type="text" placeholder="Ex.: 1T Fajardo" /></div>
-        </div>
-        <div class="field"><label for="psDivisao">17. Divisão Responsável</label><input id="psDivisao" type="text" placeholder="Ex.: Divisão de Máquinas" /></div>
-        <div class="field"><label for="psInfoComplementares">18. Informações Complementares</label><textarea id="psInfoComplementares" placeholder="Informações adicionais sobre o reparo"></textarea></div>
-        <div class="field">
-          <label>Imagens</label>
-          <label class="btn btn-ghost" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;" for="psAnexosImagem">📎 Adicionar imagens</label>
-          <input id="psAnexosImagem" type="file" accept="image/*" multiple class="hidden" />
-          <div id="psAttachmentPreview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:8px;"></div>
-        </div>
-        <div class="btn-row">
-          <button id="psSubmitBtn" class="btn btn-primary" type="submit">Salvar Pedido</button>
-          <button class="btn btn-secondary" type="button" onclick="resetPsForm()">Limpar</button>
-        </div>
-        <div id="psStatus" class="status-msg"></div>
-      </form>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closePsModal()">Fechar</button></div>
-    </div>
-  </div>
-
-  <div id="mainMenuModal" class="modal-overlay" onclick="if(event.target.id==='mainMenuModal')closeMainMenu()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Menu</h3>
-      <p>Ações gerais do aplicativo.</p>
-      <div class="menu-list">
-        <button id="menuAdicionarBigramaBtn" class="menu-item hidden" type="button" onclick="openManageBigramas()">
-          <span class="menu-item-label"><span>➕</span><span>Adicionar Bigrama</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-
-        <button id="menuOrganizacaoBtn" class="menu-item hidden" type="button" onclick="toggleVisualPrefsMenu()">
-          <span class="menu-item-label"><span>⚙️</span><span>Organização das pastas</span></span>
-          <span class="menu-item-arrow" id="visualPrefsArrow">▾</span>
-        </button>
-        <div id="visualPrefsPanel" class="submenu-panel hidden">
-          <div>
-            <div class="submenu-title">Classificação</div>
-            <div class="home-control-buttons" style="margin-top:8px;">
-              <button id="btnOrdemAlfa" class="chip chip-toggle active" type="button" onclick="setHomeOrdem('alfa')">Ordem alfabética</button>
-              <button id="btnOrdemUpdate" class="chip chip-toggle" type="button" onclick="setHomeOrdem('update')">Última atualização</button>
-            </div>
-          </div>
-          <div>
-            <div class="submenu-title">Exibição</div>
-            <div class="home-control-buttons" style="margin-top:8px;">
-              <button id="btnApresentacaoPasta" class="chip chip-toggle active" type="button" onclick="setHomeApresentacao('pasta')">Em pastas</button>
-              <button id="btnApresentacaoLista" class="chip chip-toggle" type="button" onclick="setHomeApresentacao('lista')">Em lista</button>
-            </div>
-          </div>
-        </div>
-        <button class="menu-item" type="button" onclick="openRelatorio()">
-          <span class="menu-item-label"><span>📊</span><span>Relatório</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <button class="menu-item" type="button" onclick="openExportModal()">
-          <span class="menu-item-label"><span>💾</span><span>Exportar backup</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <label class="menu-item" for="importBackup">
-          <span class="menu-item-label"><span>📥</span><span>Importar backup</span></span>
-          <span class="menu-item-arrow">›</span>
-        </label>
-        <input id="importBackup" class="hidden" type="file" accept=".json" />
-        <button class="menu-item" type="button" onclick="closeMainMenu()">
-          <span class="menu-item-label"><span>✖</span><span>Fechar</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-      </div>
-      <div class="app-version">VERSÃO v388</div>
-    </div>
-  </div>
-
-  <div id="exportBackupModal" class="modal-overlay" onclick="if(event.target.id==='exportBackupModal')closeExportModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Exportar Backup</h3>
-      <p>Escolha o nome do arquivo e como deseja salvar o backup. O backup exportado também leva as imagens anexadas.</p>
-      <div class="section" style="margin-bottom:16px;">
-        <div class="field">
-          <label for="exportFileName">Nome do arquivo</label>
-          <input id="exportFileName" type="text" placeholder="Ex.: Livro H- Backup" />
-        </div>
-        <div id="exportFsaWarning" class="hidden" style="padding:10px 14px;border-radius:14px;background:rgba(255,143,143,.10);border:1px solid rgba(255,143,143,.25);color:#ffb3b3;font-size:.92rem;line-height:1.45;">
-          Seu navegador não suporta seleção de pasta. Use a opção de Downloads.
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-primary" type="button" onclick="exportWithFolderPicker()">📁 Escolher pasta e salvar</button>
-        <button class="btn btn-secondary" type="button" onclick="exportToDownloads()">⬇️ Salvar em Downloads</button>
-      </div>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeExportModal()">Cancelar</button></div>
-    </div>
-  </div>
-
-  <div id="manageBigramasModal" class="modal-overlay" onclick="if(event.target.id==='manageBigramasModal')closeManageBigramas()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Adicionar Bigrama</h3>
-      <p>Adicione, edite ou exclua sistemas.</p>
-      <form id="bigramaForm" class="section">
-        <div class="grid-2">
-          <div class="field"><label for="siglaInput">Sigla *</label><input id="siglaInput" type="text" maxlength="4" placeholder="Ex.: DA" required /></div>
-          <div class="field"><label for="nomeSistemaInput">Nome do sistema *</label><input id="nomeSistemaInput" type="text" placeholder="Ex.: Esgoto" required /></div>
-        </div>
-        <div class="btn-row"><button id="saveBigramaBtn" class="btn btn-primary" type="submit">Salvar Bigrama</button><button class="btn btn-secondary" type="button" onclick="resetBigramaForm()">Limpar</button></div>
-        <div id="bigramaStatus" class="status-msg"></div>
-      </form>
-      <div id="bigramaList" class="record-list"></div>
-      <div class="toolbar" style="margin-top:12px;"><button class="btn btn-ghost" type="button" onclick="closeManageBigramas()">Fechar</button></div>
-    </div>
-  </div>
-
-  <div id="printChoiceModal" class="modal-overlay" onclick="if(event.target.id==='printChoiceModal')closePrintChoiceModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Imprimir / Exportar DOCX</h3>
-      <p>Escolha se os registros que forem para o PDF devem ser marcados como fechados após a abertura da visualização de impressão.</p>
-      <div class="modal-actions">
-        <button class="btn btn-primary" type="button" onclick="confirmPrintAndClose()">Exportar DOCX</button>
-        <button class="btn btn-secondary" type="button" onclick="previewPdfOnly()">Visualizar documento</button>
-      </div>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closePrintChoiceModal()">Cancelar</button></div>
-    </div>
-  </div>
-
-  <div id="conflictModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='conflictModal')closeConflictModal()">
-    <div class="modal-box" style="max-height:calc(100vh - var(--topbar-height, 88px) - 32px);overflow-y:auto;display:flex;flex-direction:column;" onclick="event.stopPropagation()">
-      <h3>Ver conflito</h3>
-      <p>Compare seu registro com o registro do backup e escolha qual versão deve permanecer.</p>
-      <div id="conflictContent" style="flex:1;overflow-y:auto;"></div>
-      <div class="toolbar" style="margin-top:14px;flex-shrink:0;">
-        <button class="btn btn-primary" type="button" onclick="resolveConflictChoice('backup')">Usar registro do backup</button>
-        <button class="btn btn-secondary" type="button" onclick="resolveConflictChoice('local')">Manter meu registro</button>
-        <button class="btn btn-ghost" type="button" onclick="closeConflictModal()">Cancelar</button>
+      <div id="atlasPdfStage" class="atlas-pdf-stage">
+        <iframe id="atlasPdfFrame" title="Atlas PDF"></iframe>
       </div>
     </div>
-  </div>
-
-  <div id="importReportModal" class="modal-overlay" onclick="if(event.target.id==='importReportModal')closeImportReportModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Relatório de importação</h3>
-      <p>Resumo da atualização do backup.</p>
-      <div id="importReportContent"></div>
-      <div class="toolbar" style="margin-top:14px;"><button class="btn btn-primary" type="button" onclick="closeImportReportModal()">OK</button></div>
-    </div>
-  </div>
-
-  <div id="appMessageModal" class="modal-overlay" onclick="if(event.target.id==='appMessageModal')closeAppMessageModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3 id="appMessageTitle">Mensagem</h3>
-      <p id="appMessageBody">—</p>
-      <div class="toolbar" style="margin-top:14px;"><button class="btn btn-primary" type="button" onclick="closeAppMessageModal()">OK</button></div>
-    </div>
-  </div>
-
-  <div id="appConfirmModal" class="modal-overlay" onclick="if(event.target.id==='appConfirmModal')resolveAppConfirm(false)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3 id="appConfirmTitle">Confirmar ação</h3>
-      <p id="appConfirmBody">—</p>
-      <div class="toolbar" style="margin-top:14px;">
-        <button class="btn btn-primary" type="button" onclick="resolveAppConfirm(true)">Confirmar</button>
-        <button class="btn btn-ghost" type="button" onclick="resolveAppConfirm(false)">Cancelar</button>
-      </div>
-    </div>
-  </div>
-
-    <div id="horasMenuModal" class="modal-overlay" onclick="if(event.target.id==='horasMenuModal')closeHorasMenu()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Menu de Horas de Funcionamento</h3>
-      <p>Escolha a ação desejada.</p>
-      <div class="menu-list">
-        <button class="menu-item" type="button" onclick="openManageEquipModal()">
-          <span class="menu-item-label"><span>🛠️</span><span>Adicionar/Editar Equipamentos</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <button class="menu-item" type="button" onclick="openManageBigramaModal()">
-          <span class="menu-item-label"><span>🔤</span><span>Adicionar/Editar Bigramas</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-                <button class="menu-item" type="button" onclick="requestReminderPermission()">
-          <span class="menu-item-label"><span>🔔</span><span>Ativar notificações</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <button class="menu-item" type="button" onclick="openReminderModal(); closeMainMenu()">
-          <span class="menu-item-label"><span>⏰</span><span>Configurar lembrete</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-                <button class="menu-item" type="button" onclick="testReminderNotification(); closeHorasMenu();">
-          <span class="menu-item-label"><span>🧪</span><span>Testar notificação</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-        <button class="menu-item" type="button" onclick="closeHorasMenu()">
-          <span class="menu-item-label"><span>✖</span><span>Fechar</span></span>
-          <span class="menu-item-arrow">›</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  
-  <div id="manageBigramaModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='manageBigramaModal')closeManageBigramaModal()">
-    <div class="modal-box" style="max-height:calc(100vh - var(--topbar-height, 88px) - 32px);overflow:auto;" onclick="event.stopPropagation()">
-      <div style="display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-bottom:8px;">
-        <h3 style="margin:0;">Adicionar/Editar Bigramas</h3>
-      </div>
-      <div class="field"><label for="novoBigramaSigla">Sigla</label><input id="novoBigramaSigla" type="text"></div>
-      <div class="field"><label for="novoBigramaNome">Nome</label><input id="novoBigramaNome" type="text"></div>
-      <div class="toolbar" style="margin:10px 0;">
-        <button class="btn btn-primary" type="button" onclick="saveManagedBigrama()">Salvar bigrama</button>
-        <button id="toggleBigramaReorderBtn" class="btn btn-secondary" type="button" onclick="toggleManagedBigramaReorder()">Reordenar Bigramas</button>
-        <button class="btn btn-ghost" type="button" onclick="closeManageBigramaModal()">Fechar</button>
-      </div>
-      <div id="manageBigramaList" class="hours-list"></div>
-    </div>
-  </div>
-
-<div id="manageEquipModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='manageEquipModal')closeManageEquipModal()">
-    <div class="modal-box" style="max-height:calc(100vh - var(--topbar-height, 88px) - 32px);overflow:auto;" onclick="event.stopPropagation()">
-      <div style="display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-bottom:8px;">
-        <h3 style="margin:0;">Adicionar/Editar Equipamentos</h3>
-      </div>
-      <p>Adicione, edite ou exclua equipamentos cadastrados nos Bigramas.</p>
-      <div class="toolbar" style="margin:10px 0 12px;">
-        <button class="btn btn-primary" type="button" onclick="openAddEquipFromManage()">➕ Adicionar equipamento</button>
-      </div>
-      <div id="manageEquipList" class="hours-list"></div>
-      <div class="toolbar" style="margin-top:10px;">
-        <button class="btn btn-ghost" type="button" onclick="closeManageEquipModal()">Fechar</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="addEquipModal" class="modal-overlay" onclick="if(event.target.id==='addEquipModal')closeAddEquipModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Adicionar equipamento</h3>
-      <p>Cadastre um novo equipamento e selecione o bigrama.</p>
-      <form id="horasForm" class="section">
-        <div class="grid-2">
-          <div class="field"><label for="horasEquipBigrama">Bigrama *</label><select id="horasEquipBigrama" required></select></div>
-          <div class="field"><label for="horasEquipNome">Equipamento *</label><input id="horasEquipNome" type="text" placeholder="Ex.: Bomba de esgoto BB1" required /></div>
-          <div class="field"><label for="horasEquipAnos">Anos</label><input id="horasEquipAnos" onclick="selectHorasField(this)" onfocus="selectHorasField(this)" onpointerdown="setTimeout(()=>selectHorasField(this),0)" type="number" min="0" step="1" placeholder="0" oninput="updateHorasFormResultado()" /></div>
-          <div class="field"><label for="horasEquipDias">Dias</label><input id="horasEquipDias" onclick="selectHorasField(this)" onfocus="selectHorasField(this)" onpointerdown="setTimeout(()=>selectHorasField(this),0)" type="number" min="0" step="1" placeholder="0" oninput="updateHorasFormResultado()" /></div>
-          <div class="field"><label for="horasEquipValor">Horas</label><input id="horasEquipValor" onclick="selectHorasField(this)" onfocus="selectHorasField(this)" onpointerdown="setTimeout(()=>selectHorasField(this),0)" type="number" min="0" step="0.1" placeholder="Ex.: 1500" oninput="updateHorasFormResultado()" /></div>
-          <div class="field"><label for="horasEquipResultado">Resultado em horas</label><input id="horasEquipResultado" type="text" readonly placeholder="0" /></div>
-        </div>
-        <div class="btn-row">
-          <button id="horasSubmitBtn" class="btn btn-primary" type="submit" onclick="handleHorasSubmit(event)">Adicionar equipamento</button>
-          <button class="btn btn-secondary" type="button" onclick="resetHorasForm()">Limpar</button>
-        </div>
-      </form>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeAddEquipModal()">Fechar</button></div>
-    </div>
-  </div>
-
-  <div id="reminderPickerModal" class="modal-overlay" onclick="if(event.target.id==='reminderPickerModal')closeReminderPickerModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Configurar lembrete</h3>
-      <p>Escolha o equipamento para configurar o lembrete.</p>
-      <div id="reminderEquipList" class="hours-list"></div>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeReminderPickerModal()">Fechar</button></div>
-    </div>
-  </div>
-
-<div id="reminderModal" class="modal-overlay" onclick="if(event.target.id==='reminderModal')closeReminderModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Lembrete de atualização</h3>
-      <p>Define a periodicidade para lembrar de atualizar as horas de funcionamento deste bigrama.</p>
-      <form id="reminderForm" class="section">
-        <div class="field">
-          <label for="reminderEquipName">Bigrama</label>
-          <input id="reminderEquipName" type="text" readonly style="opacity:.7;" />
-        </div>
-        <div class="grid-2">
-          <div class="field">
-            <label for="reminderType">Periodicidade</label>
-            <select id="reminderType">
-              <option value="none">Sem lembrete</option>
-              <option value="weekly">Semanal</option>
-              <option value="monthly">Mensal</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="reminderStartDate">Data base</label>
-            <input id="reminderStartDate" type="date" />
-          </div>
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-primary" type="submit">Salvar lembrete</button>
-          <button class="btn btn-secondary" type="button" onclick="clearReminderConfig()">Remover lembrete</button>
-        </div>
-      </form>
-      <div class="toolbar" style="margin-top:10px;"><button class="btn btn-ghost" type="button" onclick="closeReminderModal()">Fechar</button></div>
-    </div>
-  </div>
-
-    <div id="horasReminderActionModal" class="modal-overlay" onclick="if(event.target.id==='horasReminderActionModal')closeHorasReminderActionModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Lembrete de horas de funcionamento</h3>
-      <p>Atualize as horas de funcionamento dos equipamentos !</p>
-      <div id="horasReminderActionContent" class="report-list"></div>
-      <div class="modal-actions" style="margin-top:14px;">
-        <button class="btn btn-primary" type="button" onclick="confirmHorasReminderDone()">Já atualizei</button>
-        <button class="btn btn-secondary" type="button" onclick="snoozeHorasReminderTomorrow()">Lembrar amanhã</button>
-      </div>
-    </div>
-  </div>
-
-<div id="dueReminderModal" class="modal-overlay" onclick="if(event.target.id==='dueReminderModal')closeDueReminderModal()">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3>Lembretes do dia</h3>
-      <p>Os lembretes abaixo venceram hoje.</p>
-      <div id="dueReminderContent" class="report-list"></div>
-      <div class="toolbar" style="margin-top:14px;"><button class="btn btn-primary" type="button" onclick="closeDueReminderModal()">OK</button></div>
-    </div>
-  </div>
-
-  <div id="imageViewerModal" class="modal-overlay" style="align-items:flex-start;padding-top:calc(var(--topbar-height, 88px) + 8px);padding-bottom:16px;" onclick="if(event.target.id==='imageViewerModal')closeImageViewer()">
-    <div class="modal-box" onclick="event.stopPropagation()" style="width:min(96vw,760px);padding:14px;max-height:calc(100vh - var(--topbar-height, 88px) - 32px);display:flex;flex-direction:column;overflow:hidden;">
-      <h3 style="flex-shrink:0;">Imagem anexada</h3>
-      <div id="imageViewerSwipeArea" style="display:flex;justify-content:center;align-items:center;overflow:hidden;touch-action:none;flex:1;min-height:0;">
-        <img id="imageViewerImg" src="" alt="Imagem anexada" style="max-width:100%;width:auto;height:auto;max-height:calc(100vh - var(--topbar-height, 88px) - 200px);object-fit:contain;border-radius:16px;display:block;transform:translate(0px,0px) scale(1);" />
-      </div>
-      <div id="imageViewerCounter" style="text-align:center;margin-top:8px;color:var(--muted);font-size:.9rem;flex-shrink:0;"></div>
-      <div style="text-align:center;margin-top:6px;color:var(--muted);font-size:.85rem;flex-shrink:0;">Use pinça ou duplo toque para ampliar. Arraste para mover a imagem ampliada.</div>
-      <div class="toolbar" style="margin-top:12px;flex-shrink:0;">
-        <button class="btn btn-primary" type="button" onclick="closeImageViewer()">Fechar</button>
-      </div>
-    </div>
-  </div>
-  <div id="psPrintHost" class="print-zone hidden"></div>
-</div>
-
-
-  <div id="pdfViewerModal" class="modal-overlay" onclick="if(event.target.id==='pdfViewerModal')closePdfViewerModal()">
-    <div class="modal-box" onclick="event.stopPropagation()" style="width:100%;height:100%;max-width:100%;max-height:100%;padding:0;overflow:hidden;display:flex;flex-direction:column;border-radius:0;">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:linear-gradient(180deg, rgba(24,60,107,.99), rgba(18,52,92,.99));border-bottom:1px solid rgba(255,255,255,.12);">
-        <h3 id="pdfViewerTitle" style="margin:0;font-size:1rem;color:#fff;">Visualização</h3>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-primary" type="button" id="pdfViewerDownloadBtn" onclick="downloadCurrentPdfViewer()" style="min-height:36px;padding:6px 10px;">⬇ Baixar DOCX</button>
-          <button class="btn btn-ghost" type="button" onclick="closePdfViewerModal()" style="min-height:36px;padding:6px 10px;">✕ Fechar</button>
-        </div>
-      </div>
-      <div id="pdfViewerContent"><div id="pdfViewerStage" class="pdf-fit-stage"></div></div>
-    </div>
-  </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 const STORAGE_KEY = 'livro_historico_clean';
 const DEFAULT_BIGRAMAS = [
@@ -2856,7 +2307,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'v388';
+const APP_VERSION = 'v390';
 
 const PS_EMIM_HEADER_IMG = 'data:image/jpeg;base64,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';
 
@@ -7691,7 +7142,7 @@ function openAtlasDetail(code, mode){
   const title = $('atlasDetailTitle');
   const sub = $('atlasDetailSub');
   if(title) title.textContent = code + ' — Atlas';
-  if(sub) sub.textContent = 'Toque no título para abrir o esquema.';
+  if(sub) sub.textContent = 'Toque no título para abrir o PDF original na página do esquema.';
   const wrap = $('atlasEntryList');
   if(!wrap) return;
   wrap.innerHTML = entries.map((e,idx)=>{
@@ -7723,24 +7174,14 @@ function getAtlasPdfUrl(){
 
 
 
+
 const ATLAS_DB_NAME = 'nautilus_atlas_cache';
-const ATLAS_DB_VERSION = 1;
+const ATLAS_DB_VERSION = 4;
 const ATLAS_STORE = 'pages';
+const ATLAS_PDF_KEY = 0;
 let atlasDbPromise = null;
-function atlasAllSchemePages(){
-  const out = [];
-  const seen = new Set();
-  Object.keys(ATLAS_INDEX || {}).forEach(code=>{
-    (ATLAS_INDEX[code] || []).forEach(e=>{
-      const page = Number(e.page || 0);
-      if(page > 0 && !seen.has(page)){
-        seen.add(page);
-        out.push(page);
-      }
-    });
-  });
-  return out.sort((a,b)=>a-b);
-}
+let atlasPdfObjectUrl = '';
+
 function atlasOpenDb(){
   if(atlasDbPromise) return atlasDbPromise;
   atlasDbPromise = new Promise((resolve,reject)=>{
@@ -7754,42 +7195,37 @@ function atlasOpenDb(){
   });
   return atlasDbPromise;
 }
-async function atlasPutPage(page, dataUrl){
+async function atlasPutPdf(blob){
   const db = await atlasOpenDb();
   return new Promise((resolve,reject)=>{
     const tx = db.transaction(ATLAS_STORE, 'readwrite');
-    tx.objectStore(ATLAS_STORE).put({page:Number(page), dataUrl, savedAt:Date.now()});
+    tx.objectStore(ATLAS_STORE).put({page:ATLAS_PDF_KEY, pdfBlob:blob, savedAt:Date.now()});
     tx.oncomplete = resolve;
     tx.onerror = ()=>reject(tx.error);
   });
 }
-async function atlasGetPage(page){
+async function atlasGetPdfBlob(){
   const db = await atlasOpenDb();
   return new Promise((resolve,reject)=>{
     const tx = db.transaction(ATLAS_STORE, 'readonly');
-    const req = tx.objectStore(ATLAS_STORE).get(Number(page));
-    req.onsuccess = ()=>resolve(req.result ? req.result.dataUrl : null);
+    const req = tx.objectStore(ATLAS_STORE).get(ATLAS_PDF_KEY);
+    req.onsuccess = ()=>resolve(req.result ? req.result.pdfBlob : null);
     req.onerror = ()=>reject(req.error);
   });
 }
-async function atlasCountPages(){
-  try{
-    const db = await atlasOpenDb();
-    return await new Promise((resolve,reject)=>{
-      const tx = db.transaction(ATLAS_STORE, 'readonly');
-      const req = tx.objectStore(ATLAS_STORE).count();
-      req.onsuccess = ()=>resolve(req.result || 0);
-      req.onerror = ()=>reject(tx.error);
-    });
-  }catch(e){ return 0; }
+async function atlasGetPdfUrl(){
+  const blob = await atlasGetPdfBlob();
+  if(!blob) return '';
+  if(atlasPdfObjectUrl) return atlasPdfObjectUrl;
+  atlasPdfObjectUrl = URL.createObjectURL(blob);
+  return atlasPdfObjectUrl;
 }
 async function updateAtlasImportStatus(){
   const status = $('atlasImportStatus');
   const bar = $('atlasImportProgressBar');
-  const total = atlasAllSchemePages().length;
-  const count = await atlasCountPages();
-  if(status) status.textContent = count ? ('Atlas importado neste aparelho: ' + count + '/' + total + ' páginas de esquemas salvas offline.') : 'Nenhum Atlas importado neste aparelho.';
-  if(bar) bar.style.width = total ? Math.min(100, Math.round(count*100/total)) + '%' : '0%';
+  const has = !!(await atlasGetPdfBlob());
+  if(status) status.textContent = has ? 'Atlas PDF original importado e salvo offline neste aparelho.' : 'Nenhum Atlas PDF importado neste aparelho.';
+  if(bar) bar.style.width = has ? '100%' : '0%';
 }
 async function handleAtlasPdfImport(event){
   const file = event.target.files && event.target.files[0];
@@ -7797,36 +7233,18 @@ async function handleAtlasPdfImport(event){
   if(!file) return;
   const status = $('atlasImportStatus');
   const bar = $('atlasImportProgressBar');
-  const pages = atlasAllSchemePages();
   try{
-    if(!window.pdfjsLib){
-      showAppMessage('Atlas','PDF.js não carregou. Abra o app com internet uma vez para importar o Atlas. Depois da importação, o Atlas funciona offline.');
-      return;
-    }
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    const buffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({data:buffer}).promise;
-    for(let i=0;i<pages.length;i++){
-      const pageNum = pages[i];
-      if(status) status.textContent = 'Renderizando Atlas: página ' + pageNum + ' (' + (i+1) + '/' + pages.length + ')';
-      if(bar) bar.style.width = Math.round((i)*100/pages.length) + '%';
-      const page = await pdf.getPage(pageNum);
-      const base = page.getViewport({scale:1});
-      const scale = Math.min(3.2, Math.max(2.2, 2600 / base.width));
-      const viewport = page.getViewport({scale});
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.floor(viewport.width);
-      canvas.height = Math.floor(viewport.height);
-      const ctx = canvas.getContext('2d', {alpha:false});
-      await page.render({canvasContext:ctx, viewport}).promise;
-      await atlasPutPage(pageNum, canvas.toDataURL('image/jpeg', 0.94));
-    }
+    if(status) status.textContent = 'Salvando PDF original do Atlas no aparelho...';
+    if(bar) bar.style.width = '45%';
+    const blob = file.slice(0, file.size, 'application/pdf');
+    await atlasPutPdf(blob);
+    if(atlasPdfObjectUrl){ try{ URL.revokeObjectURL(atlasPdfObjectUrl); }catch(e){} atlasPdfObjectUrl=''; }
     if(bar) bar.style.width = '100%';
     await updateAtlasImportStatus();
-    showAppMessage('Atlas','Atlas importado e salvo offline neste aparelho.');
+    showAppMessage('Atlas','Atlas PDF importado e salvo offline neste aparelho.');
   }catch(e){
-    console.error('Importar Atlas:', e);
-    showAppMessage('Atlas','Falha ao importar o Atlas. Tente novamente com o PDF original.');
+    console.error('Importar Atlas PDF:', e);
+    showAppMessage('Atlas','Falha ao importar o PDF do Atlas. Tente novamente.');
   }
 }
 
@@ -7843,6 +7261,9 @@ var atlasLastTouchY = 0;
 var atlasDragging = false;
 
 function atlasBuildItemPages(entry){
+  if(entry && Array.isArray(entry.groupPages) && entry.groupPages.length){
+    return entry.groupPages.map(p=>({page:Number(p), title:String(entry.title || 'Atlas')}));
+  }
   const page = Number(entry && entry.page ? entry.page : 1);
   return [{page:page, title:String(entry.title || 'Atlas')}];
 }
@@ -7923,21 +7344,22 @@ let atlasZoom = 100;
   atlasCurrentSchemePages = [];
   atlasCurrentSchemeIndex = 0;
 async function atlasUpdateViewer(){
-  const img = $('atlasViewerImage');
+  const frame = $('atlasPdfFrame');
   const p = $('atlasPageIndicator');
-  const z = $('atlasZoomIndicator');
   const total = Math.max(1, atlasCurrentItemPages.length || 1);
   if(p) p.textContent = 'Pág. ' + (atlasCurrentItemIndex + 1) + '/' + total + ' · PDF ' + atlasCurrentPage;
-  if(z) z.textContent = atlasZoom + '%';
-  if(img){
-    const src = await atlasGetPage(atlasCurrentPage);
-    if(src){
-      img.onload = ()=>{ atlasPanX = 0; atlasPanY = 0; atlasApplyImageZoom(); };
-      img.src = src;
-      atlasApplyImageZoom();
-    }else{
-      img.removeAttribute('src');
-      try{ showAppMessage('Atlas','Página ' + atlasCurrentPage + ' não importada. Reimporte o Atlas PDF para incluir todas as páginas do item.'); }catch(e){}
+  if(frame){
+    try{
+      const url = await atlasGetPdfUrl();
+      if(url){
+        frame.src = url + '#page=' + Number(atlasCurrentPage || 1) + '&zoom=page-width';
+      }else{
+        frame.removeAttribute('src');
+        try{ showAppMessage('Atlas','Importe o Atlas PDF pelo menu superior direito antes de abrir os esquemas.'); }catch(e){}
+      }
+    }catch(e){
+      console.error('Atlas PDF original:', e);
+      try{ showAppMessage('Atlas','Falha ao abrir o PDF do Atlas. Reimporte o PDF.'); }catch(_){}
     }
   }
 }
@@ -7979,39 +7401,21 @@ function openAtlasScheme(code, idx){
 function openAtlasPage(page, title, keepList){
   atlasCurrentPage = Number(page || 1);
   atlasCurrentTitle = title || 'Atlas';
-  atlasZoom = 100;
-  atlasPanX = 0;
-  atlasPanY = 0;
   const viewer = $('atlasViewer');
   const vt = $('atlasViewerTitle');
   if(vt) vt.textContent = atlasCurrentTitle;
   if(viewer) viewer.classList.add('show');
-  setupAtlasPinchZoom();
   atlasUpdateViewer();
 }
 function closeAtlasViewer(){
   const viewer = $('atlasViewer');
-  const img = $('atlasViewerImage');
-  if(img) img.removeAttribute('src');
-  atlasZoom = 100;
-  atlasPanX = 0;
-  atlasPanY = 0;
+  const frame = $('atlasPdfFrame');
+  if(frame) frame.removeAttribute('src');
   atlasCurrentItemPages = [];
   atlasCurrentItemIndex = 0;
   if(viewer) viewer.classList.remove('show');
 }
-async function openAtlasExternal(){
-  const src = await atlasGetPage(atlasCurrentPage);
-  if(src){
-    try{
-      const w = window.open('', '_blank');
-      if(w){
-        w.document.write('<html><head><title>Atlas</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;background:#111;display:flex;align-items:flex-start;justify-content:center}img{max-width:100%;height:auto}</style></head><body><img src="'+src+'"></body></html>');
-        w.document.close();
-      }
-    }catch(e){}
-  }
-}
+function openAtlasExternal(){}
 
 
 
@@ -8041,18 +7445,16 @@ function closeAtlasMenu(){
 function openAtlasModule(){
   try{
     closeAtlasMenu();
-    const secs=document.querySelectorAll('section.section');
-    secs.forEach(s=>s.classList.add('hidden'));
+    document.querySelectorAll('section.section').forEach(s=>s.classList.add('hidden'));
     const atlas=document.getElementById('screen-atlas');
     if(atlas) atlas.classList.remove('hidden');
     try{ renderAtlasHome(); updateAtlasImportStatus(); }catch(e){}
     const t=document.getElementById('screenTitle');
     if(t) t.textContent='ATLAS';
     const back=document.getElementById('topbarBackBtn') || document.getElementById('backBtn') || document.querySelector('.topbar .back-btn');
-    if(back){
-      back.style.display='';
-      back.onclick=function(){ showScreen('home'); };
-    }
+    if(back){ back.style.display=''; back.classList.remove('ghost','hidden'); back.onclick=function(){ showScreen('home'); }; }
+    const menu=document.getElementById('menuBtn') || document.querySelector('.topbar .menu-btn');
+    if(menu) menu.style.visibility='hidden';
     return false;
   }catch(e){ console.error(e); }
 }
