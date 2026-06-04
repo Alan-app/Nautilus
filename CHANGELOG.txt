@@ -113,3 +113,6 @@ v119 - Notas: checklist com caixas reais na edição preservando quebra de linha
 - Adicionado Equipment Code na importação LDS, quando a coluna existir na planilha.
 - Adicionado Equipment Code na busca LDS, nos cards de resultado e no texto de compartilhamento.
 - Atualizada busca para localizar também por Equipment Code.
+
+
+v382 - Atlas embutido sem assets; páginas em alta qualidade dentro do app.html.
