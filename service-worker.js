@@ -1,7 +1,7 @@
 const CACHE_NAME = 'nautilus-v360-core';
 const RUNTIME_CACHE = 'nautilus-v360-runtime';
 const APP_ASSETS = [
-  './',
+  './atlas.pdf','./',
   './index.html',
   './app.html',
   './manifest.webmanifest',
