@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-v479-core';
-const RUNTIME_CACHE = 'nautilus-v479-runtime';
+const CACHE_NAME = 'nautilus-v480-core';
+const RUNTIME_CACHE = 'nautilus-v480-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -41,6 +41,23 @@ self.addEventListener('message', event => {
   if(event.data && event.data.type === 'PRECACHE_CORE') event.waitUntil(precacheCore());
 });
 
+async function fallbackHtml(){
+  return (await caches.match('./app.html')) || (await caches.match('./index.html')) || new Response('<!doctype html><meta charset="utf-8"><meta name="theme-color" content="#012544"><style>html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#031522,#031b2f);color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center}.box{padding:24px}</style><title>Nautilus offline</title><body><div class="box"><h1>Nautilus</h1><p>App offline indisponível. Abra uma vez com internet para restaurar o cache.</p></div></body>', {headers:{'Content-Type':'text/html; charset=utf-8'}});
+}
+
+async function networkFirstHtml(request){
+  try{
+    const response = await fetch(new Request(request, {cache:'reload'}));
+    if(response && response.ok){
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone()).catch(()=>{});
+    }
+    return response;
+  }catch(e){
+    return (await caches.match(request)) || await fallbackHtml();
+  }
+}
+
 async function cacheFirst(request){
   const cached = await caches.match(request);
   if(cached) return cached;
@@ -52,9 +69,6 @@ async function cacheFirst(request){
     }
     return response;
   }catch(e){
-    if(request.mode === 'navigate' || (request.headers.get('accept')||'').includes('text/html')){
-      return (await caches.match('./app.html')) || (await caches.match('./index.html')) || new Response('<!doctype html><meta charset="utf-8"><meta name="theme-color" content="#012544"><style>html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#031522,#031b2f);color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center}.box{padding:24px}</style><title>Nautilus offline</title><body><div class="box"><h1>Nautilus</h1><p>App offline indisponível. Abra uma vez com internet para restaurar o cache.</p></div></body>', {headers:{'Content-Type':'text/html; charset=utf-8'}});
-    }
     return new Response('', {status:504, statusText:'Offline'});
   }
 }
@@ -63,7 +77,11 @@ self.addEventListener('fetch', event => {
   if(event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   if(url.origin !== self.location.origin) return;
+  if(event.request.mode === 'navigate' || (event.request.headers.get('accept')||'').includes('text/html')){
+    event.respondWith(networkFirstHtml(event.request));
+    return;
+  }
   event.respondWith(cacheFirst(event.request));
 });
 
-// v479-splash-azul-sem-piscao-branco
+// v480-index-redireciona-sem-tela-instalacao

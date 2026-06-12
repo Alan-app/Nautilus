@@ -1,5 +1,4 @@
-v479
-- Define fundo azul imediatamente no primeiro paint de index.html e app.html.
-- Ajusta start_url do PWA para app.html, evitando transição index -> app no app instalado.
-- Atualiza cache do service worker para v479.
-- Mantém alterações da v477/v478.
+v480
+- Remove a renderização da tela de instalação no index.html.
+- Mantém apenas splash azul com logo enquanto redireciona para app.html.
+- Atualiza service worker para evitar cache antigo do index.html.

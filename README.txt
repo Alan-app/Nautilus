@@ -1,1 +1,1 @@
-Nautilus v479 - remove piscão branco inicial usando fundo/splash azul e inicialização direta no app instalado.
+Nautilus v480 - index redireciona imediatamente para o app, sem renderizar tela de instalação antes da tela inicial.
