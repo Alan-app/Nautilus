@@ -1,0 +1,5 @@
+MetaDriver v52
+Base v51 com nova página Histórico por dia.
+Use Menu > Histórico para ver apenas dias com registros e abrir o relatório do dia selecionado.
+
+v53 revisão: pacote recomposto com todos os 14 arquivos da estrutura completa, preservando a alteração do Histórico detalhado na tela inicial.
