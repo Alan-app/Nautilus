@@ -1,2 +1,2 @@
-Nautilus V.Beta.15
-Corrigida condição de corrida na busca do LDS: quando se digitava rápido, uma busca anterior mais lenta (geralmente por termos curtos, com varredura mais ampla) podia terminar depois da busca mais recente e sobrescrever o resultado certo na tela com um resultado desatualizado. Agora cada busca tem um identificador de geração; qualquer resultado que chegue atrasado, de uma busca que não é mais a mais recente, é descartado automaticamente.
+Nautilus V.Beta.17
+LDS: busca deixou de disparar em tempo real a cada tecla digitada. Agora confirma com a lupa do teclado ou apertando Enter. Limpar o campo de busca continua limpando os resultados na hora, sem precisar confirmar.
