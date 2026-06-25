@@ -1,2 +1,3 @@
-Nautilus V.Beta.12
-Re-publicação forçada para corrigir falha de deploy anterior no GitHub Pages (deploy #429 falhou e o site ficou travado em versão antiga). Conteúdo idêntico à V.Beta.11: suporte a vídeos no Histórico (armazenados no IndexedDB do app, sobrevivem à exclusão da galeria) e correção de cache do service worker.
+Nautilus V.Beta.01
+Correção visual de abertura: splash azul mantém a logo fixa no mesmo ponto, com transição por opacidade, evitando micro deslocamento/tremida entre o splash e a tela inicial.
+Kill Card: revisão completa dos dados (compartimentos, descrições e códigos de equipamento) a partir do documento original.
