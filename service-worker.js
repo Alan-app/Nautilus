@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-v482-core';
-const RUNTIME_CACHE = 'nautilus-v482-runtime';
+const CACHE_NAME = 'nautilus-vbeta11-core';
+const RUNTIME_CACHE = 'nautilus-vbeta11-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -84,4 +84,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(cacheFirst(event.request));
 });
 
-// v482-logo-fixa-sem-tremida
+// V.Beta.11
