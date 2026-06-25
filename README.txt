@@ -1,2 +1,2 @@
-Nautilus V.Beta.18
-LDS: ao buscar (lupa do teclado ou Enter), o teclado fecha e o campo perde o foco automaticamente. O termo buscado agora aparece destacado em amarelo nos resultados (Functional Mark, Parent Functional Mark, Reference Number e Equipment Code).
+Nautilus V.Beta.19
+Notas: corrigido bug ao digitar em itens de checklist (caixa de seleção). A cada tecla, o app forçava a página a rolar de volta para a posição salva do toque inicial, dando a sensação de "voltar pro início e esconder o texto digitado" — só aparecia certo depois de salvar e saí da edição. Removida a correção de rolagem repetida durante a digitação nos itens de checklist; o ajuste de posição acima do teclado continua acontecendo apenas quando o campo recebe foco, não a cada caractere.
