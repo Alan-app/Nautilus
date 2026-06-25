@@ -1,2 +1,2 @@
-Nautilus V.Beta.14
-Atlas: busca agora também pesquisa o texto real desenhado dentro dos esquemas (não só o título do índice). Durante a importação do PDF, o app extrai e indexa o texto de cada página; depois disso a busca por qualquer palavra ou código que apareça dentro do esquema é instantânea. É necessário reimportar o Atlas PDF uma vez para gerar esse índice.
+Nautilus V.Beta.12
+Re-publicação forçada para corrigir falha de deploy anterior no GitHub Pages (deploy #429 falhou e o site ficou travado em versão antiga). Conteúdo idêntico à V.Beta.11: suporte a vídeos no Histórico (armazenados no IndexedDB do app, sobrevivem à exclusão da galeria) e correção de cache do service worker.
