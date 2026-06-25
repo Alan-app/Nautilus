@@ -1,2 +1,2 @@
-Nautilus V.Beta.14
-Corrigido bug pré-existente no Pedido de Serviço: os botões "Visualizar/Baixar" (PDF e DOCX) buscavam o pedido usando o bigrama atualmente selecionado na tela, mas os pedidos são armazenados numa lista própria (independente de bigrama). Com qualquer bigrama selecionado, a busca falhava e mostrava "Pedido não encontrado". Agora os 3 pontos afetados (exportPsPdf, downloadPsDocxById, previewPsPdf) usam a mesma chave da lista exibida.
+Nautilus V.Beta.15
+Corrigida condição de corrida na busca do LDS: quando se digitava rápido, uma busca anterior mais lenta (geralmente por termos curtos, com varredura mais ampla) podia terminar depois da busca mais recente e sobrescrever o resultado certo na tela com um resultado desatualizado. Agora cada busca tem um identificador de geração; qualquer resultado que chegue atrasado, de uma busca que não é mais a mais recente, é descartado automaticamente.
