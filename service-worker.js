@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-vbeta26-core';
-const RUNTIME_CACHE = 'nautilus-vbeta26-runtime';
+const CACHE_NAME = 'nautilus-vbeta28-core';
+const RUNTIME_CACHE = 'nautilus-vbeta28-runtime';
 const APP_ASSETS = [
   './',
   './index.html',

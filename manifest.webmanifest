@@ -2,7 +2,7 @@
   "name": "Nautilus",
   "short_name": "Nautilus",
   "description": "Registro histórico de equipamentos de máquinas com exportação para PDF.",
-  "start_url": "./app.html?v=482",
+  "start_url": "./app.html?v=486",
   "scope": "./",
   "display": "standalone",
   "background_color": "#031522",

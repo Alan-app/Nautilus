@@ -18,8 +18,20 @@ body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:c
 .logo-img{width:120px;height:120px;object-fit:contain;border-radius:28px;margin:0 auto 18px;display:block;box-shadow:0 10px 28px rgba(0,0,0,.30)}
 .title{font-size:28px;font-weight:800;margin-bottom:10px;letter-spacing:.03em}
 .sub{opacity:.9;line-height:1.45;margin-bottom:18px;font-size:14px}
-button{width:100%;padding:14px 16px;border:none;border-radius:14px;font:inherit;font-weight:700;background:#f0c419;color:#0b1220}
+button{width:100%;padding:14px 16px;border:none;border-radius:14px;font:inherit;font-weight:700;background:#f0c419;color:#0b1220;cursor:pointer}
+button.secondary{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.20)}
+button:active{transform:scale(.98)}
 .note{margin-top:12px;font-size:12px;opacity:.82;line-height:1.45}
+.os-choice{display:flex;gap:12px;margin-bottom:4px}
+.os-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:rgba(255,255,255,.06);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.os-btn:active{transform:scale(.97)}
+.os-btn svg{width:34px;height:34px}
+.back-link{display:inline-block;margin-top:16px;font-size:13px;color:#cfe3f7;opacity:.85;text-decoration:underline;background:none;border:none;width:auto;padding:4px 8px;font-weight:400}
+.steps{text-align:left;margin:0 0 18px;padding-left:0;list-style:none;font-size:14px;line-height:1.6}
+.steps li{display:flex;gap:10px;margin-bottom:12px}
+.steps .num{flex:0 0 24px;height:24px;border-radius:50%;background:#f0c419;color:#0b1220;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.screen{display:none}
+.screen.active{display:block}
 </style>
 </head>
 <body>
@@ -27,9 +39,42 @@ button{width:100%;padding:14px 16px;border:none;border-radius:14px;font:inherit;
   <div class="panel">
     <img class="logo-img" src="icon-512.png" alt="Logo Nautilus">
     <div class="title">Nautilus</div>
-    <div class="sub" id="subText">Instale o aplicativo para usar da forma correta.</div>
-    <button id="installBtn" type="button">Instalar aplicativo</button>
-    <div class="note" id="noteText">O uso pelo navegador fica bloqueado. Depois de instalar, abra pelo ícone do app.</div>
+
+    <!-- TELA 1: escolha do sistema -->
+    <div class="screen active" id="screenChoice">
+      <div class="sub">Para usar o Nautilus da forma correta, instale o aplicativo. Selecione o sistema do seu celular:</div>
+      <div class="os-choice">
+        <button class="os-btn" type="button" id="btnAndroid">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.5.5 0 0 0-.86-.5l-1.86 3.22a8.5 8.5 0 0 0-7.44 0L7.42 5.8a.5.5 0 0 0-.86.5l1.84 3.18A8.45 8.45 0 0 0 4 16.5h16a8.45 8.45 0 0 0-2.4-7.02zM9 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm6 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM4 18v3a1 1 0 0 0 1 1h1v-4H4zm14 0v4h1a1 1 0 0 0 1-1v-3h-2zM6 18h12v4a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-4z"/></svg>
+          Android
+        </button>
+        <button class="os-btn" type="button" id="btnApple">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.36 1.43c.1 1-.3 2-1 2.78-.7.8-1.84 1.42-2.93 1.34-.12-.98.36-2 1.04-2.74.74-.8 1.97-1.4 2.9-1.38zM20.6 17.18c-.3.72-.65 1.4-1.07 2.04-.85 1.3-1.9 2.9-3.26 2.92-1.2.02-1.6-.78-3.06-.78-1.46 0-1.9.76-3.05.8-1.32.04-2.3-1.43-3.16-2.72-1.7-2.6-3.02-7.32-1.26-10.52a4.7 4.7 0 0 1 3.96-2.4c1.18-.02 1.92.78 3.04.78 1.1 0 1.66-.78 3.06-.76 1 .02 2.6.45 3.55 1.93-3.04 1.78-2.55 6.18.25 8.7z"/></svg>
+          Apple
+        </button>
+      </div>
+    </div>
+
+    <!-- TELA 2: instalação Android -->
+    <div class="screen" id="screenAndroid">
+      <div class="sub" id="subText">Instale o aplicativo para usar da forma correta.</div>
+      <button id="installBtn" type="button">Instalar aplicativo</button>
+      <div class="note" id="noteText">O uso pelo navegador fica bloqueado. Depois de instalar, abra pelo ícone do app.</div>
+      <button class="back-link" type="button" data-back>← Escolher outro sistema</button>
+    </div>
+
+    <!-- TELA 3: instrução Apple/iOS -->
+    <div class="screen" id="screenApple">
+      <div class="sub">No iPhone/iPad não é possível instalar pelo navegador automaticamente. Siga estes passos no <b>Safari</b>:</div>
+      <ol class="steps">
+        <li><span class="num">1</span><span>Toque no botão <b>Compartilhar</b> (o ícone do quadrado com a seta para cima), na barra do Safari.</span></li>
+        <li><span class="num">2</span><span>Role para baixo e toque em <b>"Adicionar à Tela de Início"</b>.</span></li>
+        <li><span class="num">3</span><span>Toque em <b>"Adicionar"</b> no canto superior direito.</span></li>
+      </ol>
+      <div class="note">O ícone do Nautilus vai aparecer na sua tela inicial. Abra sempre por ele, e não mais pelo navegador.</div>
+      <button class="back-link" type="button" data-back>← Escolher outro sistema</button>
+    </div>
+
   </div>
 </div>
 <script>
@@ -38,12 +83,30 @@ function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
 function isSafari(){ return /^((?!chrome|android).)*safari/i.test(navigator.userAgent); }
 function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone; }
 if (isStandalone()) location.replace('app.html');
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+document.getElementById('btnAndroid').addEventListener('click', function(){ showScreen('screenAndroid'); });
+document.getElementById('btnApple').addEventListener('click', function(){ showScreen('screenApple'); });
+document.querySelectorAll('[data-back]').forEach(function(btn){
+  btn.addEventListener('click', function(){ showScreen('screenChoice'); });
+});
+
 window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt=e; });
-window.addEventListener('appinstalled', function(){ deferredPrompt=null; document.getElementById('subText').textContent='Aplicativo instalado com sucesso. Agora abra pelo ícone instalado.'; document.getElementById('noteText').textContent='Feche o navegador e use somente o app instalado.'; document.getElementById('installBtn').style.display='none'; });
+window.addEventListener('appinstalled', function(){
+  deferredPrompt=null;
+  document.getElementById('subText').textContent='Aplicativo instalado com sucesso. Agora abra pelo ícone instalado.';
+  document.getElementById('noteText').textContent='Feche o navegador e use somente o app instalado.';
+  document.getElementById('installBtn').style.display='none';
+});
 document.getElementById('installBtn').addEventListener('click', async function(){
   if (deferredPrompt) { deferredPrompt.prompt(); try { await deferredPrompt.userChoice; } catch(e) {} return; }
-  if (isIOS() && isSafari()) { document.getElementById('subText').textContent='No iPhone, use o menu Compartilhar do Safari e depois “Adicionar à Tela de Início”.'; document.getElementById('noteText').textContent='Depois de instalar, abra somente pelo ícone do app.'; return; }
+  if (isIOS() && isSafari()) { showScreen('screenApple'); return; }
 }, true);
+
 if ('serviceWorker' in navigator) window.addEventListener('load', function(){ navigator.serviceWorker.register('./service-worker.js').catch(console.error); });
 </script>
 </body>
