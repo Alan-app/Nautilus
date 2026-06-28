@@ -1,2 +1,2 @@
-Nautilus V.Beta.44
-Atlas: o menu (☰) volta a aparecer na topbar, agora com a opção "Organização do índice" (classificação alfabética dos bigramas), escondendo os itens que não fazem sentido nessa tela (Relatório, backups). Veja CHANGELOG.txt para o histórico completo de mudanças.
+Nautilus V.Beta.45
+Corrigido: o botão de menu (☰) do Atlas, adicionado na V.Beta.44, aparecia mas não abria nada ao tocar (um trecho antigo sobrescrevia a função correta por baixo). Agora funciona normalmente em ambas as telas do Atlas. Veja CHANGELOG.txt para o histórico completo de mudanças.
