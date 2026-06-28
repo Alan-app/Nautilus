@@ -1,2 +1,2 @@
-Nautilus V.Beta.45
-Corrigido: o botão de menu (☰) do Atlas, adicionado na V.Beta.44, aparecia mas não abria nada ao tocar (um trecho antigo sobrescrevia a função correta por baixo). Agora funciona normalmente em ambas as telas do Atlas. Veja CHANGELOG.txt para o histórico completo de mudanças.
+Nautilus V.Beta.46
+Corrigido o painel "Organização do índice" do Atlas: agora oferece a opção de exibição em miniatura ou em lista (como pedido), em vez da ordenação alfabética implementada por engano na versão anterior. Veja CHANGELOG.txt para o histórico completo de mudanças.
