@@ -1,2 +1,2 @@
-Nautilus V.Beta.36
-Versão de diagnóstico: o modal de erro do download do Atlas agora mostra o detalhe técnico real da falha, para identificar a causa exata do erro relatado (download completa, processamento avança e falha no meio). Veja CHANGELOG.txt.
+Nautilus V.Beta.37
+Corrige o erro "Invalid page request" durante o processamento do Atlas: o índice de páginas dos esquemas foi recalculado para corresponder ao PDF reduzido (317 páginas), eliminando referências a páginas de legenda que foram removidas. Veja CHANGELOG.txt para o histórico completo de mudanças.
