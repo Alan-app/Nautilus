@@ -1,2 +1,2 @@
-Nautilus V.Beta.47
-Corrigida a qualidade ruim/borrada das páginas do Atlas no iPhone: o Safari/WebKit tem um limite de canvas bem menor que o Chrome/Android, e pedir mais que isso fazia a imagem sair corrompida silenciosamente. Agora o app detecta o Safari e ajusta a resolução automaticamente, mantendo nitidez em ambos. Veja CHANGELOG.txt para o histórico completo de mudanças.
+Nautilus V.Beta.49
+Corrigido o highlight amarelo da busca do LDS, que só funcionava em 4 dos 8 campos pesquisados (parecia aleatório). Adicionados: botão grande para voltar ao topo dos resultados do LDS e caixa de busca fixa no topo da tela enquanto os resultados rolam. Veja CHANGELOG.txt para o histórico completo de mudanças.

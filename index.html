@@ -30,6 +30,7 @@ button:active{transform:scale(.98)}
 .steps{text-align:left;margin:0 0 18px;padding-left:0;list-style:none;font-size:14px;line-height:1.6}
 .steps li{display:flex;gap:10px;margin-bottom:12px}
 .steps .num{flex:0 0 24px;height:24px;border-radius:50%;background:#f0c419;color:#0b1220;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.ios-tip{margin:0 0 18px;padding:10px 12px;border-radius:10px;background:rgba(240,196,25,.12);border:1px solid rgba(240,196,25,.35);font-size:12px;line-height:1.5;text-align:left}
 .screen{display:none}
 .screen.active{display:block}
 </style>
@@ -65,12 +66,13 @@ button:active{transform:scale(.98)}
 
     <!-- TELA 3: instrução Apple/iOS -->
     <div class="screen" id="screenApple">
-      <div class="sub">No iPhone/iPad não é possível instalar pelo navegador automaticamente. Siga estes passos no <b>Safari</b>:</div>
-      <ol class="steps">
+      <div class="sub" id="appleSubText">No iPhone/iPad não é possível instalar pelo navegador automaticamente. Siga estes passos no <b>Safari</b>:</div>
+      <ol class="steps" id="appleSteps">
         <li><span class="num">1</span><span>Toque no botão <b>Compartilhar</b> (o ícone do quadrado com a seta para cima), na barra do Safari.</span></li>
         <li><span class="num">2</span><span>Role para baixo e toque em <b>"Adicionar à Tela de Início"</b>.</span></li>
         <li><span class="num">3</span><span>Toque em <b>"Adicionar"</b> no canto superior direito.</span></li>
       </ol>
+      <div class="ios-tip" id="appleTip">Não achou "Adicionar à Tela de Início" na lista? Role até o final dela e toque em "Mais" ou "Editar Ações" (ícone "..."). Ative "Adicionar à Tela de Início" nessa lista, toque em "Concluído" e volte para a folha de compartilhamento — a opção vai aparecer.</div>
       <div class="note">O ícone do Nautilus vai aparecer na sua tela inicial. Abra sempre por ele, e não mais pelo navegador.</div>
       <button class="back-link" type="button" data-back>← Escolher outro sistema</button>
     </div>
@@ -81,11 +83,48 @@ button:active{transform:scale(.98)}
 let deferredPrompt=null;
 function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
 function isSafari(){ return /^((?!chrome|android).)*safari/i.test(navigator.userAgent); }
+function isChromeIOS(){ return /crios/i.test(navigator.userAgent); }
+function isFirefoxIOS(){ return /fxios/i.test(navigator.userAgent); }
+function isEdgeIOS(){ return /edgios/i.test(navigator.userAgent); }
 function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone; }
 if (isStandalone()) location.replace('app.html');
 
+// v.Beta48 - "Adicionar à Tela de Início" funciona em qualquer navegador do iPhone desde o
+// iOS 16.4 (Safari, Chrome, Firefox, Edge), não só no Safari. Só muda onde fica o botão
+// Compartilhar em cada um, então a tela Apple agora monta os passos certos por navegador.
+function iosBrowserSteps(){
+  if (isChromeIOS()) return {
+    nome: 'Chrome',
+    passos: ['Toque no menu <b>⋮</b> (três pontos) no canto superior direito do Chrome.', 'Toque em <b>"Compartilhar"</b>.', 'Na lista que abrir, toque em <b>"Adicionar à Tela de Início"</b>.', 'Toque em <b>"Adicionar"</b>.']
+  };
+  if (isFirefoxIOS()) return {
+    nome: 'Firefox',
+    passos: ['Toque no menu <b>≡</b> na parte de baixo do Firefox.', 'Toque em <b>"Compartilhar"</b>.', 'Na lista que abrir, toque em <b>"Adicionar à Tela de Início"</b>.', 'Toque em <b>"Adicionar"</b>.']
+  };
+  if (isEdgeIOS()) return {
+    nome: 'Edge',
+    passos: ['Toque no ícone <b>"..."</b> na parte de baixo do Edge.', 'Toque em <b>"Compartilhar"</b>.', 'Na lista que abrir, toque em <b>"Adicionar à Tela de Início"</b>.', 'Toque em <b>"Adicionar"</b>.']
+  };
+  return {
+    nome: 'Safari',
+    passos: ['Toque no botão <b>Compartilhar</b> (o ícone do quadrado com a seta para cima), na barra do Safari.', 'Role para baixo e toque em <b>"Adicionar à Tela de Início"</b>.', 'Toque em <b>"Adicionar"</b> no canto superior direito.']
+  };
+}
+function renderAppleScreen(){
+  var info = iosBrowserSteps();
+  document.getElementById('appleSubText').innerHTML = 'No iPhone/iPad não é possível instalar pelo navegador automaticamente. Siga estes passos no <b>' + info.nome + '</b>:';
+  var ol = document.getElementById('appleSteps');
+  ol.innerHTML = '';
+  info.passos.forEach(function(txt, i){
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="num">' + (i+1) + '</span><span>' + txt + '</span>';
+    ol.appendChild(li);
+  });
+}
+
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(el){ el.classList.remove('active'); });
+  if (id === 'screenApple') renderAppleScreen();
   document.getElementById(id).classList.add('active');
 }
 
@@ -104,7 +143,7 @@ window.addEventListener('appinstalled', function(){
 });
 document.getElementById('installBtn').addEventListener('click', async function(){
   if (deferredPrompt) { deferredPrompt.prompt(); try { await deferredPrompt.userChoice; } catch(e) {} return; }
-  if (isIOS() && isSafari()) { showScreen('screenApple'); return; }
+  if (isIOS()) { showScreen('screenApple'); return; }
 }, true);
 
 if ('serviceWorker' in navigator) window.addEventListener('load', function(){ navigator.serviceWorker.register('./service-worker.js').catch(console.error); });
