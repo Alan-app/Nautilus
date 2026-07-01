@@ -1,3 +1,11 @@
+V.Beta.50 - CORREÇÃO: o "botão de rolagem" da V.Beta.49 estava errado -- entendido incorretamente como um botão redondo de "voltar ao topo", quando o pedido real era uma barra de rolagem arrastável (maior e mais visível que a nativa do navegador) para navegar manualmente pela lista de resultados do LDS.
+- Removido: o botão flutuante redondo de 62px "voltar ao topo" (ldsScrollTopBtn) adicionado por engano na V.Beta.49.
+- Adicionado: uma barra de rolagem customizada (trilha + alça/thumb) fixa na lateral direita da tela do LDS, visível sempre que a lista de resultados é maior que a tela -- a alça pode ser arrastada com o dedo para cima/baixo para navegar rapidamente pelos resultados, sem precisar rolar manualmente item por item.
+- O tamanho da alça é proporcional à quantidade de conteúdo (mais resultados = alça menor), e sua posição acompanha a rolagem em tempo real nos dois sentidos (rolar a página move a alça; arrastar a alça rola a página).
+- A caixa de busca fixa no topo (adicionada na V.Beta.49) e a correção do highlight amarelo em todos os 8 campos permanecem inalteradas.
+- Validação: sintaxe JS de todo o app.html validada (node --check).
+- Base oficial: vBeta49.
+
 V.Beta.49 - CORREÇÃO: highlight amarelo no LDS ficava aleatório; ADIÇÃO: botão maior de rolagem e busca fixa no topo
 - Relatado: na busca do LDS, alguns resultados apareciam com highlight amarelo no termo buscado e outros não, de forma aparentemente aleatória.
 - Investigado: a busca do LDS compara o termo contra 8 campos (Functional Mark, Parent Functional Mark, Reference Number, Equipment Code, NSN, Long LCN Nomenclature, Equipment Description, TM Number), mas a tela só aplicava o highlight em 4 desses campos -- os outros 4 (NSN, Long LCN Nomenclature, Equipment Description, TM Number) eram exibidos sem highlight mesmo quando foi exatamente ali que o termo buscado apareceu. Por isso parecia aleatório: dependia de qual campo continha o termo, não de um bug de lógica de busca.

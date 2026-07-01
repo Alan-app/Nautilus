@@ -1,2 +1,2 @@
-Nautilus V.Beta.49
-Corrigido o highlight amarelo da busca do LDS, que só funcionava em 4 dos 8 campos pesquisados (parecia aleatório). Adicionados: botão grande para voltar ao topo dos resultados do LDS e caixa de busca fixa no topo da tela enquanto os resultados rolam. Veja CHANGELOG.txt para o histórico completo de mudanças.
+Nautilus V.Beta.50
+Corrigido o "botão de rolagem" da versão anterior: era um botão redondo de "voltar ao topo", mas o pedido era uma barra de rolagem arrastável. Agora a tela do LDS tem uma barra de rolagem customizada e maior na lateral, que pode ser arrastada com o dedo para navegar pelos resultados. A busca fixa no topo e a correção do highlight continuam como estavam. Veja CHANGELOG.txt para o histórico completo de mudanças.
