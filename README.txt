@@ -1,2 +1,2 @@
-Nautilus V.Beta.50
-Corrigido o "botão de rolagem" da versão anterior: era um botão redondo de "voltar ao topo", mas o pedido era uma barra de rolagem arrastável. Agora a tela do LDS tem uma barra de rolagem customizada e maior na lateral, que pode ser arrastada com o dedo para navegar pelos resultados. A busca fixa no topo e a correção do highlight continuam como estavam. Veja CHANGELOG.txt para o histórico completo de mudanças.
+Nautilus V.Beta.51
+Corrigido de vez a caixa de busca do LDS: o "sticky" da versão anterior não funcionava por causa de um overflow herdado do html/body do app (problema conhecido do CSS). Trocado por position:fixed, o mesmo tipo já usado com sucesso na barra superior -- agora a busca fica realmente parada na tela enquanto os resultados rolam por baixo. Veja CHANGELOG.txt para o histórico completo de mudanças.
