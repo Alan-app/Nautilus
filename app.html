@@ -1736,7 +1736,7 @@ body.notes-screen{scroll-padding-bottom:38vh;}
   padding:10px;
   position:relative;
 }
-.atlas-page-loading{position:absolute;inset:0;z-index:5;background:#101014;opacity:1;transition:opacity .35s ease;pointer-events:none}
+.atlas-page-loading{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:linear-gradient(160deg,rgba(8,22,40,.97),rgba(4,12,24,.99));opacity:1;transition:opacity .35s ease;pointer-events:none}
 .atlas-page-loading.hidden{opacity:0}
 .atlas-page-loading-glow{position:absolute;top:38%;left:50%;width:280px;height:280px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(70,160,255,.16) 0%,rgba(70,160,255,0) 70%);border-radius:50%;filter:blur(40px);animation:atlasGlowPulse 2.6s ease-in-out infinite}
 .atlas-page-loading-logo{position:relative;width:72px;height:72px;object-fit:contain;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:atlasLogoFloat 3.2s ease-in-out infinite}
@@ -2097,7 +2097,7 @@ body.notes-screen{scroll-padding-bottom:38vh;}
 }
 #atlasPdfCanvas{
   display:block !important;
-  background:#101014 !important;
+  background:#fff !important;
   transform-origin:center center !important;
   will-change:transform !important;
   max-width:none !important;
@@ -3377,7 +3377,10 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
         <button class="btn btn-ghost" type="button" onclick="atlasZoomIn()">+</button>
       </div>
       <div id="atlasImageStage" class="atlas-image-stage atlas-pdf-canvas-stage"><img id="atlasViewerImage" alt="Página do Atlas" /><canvas id="atlasPdfCanvas"></canvas>
-        <div id="atlasPageLoading" class="atlas-page-loading"></div>
+        <div id="atlasPageLoading" class="atlas-page-loading">
+          <div class="atlas-page-loading-glow"></div>
+          <img class="atlas-page-loading-logo" src="icon-512.png" alt="Nautilus">
+        </div>
       </div>
     </div>
 
@@ -3979,7 +3982,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.62';
+const APP_VERSION = 'V.Beta.59';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -4138,8 +4141,8 @@ function syncTopbarLayoutStable(){
   });
 }
 
-function escapeHtml(str){ return String(str==null?'':str).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;').split("'").join('&#039;'); }
-function nl2br(str){ return escapeHtml(str).split('\n').join('<br>'); }
+function escapeHtml(str){ return String(str??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+function nl2br(str){ return escapeHtml(str).replaceAll('\n','<br>'); }
 function formatDateBR(date){ if(!date) return ''; const [y,m,d]=date.split('-'); return y&&m&&d?`${d}/${m}/${y}`:date; }
 
 function showAppMessage(title, body){
@@ -5065,7 +5068,7 @@ document.addEventListener('input', function(ev){
   try{ el.dataset.replaceOnNextType = '0'; }catch(e){}
 }, true);
 function normalizeHorasNumber(value){
-  const normalized = String(value==null?'':value).replace(',', '.').trim();
+  const normalized = String(value ?? '').replace(',', '.').trim();
   if(!normalized) return 0;
   const n = Number(normalized);
   return Number.isFinite(n) && n >= 0 ? n : 0;
@@ -5809,7 +5812,7 @@ function renderHistoryCardDetails(r){
     if(!raw || raw === '-' || raw.toLowerCase() === 'undefined' || raw.toLowerCase() === 'null') return;
     blocks.push(`<div class="label-block"><b>${escapeHtml(label)}:</b> ${multiline ? nl2br(raw) : escapeHtml(raw)}</div>`);
   };
-  addBlock('Período', dateRangeLabel(r).split('\n').join(' | '));
+  addBlock('Período', dateRangeLabel(r).replaceAll('\n',' | '));
   addBlock('Horas de Funcionamento', r.horasFunc);
   addBlock('Sistema do Encarregado', r.sistemaEncarregado);
   addBlock(r.tipoRegistroLabel || 'Avaria', r.avaria || '—', true);
@@ -5842,7 +5845,7 @@ function toggleEquipmentGroup(key){ const el=$('equipGroup-'+key), ar=$('equipAr
 function previewSingleRecord(id){
   const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
   const qtdImagens = Array.isArray(r.anexos) ? r.anexos.length : 0;
-  showAppMessage(getBigramaLabel(r.bigramaId), `${dateRangeLabel(r).split('\n').join(' | ')}\n\n${r.tipoRegistroLabel || 'Avaria'}:\n${r.avaria || '—'}\n\nSolução:\n${r.solucao || '—'}\n\nObservação:\n${r.observacao || '—'}${qtdImagens ? `\n\nImagens anexadas: ${qtdImagens}` : ''}`);
+  showAppMessage(getBigramaLabel(r.bigramaId), `${dateRangeLabel(r).replaceAll('\n',' | ')}\n\n${r.tipoRegistroLabel || 'Avaria'}:\n${r.avaria || '—'}\n\nSolução:\n${r.solucao || '—'}\n\nObservação:\n${r.observacao || '—'}${qtdImagens ? `\n\nImagens anexadas: ${qtdImagens}` : ''}`);
 }
 function editRecord(id){
   const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
@@ -7016,7 +7019,7 @@ async function exportToDownloads(){
 }
 
 function conflictField(label, mine, theirs, useBackup=false){
-  const diff=String(mine==null?'':mine)!==String(theirs==null?'':theirs); const value=useBackup?theirs:mine;
+  const diff=String(mine??'')!==String(theirs??''); const value=useBackup?theirs:mine;
   return `<div class="conflict-field ${diff?'conflict-diff':''}"><b>${escapeHtml(label)}</b><div>${nl2br(value===''||value===null||typeof value==='undefined'?'—':String(value))}</div></div>`;
 }
 function openNextConflict(){
@@ -7160,7 +7163,7 @@ function importBackup(file){
           return;
         }
 
-        const different = compareKeys.some(k => String(local[k]==null?'':local[k]) !== String(ext[k]==null?'':ext[k]));
+        const different = compareKeys.some(k => String(local[k] ?? '') !== String(ext[k] ?? ''));
         if(!different){
           report.ignored++;
           return;
@@ -11317,17 +11320,8 @@ function ldsShareText(i){
     val(i.AllowOnBoard),
     '',
     '*Allow ShoreBase:*',
-    val(i.AllowShoreBase),
-    '',
-    '*Aplicação em outros Equipamentos:*',
-    ldsRelatedApplicationsText(i)
+    val(i.AllowShoreBase)
   ].join('\n');
-}
-function ldsRelatedApplicationsText(item){
-  const related=ldsFindOtherApplications(item);
-  const clean=related.map(ldsCleanApplicationValue).filter(Boolean);
-  if(!clean.length) return 'Nenhuma outra aplicação encontrada.';
-  return clean.map(v=>'- '+v).join('\n');
 }
 
 async function shareLdsResult(btn){
@@ -11482,7 +11476,7 @@ function ldsRenderResults(items, query, compact){
 }
 function initLdsModule(){
   ldsSetStatus('');
-  if(!(lds$('ldsSearchInput') && lds$('ldsSearchInput').value)) ldsRenderResults([]);
+  if(!lds$('ldsSearchInput')?.value) ldsRenderResults([]);
   // v.Beta51 - posiciona a barra de busca fixa no topo real do card e sincroniza a altura
   // do espaçador toda vez que a tela do LDS é aberta (na primeira abertura, a topbar ainda
   // podia não estar com a altura final medida, e a barra ficava sobrepondo o conteúdo).
