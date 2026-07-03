@@ -1736,7 +1736,7 @@ body.notes-screen{scroll-padding-bottom:38vh;}
   padding:10px;
   position:relative;
 }
-.atlas-page-loading{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:linear-gradient(160deg,rgba(8,22,40,.97),rgba(4,12,24,.99));opacity:1;transition:opacity .35s ease;pointer-events:none}
+.atlas-page-loading{position:absolute;inset:0;z-index:5;background:#101014;opacity:1;transition:opacity .35s ease;pointer-events:none}
 .atlas-page-loading.hidden{opacity:0}
 .atlas-page-loading-glow{position:absolute;top:38%;left:50%;width:280px;height:280px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(70,160,255,.16) 0%,rgba(70,160,255,0) 70%);border-radius:50%;filter:blur(40px);animation:atlasGlowPulse 2.6s ease-in-out infinite}
 .atlas-page-loading-logo{position:relative;width:72px;height:72px;object-fit:contain;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:atlasLogoFloat 3.2s ease-in-out infinite}
@@ -2097,7 +2097,7 @@ body.notes-screen{scroll-padding-bottom:38vh;}
 }
 #atlasPdfCanvas{
   display:block !important;
-  background:#fff !important;
+  background:#101014 !important;
   transform-origin:center center !important;
   will-change:transform !important;
   max-width:none !important;
@@ -3377,10 +3377,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
         <button class="btn btn-ghost" type="button" onclick="atlasZoomIn()">+</button>
       </div>
       <div id="atlasImageStage" class="atlas-image-stage atlas-pdf-canvas-stage"><img id="atlasViewerImage" alt="Página do Atlas" /><canvas id="atlasPdfCanvas"></canvas>
-        <div id="atlasPageLoading" class="atlas-page-loading">
-          <div class="atlas-page-loading-glow"></div>
-          <img class="atlas-page-loading-logo" src="icon-512.png" alt="Nautilus">
-        </div>
+        <div id="atlasPageLoading" class="atlas-page-loading"></div>
       </div>
     </div>
 
@@ -3982,7 +3979,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.59';
+const APP_VERSION = 'V.Beta.64';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -4104,6 +4101,16 @@ function ensureHomeFoldersRendered(){
 
 const UI = { currentScreen:'home', editingRecordId:null, editingNoteId:null, editingBigramaId:null, editingEquipmentId:null, pendingImportReport:null, conflictQueue:[], confirmResolver:null, activeHorasReminders:[] };
 const $ = (id)=>document.getElementById(id);
+// v.Beta64 - a tela de carregamento do Atlas é só o fundo sólido (sem logo, sem spinner, sem
+// indicador de nenhum tipo) -- nada deve piscar por cima do esquema carregando.
+function atlasShowLoadingOverlay(){
+  const loading = $('atlasPageLoading');
+  if(loading) loading.classList.remove('hidden');
+}
+function atlasHideLoadingOverlay(){
+  const loading = $('atlasPageLoading');
+  if(loading) loading.classList.add('hidden');
+}
 const uid = (prefix='id') => prefix+'_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
 
 function applyFixedTopbarLayout(){
@@ -4141,8 +4148,8 @@ function syncTopbarLayoutStable(){
   });
 }
 
-function escapeHtml(str){ return String(str??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
-function nl2br(str){ return escapeHtml(str).replaceAll('\n','<br>'); }
+function escapeHtml(str){ return String(str==null?'':str).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;').split("'").join('&#039;'); }
+function nl2br(str){ return escapeHtml(str).split('\n').join('<br>'); }
 function formatDateBR(date){ if(!date) return ''; const [y,m,d]=date.split('-'); return y&&m&&d?`${d}/${m}/${y}`:date; }
 
 function showAppMessage(title, body){
@@ -5068,7 +5075,7 @@ document.addEventListener('input', function(ev){
   try{ el.dataset.replaceOnNextType = '0'; }catch(e){}
 }, true);
 function normalizeHorasNumber(value){
-  const normalized = String(value ?? '').replace(',', '.').trim();
+  const normalized = String(value==null?'':value).replace(',', '.').trim();
   if(!normalized) return 0;
   const n = Number(normalized);
   return Number.isFinite(n) && n >= 0 ? n : 0;
@@ -5812,7 +5819,7 @@ function renderHistoryCardDetails(r){
     if(!raw || raw === '-' || raw.toLowerCase() === 'undefined' || raw.toLowerCase() === 'null') return;
     blocks.push(`<div class="label-block"><b>${escapeHtml(label)}:</b> ${multiline ? nl2br(raw) : escapeHtml(raw)}</div>`);
   };
-  addBlock('Período', dateRangeLabel(r).replaceAll('\n',' | '));
+  addBlock('Período', dateRangeLabel(r).split('\n').join(' | '));
   addBlock('Horas de Funcionamento', r.horasFunc);
   addBlock('Sistema do Encarregado', r.sistemaEncarregado);
   addBlock(r.tipoRegistroLabel || 'Avaria', r.avaria || '—', true);
@@ -5845,7 +5852,7 @@ function toggleEquipmentGroup(key){ const el=$('equipGroup-'+key), ar=$('equipAr
 function previewSingleRecord(id){
   const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
   const qtdImagens = Array.isArray(r.anexos) ? r.anexos.length : 0;
-  showAppMessage(getBigramaLabel(r.bigramaId), `${dateRangeLabel(r).replaceAll('\n',' | ')}\n\n${r.tipoRegistroLabel || 'Avaria'}:\n${r.avaria || '—'}\n\nSolução:\n${r.solucao || '—'}\n\nObservação:\n${r.observacao || '—'}${qtdImagens ? `\n\nImagens anexadas: ${qtdImagens}` : ''}`);
+  showAppMessage(getBigramaLabel(r.bigramaId), `${dateRangeLabel(r).split('\n').join(' | ')}\n\n${r.tipoRegistroLabel || 'Avaria'}:\n${r.avaria || '—'}\n\nSolução:\n${r.solucao || '—'}\n\nObservação:\n${r.observacao || '—'}${qtdImagens ? `\n\nImagens anexadas: ${qtdImagens}` : ''}`);
 }
 function editRecord(id){
   const r=AppState.data.registros.find(x=>x.id===id); if(!r) return;
@@ -7019,7 +7026,7 @@ async function exportToDownloads(){
 }
 
 function conflictField(label, mine, theirs, useBackup=false){
-  const diff=String(mine??'')!==String(theirs??''); const value=useBackup?theirs:mine;
+  const diff=String(mine==null?'':mine)!==String(theirs==null?'':theirs); const value=useBackup?theirs:mine;
   return `<div class="conflict-field ${diff?'conflict-diff':''}"><b>${escapeHtml(label)}</b><div>${nl2br(value===''||value===null||typeof value==='undefined'?'—':String(value))}</div></div>`;
 }
 function openNextConflict(){
@@ -7163,7 +7170,7 @@ function importBackup(file){
           return;
         }
 
-        const different = compareKeys.some(k => String(local[k] ?? '') !== String(ext[k] ?? ''));
+        const different = compareKeys.some(k => String(local[k]==null?'':local[k]) !== String(ext[k]==null?'':ext[k]));
         if(!different){
           report.ignored++;
           return;
@@ -9992,6 +9999,37 @@ function atlasWaitForPdfJs(timeoutMs){
     check();
   });
 }
+// v.Beta64 - roda em segundo plano (sem bloquear nada) sempre que a tela do Atlas é aberta em
+// um app que já tem o PDF baixado. Compara a lista de páginas esperadas com o que está
+// realmente salvo em cache e pré-renderiza só as que estão faltando -- corrige, aos poucos e
+// sem downloads extras, instalações que ficaram com páginas sem cache por causa do bug antigo
+// (uma falha de pré-renderização que parava o processo inteiro no meio).
+async function atlasRepairMissingCache(){
+  try{
+    const groups = await atlasGetGroups();
+    const pages = atlasCollectRenderedPages(groups);
+    if(!pages || !pages.length) return;
+    const missing = [];
+    for(const pageNum of pages){
+      let cached = null;
+      try{ cached = await atlasGetPage(Number(pageNum)); }catch(e){ cached = null; }
+      if(!cached) missing.push(pageNum);
+    }
+    if(!missing.length) return;
+    const pdf = await atlasGetPdfDocument();
+    if(!pdf) return;
+    console.warn('Atlas: reparando ' + missing.length + ' página(s) sem cache em segundo plano: ' + missing.join(', '));
+    for(const pageNum of missing){
+      try{
+        await atlasPreRenderPageToCache(pdf, pageNum);
+      }catch(err){
+        console.warn('Atlas: reparo ainda falhou para a página ' + pageNum + ' -- continuará usando renderização ao vivo para ela.', err);
+      }
+    }
+  }catch(err){
+    console.warn('Atlas: não foi possível verificar páginas pendentes de cache.', err);
+  }
+}
 async function processAtlasPdfBlob(blob, onProgress){
   const report = typeof onProgress === 'function' ? onProgress : function(){};
   if(!window.pdfjsLib){
@@ -10013,11 +10051,26 @@ async function processAtlasPdfBlob(blob, onProgress){
 
   const pages = atlasCollectRenderedPages(groups);
   atlasRenderedPageMemoryCache = new Map();
+  const failedPages = [];
   for(let i=0;i<pages.length;i++){
     const pageNum = pages[i];
     const pct = Math.min(99, Math.round(20 + (i * 79 / Math.max(1,pages.length))));
     report('Preparando Atlas para abertura instantânea: página ' + pageNum + ' (' + (i+1) + '/' + pages.length + ')', pct);
-    await atlasPreRenderPageToCache(pdf, pageNum);
+    // v.Beta64 - antes, se a pré-renderização de UMA página falhasse (ex.: esquema muito
+    // denso/complexo estourando memória ao codificar o PNG), o laço inteiro parava ali --
+    // todas as páginas seguintes nunca ficavam em cache, obrigando o app a renderizar cada
+    // uma delas do zero, ao vivo, toda vez que fossem abertas (demora extrema). Agora, se uma
+    // página falhar, ela é pulada (fica pendente e usa o fallback ao vivo quando aberta) e o
+    // laço continua normalmente para as próximas, garantindo o máximo de páginas em cache.
+    try{
+      await atlasPreRenderPageToCache(pdf, pageNum);
+    }catch(err){
+      console.warn('Atlas: falha ao pré-renderizar a página ' + pageNum + ' -- será renderizada ao vivo quando aberta.', err);
+      failedPages.push(pageNum);
+    }
+  }
+  if(failedPages.length){
+    console.warn('Atlas: ' + failedPages.length + ' página(s) não puderam ser pré-renderizadas: ' + failedPages.join(', '));
   }
 
   report('Atlas importado e pré-renderizado. Abertura instantânea ativa.', 100);
@@ -10117,7 +10170,13 @@ async function autoDownloadAtlasIfNeeded(){
     let completedBlob = null; // referência ao PDF já 100% baixado, mesmo que o processamento falhe depois
     try{
       const already = await atlasGetOriginalPdfBlob();
-      if(already) return;
+      if(already){
+        // v.Beta64 - repara em segundo plano, sem travar nada, páginas que ficaram sem cache
+        // por causa do bug antigo (uma falha de pré-renderização parava o processo inteiro).
+        // Só roda de verdade se encontrar alguma página faltando; não baixa nada de novo.
+        atlasRepairMissingCache();
+        return;
+      }
       if(!navigator.onLine){
         atlasShowDownloadError('Sem internet para baixar o Atlas pela primeira vez. Conecte-se e toque aqui para tentar de novo.');
         atlasBindDownloadModalRetry();
@@ -10377,7 +10436,7 @@ async function atlasDrawPageToVisibleCanvas(dataUrl){
   atlasRenderedZoom = 100;
   canvas.style.transform = 'translate(' + atlasPanX + 'px,' + atlasPanY + 'px) scale(' + (Number(atlasZoom||100)/100) + ')';
   const loading = $('atlasPageLoading');
-  if(loading) loading.classList.add('hidden');
+  if(loading) atlasHideLoadingOverlay();
   return true;
 }
 
@@ -10454,14 +10513,14 @@ async function atlasRenderPdfPage(){
     atlasRenderedZoom = 100;
     canvas.style.transform = 'translate(' + atlasPanX + 'px,' + atlasPanY + 'px) scale(' + (Number(atlasZoom||100)/100) + ')';
     const loadingEl1 = $('atlasPageLoading');
-    if(loadingEl1) loadingEl1.classList.add('hidden');
+    if(loadingEl1) atlasHideLoadingOverlay();
   }catch(e){
     if(String(e && e.name) !== 'RenderingCancelledException'){
       console.error('Atlas render:', e);
       try{ showAppMessage('Atlas','Falha ao renderizar a página do Atlas.'); }catch(_){}
     }
     const loadingEl2 = $('atlasPageLoading');
-    if(loadingEl2) loadingEl2.classList.add('hidden');
+    if(loadingEl2) atlasHideLoadingOverlay();
   }
 }
 function atlasScheduleRender(delay){
@@ -10639,7 +10698,7 @@ function openAtlasPage(page, title, keepList){
   const vt = $('atlasViewerTitle');
   const loading = $('atlasPageLoading');
   if(vt) vt.textContent = atlasCurrentTitle;
-  if(loading) loading.classList.remove('hidden');
+  if(loading) atlasShowLoadingOverlay();
   if(viewer) viewer.classList.add('show');
   setupAtlasPinchZoom();
   // Espera dois frames antes de iniciar o trabalho pesado (busca no IndexedDB + decodificação
@@ -11320,8 +11379,17 @@ function ldsShareText(i){
     val(i.AllowOnBoard),
     '',
     '*Allow ShoreBase:*',
-    val(i.AllowShoreBase)
+    val(i.AllowShoreBase),
+    '',
+    '*Aplicação em outros Equipamentos:*',
+    ldsRelatedApplicationsText(i)
   ].join('\n');
+}
+function ldsRelatedApplicationsText(item){
+  const related=ldsFindOtherApplications(item);
+  const clean=related.map(ldsCleanApplicationValue).filter(Boolean);
+  if(!clean.length) return 'Nenhuma outra aplicação encontrada.';
+  return clean.map(v=>'- '+v).join('\n');
 }
 
 async function shareLdsResult(btn){
@@ -11476,7 +11544,7 @@ function ldsRenderResults(items, query, compact){
 }
 function initLdsModule(){
   ldsSetStatus('');
-  if(!lds$('ldsSearchInput')?.value) ldsRenderResults([]);
+  if(!(lds$('ldsSearchInput') && lds$('ldsSearchInput').value)) ldsRenderResults([]);
   // v.Beta51 - posiciona a barra de busca fixa no topo real do card e sincroniza a altura
   // do espaçador toda vez que a tela do LDS é aberta (na primeira abertura, a topbar ainda
   // podia não estar com a altura final medida, e a barra ficava sobrepondo o conteúdo).

@@ -1,2 +1,2 @@
-Nautilus V.Beta.59
-Removida a bolinha de carregamento do Atlas -- a tela de carregamento agora mostra só a logo, sem o spinner girando ao lado. Veja CHANGELOG.txt para o histórico completo de mudanças.
+Nautilus V.Beta.64
+Corrigida a demora real de alguns esquemas do Atlas (ex.: "19 do BB"): a pré-renderização parava de vez em quando no meio do processo se uma página falhasse, deixando todas as páginas seguintes sem cache. Corrigido, mais um reparo automático em segundo plano pra quem já tinha esse problema. Removido também o indicador giratório da vBeta63 -- voltou a ser só o fundo sólido. Veja CHANGELOG.txt para o histórico completo de mudanças.
