@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-vbeta64-core';
-const RUNTIME_CACHE = 'nautilus-vbeta64-runtime';
+const CACHE_NAME = 'nautilus-vbeta64b-core';
+const RUNTIME_CACHE = 'nautilus-vbeta64b-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,9 @@ const APP_ASSETS = [
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
-  './app_documento_oficial_impressao_direta_forcada.html'
+  './app_documento_oficial_impressao_direta_forcada.html',
+  './pdf.min.js',
+  './pdf.worker.min.js'
 ];
 
 async function precacheCore(){
