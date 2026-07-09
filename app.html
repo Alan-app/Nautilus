@@ -3017,22 +3017,24 @@ body.notes-screen{
 .rig-comp-body{padding:12px}
 .rig-table-wrap{border-radius:12px}
 .rig-table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:.76rem}
-.rig-table thead th{background:rgba(255,255,255,.08);text-align:left;padding:7px 6px;font-size:.62rem;text-transform:uppercase;letter-spacing:.01em;opacity:.75;overflow-wrap:anywhere;word-break:break-word;white-space:normal;line-height:1.15;vertical-align:bottom}
-.rig-th-check,.rig-td-check{width:28px}
-.rig-th-id,.rig-td-id{width:92px;white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important}
-.rig-table td{padding:7px 6px;border-top:1px solid rgba(255,255,255,.07);vertical-align:top;overflow-wrap:anywhere;word-break:break-word}
-.rig-table:not(.rig-table-5col) .rig-th-desc,.rig-table:not(.rig-table-5col) .rig-td-desc{width:40%}
-.rig-table-5col .rig-th-desc,.rig-table-5col .rig-td-desc{width:26%}
+.rig-table thead th{background:rgba(255,255,255,.08);text-align:left;padding:8px 6px;font-size:.62rem;text-transform:uppercase;letter-spacing:.01em;opacity:.75;overflow-wrap:anywhere;word-break:break-word;white-space:normal;line-height:1.15;vertical-align:middle}
+.rig-th-check,.rig-td-check{width:28px;text-align:center}
+.rig-th-id,.rig-td-id{width:76px;white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important}
+.rig-table td{padding:9px 6px;border-top:1px solid rgba(255,255,255,.07);vertical-align:middle;overflow-wrap:anywhere;word-break:break-word;line-height:1.3}
+.rig-table:not(.rig-table-5col) .rig-th-desc,.rig-table:not(.rig-table-5col) .rig-td-desc{width:auto}
+.rig-table:not(.rig-table-5col) .rig-th-cond,.rig-table:not(.rig-table-5col) .rig-td-cond{width:88px}
+.rig-table-5col .rig-th-cond,.rig-table-5col .rig-td-cond{width:76px}
 .rig-row.checked{background:rgba(102,213,138,.10)}
-.rig-td-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold)}
+.rig-td-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold);display:block;margin:0 auto}
 .rig-id-big{background:rgba(255,255,255,.12);border-radius:8px;padding:1px 5px;font-size:.64rem;display:inline-block;margin-bottom:3px;font-weight:800;white-space:nowrap}
-.rig-id-equip{font-size:.7rem;opacity:.9;font-weight:700;white-space:nowrap}
+.rig-id-equip{font-size:.72rem;opacity:.9;font-weight:700;white-space:nowrap}
 .rig-td-desc{white-space:normal}
 .rig-td-cond{white-space:pre-line}
-.rig-table thead th:last-child{text-align:center}
+.rig-table thead th:last-child,.rig-table-5col thead th:nth-last-child(2){text-align:center}
 .rig-table tbody tr:not(.rig-note-row):not(.rig-local-row) td:last-child{text-align:center}
-.rig-note-row td{background:rgba(255,255,255,.04);font-style:italic;opacity:.8;padding:10px;border-top:1px dashed rgba(255,255,255,.14)}
-.rig-local-row td{background:rgba(255,255,255,.10);font-weight:900;text-transform:uppercase;font-size:.72rem;letter-spacing:.05em;padding:8px 10px}
+.rig-table-5col tbody tr:not(.rig-note-row):not(.rig-local-row) td:nth-last-child(2){text-align:center}
+.rig-note-row td{background:rgba(255,255,255,.04);font-style:italic;opacity:.8;padding:10px;border-top:1px dashed rgba(255,255,255,.14);text-align:left}
+.rig-local-row td{background:rgba(255,255,255,.10);font-weight:900;text-transform:uppercase;font-size:.72rem;letter-spacing:.05em;padding:8px 10px;text-align:left}
 /* =================== FIM MÓDULO RIGs (CSS) =================== */
 
 </style>
@@ -3456,7 +3458,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
     <section id="screen-rigs" class="section hidden">
       <div class="menu-grid">
         <button class="menu-card" type="button" onclick="openRig24h()"><div class="menu-text"><h2>Rig 24h</h2><p>Checklist geral antes de suspender.</p></div></button>
-        <button class="menu-card secondary" type="button" onclick="openRigComp()"><div class="menu-text"><h2>Rigs de Compartimentos</h2><p>Checklists por mudança de regime e compartimento.</p></div></button>
+        <button class="menu-card" type="button" onclick="openRigComp()"><div class="menu-text"><h2>Rigs de Compartimentos</h2><p>Checklists por mudança de regime e compartimento.</p></div></button>
         <button class="menu-card" type="button" onclick="openTV()"><div class="menu-text"><h2>Teste de Vácuo</h2><p>Checklists das 3 fases do teste.</p></div></button>
       </div>
     </section>
@@ -11020,7 +11022,7 @@ function rigCondTableHead(condLabel, extraCondLabel){
   return `<thead><tr><th class="rig-th-check"></th><th class="rig-th-id">Identificação</th><th class="rig-th-desc">Descrição</th><th class="rig-th-cond">${escapeHtml(condLabel)}</th>${extraCondLabel?`<th class="rig-th-cond">${escapeHtml(extraCondLabel)}</th>`:''}</tr></thead>`;
 }
 function rigIdCell(big, equip){
-  return `<td class="rig-td-id">${big?`<div class="rig-id-big">${escapeHtml(big)}</div>`:''}${equip?`<div class="rig-id-equip">${escapeHtml(equip)}</div>`:''}</td>`;
+  return `<td class="rig-td-id">${equip?`<div class="rig-id-equip">${escapeHtml(equip)}</div>`:''}</td>`;
 }
 
 function renderRigCompScreen(){
