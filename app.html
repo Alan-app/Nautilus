@@ -7479,6 +7479,16 @@ function toggleNoteChecklistLine(id,lineIndex,ev){
 function deleteNoteLine(id,lineIndex,ev){
   if(ev){ev.preventDefault();ev.stopPropagation();}
   ensureNotas(); const n=AppState.data.notas.find(x=>x.id===id); if(!n)return;
+  const wrap=document.getElementById('checkEdit_'+String(id));
+  const row=wrap?wrap.querySelector('.keep-check-edit-row[data-line-index="'+Number(lineIndex)+'"]'):null;
+  if(wrap&&row&&wrap.querySelectorAll('.keep-check-edit-row').length>1){
+    // Remoção no próprio editor: preserva o tamanho correto das demais linhas
+    row.remove();
+    noteRefreshChecklistDom(id);
+    noteCommitChecklistDomToText(id);
+    noteAutosizeChecklist(wrap);
+    return;
+  }
   const lines=String(n.texto||'').split(/\n/); lines.splice(lineIndex,1);
   n.texto=lines.join('\n'); n.updatedAt=nowIso(); AppState.save(); renderNotes();
 }
@@ -8034,12 +8044,10 @@ function noteCommitChecklistDomToText(noteId){
   const n = AppState.data.notas.find(x=>String(x.id)===String(noteId));
   const wrap = document.getElementById('checkEdit_'+String(noteId));
   if(!n || !wrap) return;
-  const oldLines = String(n.texto||'').split(/\n/);
-  const nextLines = Array.from(wrap.querySelectorAll('.keep-check-edit-row')).map((row,idx)=>{
+  const nextLines = Array.from(wrap.querySelectorAll('.keep-check-edit-row')).map(row=>{
     const inp = row.querySelector('.keep-check-edit-input');
-    const old = oldLines[idx] || '';
-    const p = checklistLineParts(old);
-    return buildChecklistLine(!!p.checked, inp ? inp.value : '');
+    const checked = row.classList.contains('done') || String((row.querySelector('.keep-check-toggle')||{}).textContent||'').includes('☑');
+    return buildChecklistLine(checked, inp ? inp.value : '');
   });
   n.texto = (nextLines.length ? nextLines : [buildChecklistLine(false,'')]).join('\n');
   n.updatedAt = nowIso();
