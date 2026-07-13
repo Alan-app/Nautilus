@@ -1420,7 +1420,7 @@ body:not(.app-ready) .app{visibility:hidden;}
 .keep-check-line.done .keep-check-text{text-decoration:line-through;opacity:.62;}
 .keep-check-delete{grid-column:3;width:24px;height:24px;margin-top:-1px;border:0 !important;background:transparent !important;box-shadow:none !important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;display:inline-flex;align-items:center;justify-content:center;padding:0;border-radius:0;-webkit-tap-highlight-color:transparent;}
 .keep-check-delete:hover,.keep-check-delete:focus{opacity:.85;background:transparent !important;outline:none;}
-.keep-check-line:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-line:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 
 .keep-icon.keep-format-toggle.active{background:var(--card) !important;border-color:var(--line) !important;color:#fff !important;box-shadow:0 2px 8px rgba(11,76,149,.28) !important;}
 .keep-icon.keep-format-toggle{font-weight:900;}
@@ -3188,7 +3188,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -3199,7 +3199,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -6984,7 +6984,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -6995,7 +6995,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -7538,9 +7538,9 @@ function renderChecklistEditRows(noteId,text){
   const lines=String(text||'').split(/\n/);
   return `<div class="keep-check-edit-wrap" id="checkEdit_${domId}">`+lines.map((line,idx)=>{
     const p=checklistLineParts(line);
-    return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}" data-line-index="${idx}">
+    return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}${String(p.text||'').trim()===''?' kc-empty':''}" data-line-index="${idx}">
       <button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${p.checked?'☑':'☐'}</button>
-      <textarea class="keep-check-edit-input" rows="1" placeholder="Item" oninput="handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteAutosizeTextarea(this);noteAutosizeChecklist(this.closest('.keep-check-edit-wrap'))" onfocus="noteAutosizeTextarea(this);scheduleNoteKeyboardAdjust(this,80)" onkeydown="handleChecklistEditInputKey(event,'${safeId}',${idx})">${escapeHtml(p.text)}</textarea>
+      <textarea class="keep-check-edit-input" rows="1" placeholder="Item" oninput="handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteSyncRowEmpty(this);noteAutosizeTextarea(this);noteAutosizeChecklist(this.closest('.keep-check-edit-wrap'))" onfocus="noteAutosizeTextarea(this);scheduleNoteKeyboardAdjust(this,80)" onkeydown="handleChecklistEditInputKey(event,'${safeId}',${idx})">${escapeHtml(p.text)}</textarea>
       <button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button>
     </div>`;
   }).join('')+'</div>';
@@ -7557,12 +7557,16 @@ function updateChecklistEditLine(noteId,lineIndex,value){
   AppState.save();
 }
 
+function noteSyncRowEmpty(el){
+  const row = el && el.closest ? el.closest('.keep-check-edit-row') : null;
+  if(row) row.classList.toggle('kc-empty', String(el.value||'').trim()==='');
+}
 function noteChecklistRowHtml(noteId, idx, line){
   const safeId=String(noteId).replace(/'/g,"\\'");
   const p=checklistLineParts(line);
-  return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}" data-line-index="${idx}">
+  return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}${String(p.text||'').trim()===''?' kc-empty':''}" data-line-index="${idx}">
     <button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${p.checked?'☑':'☐'}</button>
-    <textarea class="keep-check-edit-input" rows="1" placeholder="Item" oninput="handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteAutosizeTextarea(this);noteAutosizeChecklist(this.closest('.keep-check-edit-wrap'))" onfocus="noteAutosizeTextarea(this);scheduleNoteKeyboardAdjust(this,80)" onkeydown="handleChecklistEditInputKey(event,'${safeId}',${idx})">${escapeHtml(p.text)}</textarea>
+    <textarea class="keep-check-edit-input" rows="1" placeholder="Item" oninput="handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteSyncRowEmpty(this);noteAutosizeTextarea(this);noteAutosizeChecklist(this.closest('.keep-check-edit-wrap'))" onfocus="noteAutosizeTextarea(this);scheduleNoteKeyboardAdjust(this,80)" onkeydown="handleChecklistEditInputKey(event,'${safeId}',${idx})">${escapeHtml(p.text)}</textarea>
     <button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button>
   </div>`;
 }
@@ -7577,7 +7581,7 @@ function noteRefreshChecklistDom(noteId){
     const del = row.querySelector('.keep-check-delete');
     if(toggle) toggle.setAttribute('onclick',`toggleNoteChecklistLine('${safeId}',${idx},event)`);
     if(input){
-      input.setAttribute('oninput',`handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteResizeChecklistInput(this)`);
+      input.setAttribute('oninput',`handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteSyncRowEmpty(this);noteResizeChecklistInput(this)`);
       input.setAttribute('onkeydown',`handleChecklistEditInputKey(event,'${safeId}',${idx})`);
       noteResizeChecklistInput(input);
     }
@@ -7604,6 +7608,16 @@ function handleChecklistEditInputKey(ev,noteId,lineIndex){
       return;
     }
     if(wrap&&currentRow){
+      const selS=typeof el.selectionStart==='number'?el.selectionStart:null;
+      const selE=typeof el.selectionEnd==='number'?el.selectionEnd:null;
+      if(selS===0&&selE===0){
+        // Cursor no início da linha: a linha atual desce e a nova vazia nasce no lugar dela
+        currentRow.insertAdjacentHTML('beforebegin',noteChecklistRowHtml(noteId,idx,buildChecklistLine(false,'')));
+        noteRefreshChecklistDom(noteId);noteCommitChecklistDomToText(noteId);noteAutosizeChecklist(wrap);
+        const moved=wrap.querySelector('.keep-check-edit-row[data-line-index="'+(idx+1)+'"] .keep-check-edit-input');
+        if(moved){moved.focus({preventScroll:true});try{moved.setSelectionRange(0,0);}catch(e){}}
+        return;
+      }
       currentRow.insertAdjacentHTML('afterend',noteChecklistRowHtml(noteId,idx+1,buildChecklistLine(false,'')));
       noteRefreshChecklistDom(noteId);noteCommitChecklistDomToText(noteId);noteAutosizeChecklist(wrap);
       const next=wrap.querySelector('.keep-check-edit-row[data-line-index="'+(idx+1)+'"] .keep-check-edit-input');
@@ -8462,7 +8476,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8473,7 +8487,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8582,7 +8596,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8593,7 +8607,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8677,7 +8691,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8688,7 +8702,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8945,7 +8959,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -8956,7 +8970,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -9568,7 +9582,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;column-gap:8px;align-items:start;min-height:28px;width:100%;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
@@ -9579,7 +9593,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 .keep-check-edit-row{display:grid!important;grid-template-columns:22px minmax(0,1fr) 24px!important;column-gap:8px!important;align-items:start!important;min-height:28px;width:100%;max-width:100%;overflow:hidden;}
 .keep-check-edit-row .keep-check-toggle{grid-column:1;margin-top:0;}
 .keep-check-edit-row .keep-check-delete{grid-column:3;margin-top:-1px;background:transparent!important;border:0!important;box-shadow:none!important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;width:24px;height:24px;min-height:24px;padding:0;border-radius:0;display:inline-flex;align-items:center;justify-content:center;}
-.keep-check-edit-row:not(.done) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-edit-row:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-edit-row.done .keep-check-edit-input{text-decoration:line-through;opacity:.62;}
 .keep-check-edit-input{grid-column:2;width:100%!important;max-width:100%!important;min-width:0!important;min-height:28px;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;font:inherit!important;line-height:1.35!important;outline:none!important;box-shadow:none!important;resize:none!important;overflow:hidden!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;border-radius:0!important;}
 .keep-check-edit-input:focus{border:0!important;box-shadow:none!important;background:transparent!important;outline:none!important;}
