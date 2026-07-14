@@ -1425,6 +1425,7 @@ body:not(.app-ready) .app{visibility:hidden;}
 .keep-check-line.kc-ind-2, #screen-notas .keep-check-line.kc-ind-2, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-2{margin-left:44px!important;width:calc(100% - 44px)!important;max-width:calc(100% - 44px)!important}
 .keep-check-line.kc-ind-3, #screen-notas .keep-check-line.kc-ind-3, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-3{margin-left:66px!important;width:calc(100% - 66px)!important;max-width:calc(100% - 66px)!important}
 .keep-check-edit-row.kc-dragging{transition:none!important}
+.keep-check-edit-row.kc-dragging, .keep-check-edit-row.kc-dragging *{user-select:none!important;-webkit-user-select:none!important}
 .keep-check-edit-row.kc-snap{transition:transform .16s ease!important}
 
 .keep-icon.keep-format-toggle.active{background:var(--card) !important;border-color:var(--line) !important;color:#fff !important;box-shadow:0 2px 8px rgba(11,76,149,.28) !important;}
@@ -7600,6 +7601,13 @@ function noteChecklistSetIndent(row, novoNivel){
   row.classList.remove('kc-ind-1','kc-ind-2','kc-ind-3');
   if(aplicado>0) row.classList.add('kc-ind-'+aplicado);
   noteCommitChecklistDomToText(noteId);
+  // Largura mudou: recalcular a altura desta e das demais linhas
+  const inp = row.querySelector('.keep-check-edit-input');
+  const wrap = row.closest('.keep-check-edit-wrap');
+  requestAnimationFrame(()=>{
+    if(inp && typeof noteAutosizeTextarea==='function') noteAutosizeTextarea(inp);
+    if(wrap && typeof noteAutosizeChecklist==='function') noteAutosizeChecklist(wrap);
+  });
 }
 (function(){
   let sw=null;
@@ -7623,12 +7631,18 @@ function noteChecklistSetIndent(row, novoNivel){
       if(Math.abs(dx) < 14 || Math.abs(dx) < 1.6*Math.abs(dy)) return; // ainda indeciso
       sw.arrastando = true;
       sw.row.classList.add('kc-dragging');
+      // impede a seleção de texto nativa (e a lupa) durante o arrasto
+      const sel = window.getSelection ? window.getSelection() : null;
+      if(sel && sel.removeAllRanges) try{ sel.removeAllRanges(); }catch(err){}
+      if(document.activeElement && document.activeElement.blur && sw.row.contains(document.activeElement)) document.activeElement.blur();
     }
+    // arrasto confirmado: cancela o comportamento nativo (seleção/lupa)
+    if(e.cancelable) e.preventDefault();
     // linha acompanha o dedo (limitada), em tempo real
     const lim = Math.max(-70, Math.min(70, dx));
     sw.row.style.transform = 'translateX('+lim+'px)';
     sw.dx = dx;
-  }, {passive:true});
+  }, {passive:false});
   document.addEventListener('touchend', function(){
     if(sw && sw.arrastando){
       const dx = sw.dx||0;
