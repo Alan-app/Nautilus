@@ -1421,6 +1421,9 @@ body:not(.app-ready) .app{visibility:hidden;}
 .keep-check-delete{grid-column:3;width:24px;height:24px;margin-top:-1px;border:0 !important;background:transparent !important;box-shadow:none !important;color:#111;font-weight:800;font-size:14px;line-height:1;opacity:.48;display:inline-flex;align-items:center;justify-content:center;padding:0;border-radius:0;-webkit-tap-highlight-color:transparent;}
 .keep-check-delete:hover,.keep-check-delete:focus{opacity:.85;background:transparent !important;outline:none;}
 .keep-check-line:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
+.keep-check-line.kc-ind-1{margin-left:18px;border-left:2px solid rgba(128,128,128,.35);padding-left:8px}
+.keep-check-line.kc-ind-2{margin-left:36px;border-left:2px solid rgba(128,128,128,.35);padding-left:8px}
+.keep-check-line.kc-ind-3{margin-left:54px;border-left:2px solid rgba(128,128,128,.35);padding-left:8px}
 
 .keep-icon.keep-format-toggle.active{background:var(--card) !important;border-color:var(--line) !important;color:#fff !important;box-shadow:0 2px 8px rgba(11,76,149,.28) !important;}
 .keep-icon.keep-format-toggle{font-weight:900;}
@@ -7454,12 +7457,13 @@ function renderNoteBodyHtml(text,noteId){
   const lines=String(text||'').split(/\n/);
   return '<div class="keep-rendered-body">'+lines.map((line,idx)=>{
     const raw=String(line||'');
-    let m=raw.match(/^\s*-\s*\[([ xX])\]\s*(.*)$/);
+    let m=raw.match(/^([ \t]*)-\s*\[([ xX])\]\s*(.*)$/);
     if(m){
-      const done=String(m[1]).toLowerCase()==='x';
+      const done=String(m[2]).toLowerCase()==='x';
+      const lvl=Math.min(3,Math.floor(String(m[1]||'').replace(/\t/g,'  ').length/2));
       const checked=done?'☑':'☐';
-      const textHtml=escapeHtml(m[2]||'');
-      return `<div class="keep-check-line ${done?'done':''}"><button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${checked}</button><span class="keep-check-text">${textHtml||'&nbsp;'}</span><button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button></div>`;
+      const textHtml=escapeHtml(m[3]||'');
+      return `<div class="keep-check-line ${done?'done':''}${lvl?' kc-ind-'+lvl:''}"><button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${checked}</button><span class="keep-check-text">${textHtml||'&nbsp;'}</span><button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button></div>`;
     }
     m=raw.match(/^\s*[-*•]\s+(.*)$/);
     if(m){return `<div class="keep-bullet-line"><span>•</span><span>${escapeHtml(m[1]||'')||'&nbsp;'}</span></div>`;}
@@ -7471,7 +7475,16 @@ function toggleNoteChecklistLine(id,lineIndex,ev){
   ensureNotas(); const n=AppState.data.notas.find(x=>x.id===id); if(!n)return;
   const lines=String(n.texto||'').split(/\n/); const raw=String(lines[lineIndex]||'');
   const m=raw.match(/^(\s*-\s*\[)([ xX])(\]\s*.*)$/); if(!m)return;
-  lines[lineIndex]=m[1]+(String(m[2]).toLowerCase()==='x'?' ':'x')+m[3];
+  const novoMarcado=String(m[2]).toLowerCase()!=='x';
+  lines[lineIndex]=m[1]+(novoMarcado?'x':' ')+m[3];
+  // Cascata: aplica o mesmo estado aos subitens (linhas seguintes com recuo maior)
+  const nivelPai=checklistLineLevel(raw);
+  for(let i=lineIndex+1;i<lines.length;i++){
+    const pf=checklistLineParts(lines[i]);
+    const ehChecklist=/^([ \t]*)-?\s*\[[ xX]\]/.test(String(lines[i]||''));
+    if(!ehChecklist||pf.level<=nivelPai)break;
+    lines[i]=buildChecklistLine(novoMarcado,pf.text,pf.level);
+  }
   n.texto=lines.join('\n'); n.updatedAt=nowIso(); AppState.save();
   renderNotes();
   requestAnimationFrame(()=>noteStabilizeCurrentEdit());
@@ -7535,20 +7548,25 @@ function isChecklistNoteText(text){
 }
 function checklistLineParts(line){
   const raw=String(line||'');
-  const m=raw.match(/^\s*-?\s*\[([ xX])\]\s*(.*)$/);
-  if(m)return {checked:String(m[1]||'').toLowerCase()==='x', text:m[2]||''};
-  return {checked:false,text:raw};
+  const m=raw.match(/^([ \t]*)-?\s*\[([ xX])\]\s*(.*)$/);
+  if(m){
+    const level=Math.min(3,Math.floor(String(m[1]||'').replace(/\t/g,'  ').length/2));
+    return {checked:String(m[2]||'').toLowerCase()==='x', text:m[3]||'', level:level};
+  }
+  return {checked:false,text:raw,level:0};
 }
-function buildChecklistLine(checked,text){
-  return '- ['+(checked?'x':' ')+'] '+String(text||'');
+function buildChecklistLine(checked,text,level){
+  const lv=Math.max(0,Math.min(3,Number(level)||0));
+  return '  '.repeat(lv)+'- ['+(checked?'x':' ')+'] '+String(text||'');
 }
+function checklistLineLevel(line){ return checklistLineParts(line).level||0; }
 function renderChecklistEditRows(noteId,text){
   const safeId=String(noteId).replace(/'/g,"\\'");
   const domId=escapeHtml(String(noteId));
   const lines=String(text||'').split(/\n/);
   return `<div class="keep-check-edit-wrap" id="checkEdit_${domId}">`+lines.map((line,idx)=>{
     const p=checklistLineParts(line);
-    return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}${String(p.text||'').trim()===''?' kc-empty':''}" data-line-index="${idx}">
+    return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}${String(p.text||'').trim()===''?' kc-empty':''}${p.level?' kc-ind-'+p.level:''}" data-line-index="${idx}" data-indent="${p.level||0}">
       <button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${p.checked?'☑':'☐'}</button>
       <textarea class="keep-check-edit-input" rows="1" placeholder="Item" oninput="handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteSyncRowEmpty(this);noteAutosizeTextarea(this);noteAutosizeChecklist(this.closest('.keep-check-edit-wrap'))" onfocus="noteAutosizeTextarea(this);scheduleNoteKeyboardAdjust(this,80)" onkeydown="handleChecklistEditInputKey(event,'${safeId}',${idx})">${escapeHtml(p.text)}</textarea>
       <button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button>
@@ -7561,12 +7579,47 @@ function updateChecklistEditLine(noteId,lineIndex,value){
   if(!n)return;
   const lines=String(n.texto||'').split(/\n/);
   const p=checklistLineParts(lines[lineIndex]||'');
-  lines[lineIndex]=buildChecklistLine(p.checked,String(value||'').replace(/\n$/,''));
+  lines[lineIndex]=buildChecklistLine(p.checked,String(value||'').replace(/\n$/,''),p.level);
   n.texto=lines.join('\n');
   n.updatedAt=nowIso();
   AppState.save();
 }
 
+function noteChecklistSetIndent(row, novoNivel){
+  const noteId = (row.closest('.keep-check-edit-wrap')||{id:''}).id.replace('checkEdit_','');
+  if(!noteId) return;
+  const nivel = Math.max(0, Math.min(3, novoNivel));
+  // Regra de sanidade: só pode recuar 1 nível além da linha de cima
+  const prev = row.previousElementSibling;
+  const teto = prev && prev.classList && prev.classList.contains('keep-check-edit-row') ? (Number(prev.dataset.indent)||0)+1 : 0;
+  const aplicado = Math.min(nivel, teto);
+  if(aplicado === (Number(row.dataset.indent)||0)) return;
+  row.dataset.indent = String(aplicado);
+  row.classList.remove('kc-ind-1','kc-ind-2','kc-ind-3');
+  if(aplicado>0) row.classList.add('kc-ind-'+aplicado);
+  noteCommitChecklistDomToText(noteId);
+}
+(function(){
+  let sw=null;
+  document.addEventListener('touchstart', function(e){
+    const row = e.target && e.target.closest ? e.target.closest('.keep-check-edit-row') : null;
+    if(!row){ sw=null; return; }
+    const t = e.touches[0];
+    sw = {row:row, x:t.clientX, y:t.clientY, done:false};
+  }, {passive:true});
+  document.addEventListener('touchmove', function(e){
+    if(!sw || sw.done) return;
+    const t = e.touches[0];
+    const dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+    if(Math.abs(dy) > 24){ sw.done = true; return; } // gesto vertical: é rolagem
+    if(Math.abs(dx) >= 46 && Math.abs(dx) > 2.2*Math.abs(dy)){
+      sw.done = true;
+      const atual = Number(sw.row.dataset.indent)||0;
+      noteChecklistSetIndent(sw.row, dx>0 ? atual+1 : atual-1);
+    }
+  }, {passive:true});
+  document.addEventListener('touchend', function(){ sw=null; }, {passive:true});
+})();
 function noteSyncRowEmpty(el){
   const row = el && el.closest ? el.closest('.keep-check-edit-row') : null;
   if(row) row.classList.toggle('kc-empty', String(el.value||'').trim()==='');
@@ -7574,7 +7627,7 @@ function noteSyncRowEmpty(el){
 function noteChecklistRowHtml(noteId, idx, line){
   const safeId=String(noteId).replace(/'/g,"\\'");
   const p=checklistLineParts(line);
-  return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}${String(p.text||'').trim()===''?' kc-empty':''}" data-line-index="${idx}">
+  return `<div class="keep-check-line keep-check-edit-row ${p.checked?'done':''}${String(p.text||'').trim()===''?' kc-empty':''}${p.level?' kc-ind-'+p.level:''}" data-line-index="${idx}" data-indent="${p.level||0}">
     <button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${p.checked?'☑':'☐'}</button>
     <textarea class="keep-check-edit-input" rows="1" placeholder="Item" oninput="handleNoteEqualsCalc(this);updateChecklistEditLine('${safeId}',${idx},this.value);noteSyncRowEmpty(this);noteAutosizeTextarea(this);noteAutosizeChecklist(this.closest('.keep-check-edit-wrap'))" onfocus="noteAutosizeTextarea(this);scheduleNoteKeyboardAdjust(this,80)" onkeydown="handleChecklistEditInputKey(event,'${safeId}',${idx})">${escapeHtml(p.text)}</textarea>
     <button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button>
@@ -7622,13 +7675,13 @@ function handleChecklistEditInputKey(ev,noteId,lineIndex){
       const selE=typeof el.selectionEnd==='number'?el.selectionEnd:null;
       if(selS===0&&selE===0){
         // Cursor no início da linha: a linha atual desce e a nova vazia nasce no lugar dela
-        currentRow.insertAdjacentHTML('beforebegin',noteChecklistRowHtml(noteId,idx,buildChecklistLine(false,'')));
+        currentRow.insertAdjacentHTML('beforebegin',noteChecklistRowHtml(noteId,idx,buildChecklistLine(false,'',Number(currentRow.dataset.indent)||0)));
         noteRefreshChecklistDom(noteId);noteCommitChecklistDomToText(noteId);noteAutosizeChecklist(wrap);
         const moved=wrap.querySelector('.keep-check-edit-row[data-line-index="'+(idx+1)+'"] .keep-check-edit-input');
         if(moved){moved.focus({preventScroll:true});try{moved.setSelectionRange(0,0);}catch(e){}}
         return;
       }
-      currentRow.insertAdjacentHTML('afterend',noteChecklistRowHtml(noteId,idx+1,buildChecklistLine(false,'')));
+      currentRow.insertAdjacentHTML('afterend',noteChecklistRowHtml(noteId,idx+1,buildChecklistLine(false,'',Number(currentRow.dataset.indent)||0)));
       noteRefreshChecklistDom(noteId);noteCommitChecklistDomToText(noteId);noteAutosizeChecklist(wrap);
       const next=wrap.querySelector('.keep-check-edit-row[data-line-index="'+(idx+1)+'"] .keep-check-edit-input');
       if(next){next.focus({preventScroll:true});try{next.setSelectionRange(0,0);}catch(e){}}
@@ -8047,7 +8100,7 @@ function noteCommitChecklistDomToText(noteId){
   const nextLines = Array.from(wrap.querySelectorAll('.keep-check-edit-row')).map(row=>{
     const inp = row.querySelector('.keep-check-edit-input');
     const checked = row.classList.contains('done') || String((row.querySelector('.keep-check-toggle')||{}).textContent||'').includes('☑');
-    return buildChecklistLine(checked, inp ? inp.value : '');
+    return buildChecklistLine(checked, inp ? inp.value : '', Number(row.dataset.indent)||0);
   });
   n.texto = (nextLines.length ? nextLines : [buildChecklistLine(false,'')]).join('\n');
   n.updatedAt = nowIso();
@@ -8095,7 +8148,7 @@ function noteLiveTextFromEditor(noteId){
     return Array.from(wrap.querySelectorAll('.keep-check-edit-row')).map(row=>{
       const inp=row.querySelector('.keep-check-edit-input');
       const checked=row.classList.contains('done')||String((row.querySelector('.keep-check-toggle')||{}).textContent||'').includes('☑');
-      return buildChecklistLine(checked,inp?inp.value:'');
+      return buildChecklistLine(checked,inp?inp.value:'',Number(row.dataset.indent)||0);
     }).join('\n');
   }
   return null;
