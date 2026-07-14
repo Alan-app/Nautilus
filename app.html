@@ -3261,6 +3261,21 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 
 <script id="v482-boot-failsafe">
 (function(){
+  // Capturador de erro para diagnóstico (iPad antigo): guarda o primeiro erro de carregamento.
+  window.__nautilusErro = window.__nautilusErro || '';
+  window.addEventListener('error', function(ev){
+    if(window.__nautilusErro) return;
+    var msg = ev && ev.message ? ev.message : 'erro';
+    var arq = ev && ev.filename ? ev.filename : '';
+    var lin = ev && typeof ev.lineno!=='undefined' ? ev.lineno : '';
+    var col = ev && typeof ev.colno!=='undefined' ? ev.colno : '';
+    window.__nautilusErro = msg + ' @ ' + arq + ':' + lin + ':' + col;
+  }, true);
+  window.addEventListener('unhandledrejection', function(ev){
+    if(window.__nautilusErro) return;
+    var r = ev && ev.reason ? ev.reason : 'promessa rejeitada';
+    window.__nautilusErro = 'PROMISE: ' + (r && r.message ? r.message : String(r));
+  });
   try{
     document.documentElement.style.background='#031522';
     document.addEventListener('DOMContentLoaded', function(){
@@ -3646,7 +3661,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
       <form id="noteForm" class="keep-composer">
         <input id="noteId" type="hidden" />
         <input id="noteTitle" type="text" placeholder="Título" />
-        <div class="keep-format-toolbar"><button class="keep-format-btn" type="button" onclick="insertNoteMarker('noteText','bullet')" title="Inserir marcador" aria-label="Inserir marcador">•</button><button class="keep-format-btn" type="button" onclick="insertNoteMarker('noteText','check')" title="Inserir caixa de seleção" aria-label="Inserir caixa de seleção">☑</button></div><textarea id="noteText" placeholder="Criar uma nota..." required onkeydown="handleNoteListEnter(event,this)"></textarea>
+        <div class="keep-format-toolbar"><button class="keep-format-btn" type="button" onclick="insertNoteMarker('noteText','bullet')" title="Inserir marcador" aria-label="Inserir marcador">•</button><button class="keep-format-btn" type="button" onclick="insertNoteMarker('noteText','check')" title="Inserir caixa de seleção" aria-label="Inserir caixa de seleção">☑</button></div><textarea id="noteText" placeholder="Criar uma nota..." required onkeydown="handleNoteListEnter(event,this)" oninput="noteAutosizeTextarea(this)" onfocus="noteAutosizeTextarea(this)"></textarea>
         <div class="keep-colors" id="noteColorPicker">
           <button class="color-dot color-default active" type="button" data-color="default" onclick="setNoteColor('default')"></button><button class="color-dot color-yellow" type="button" data-color="yellow" onclick="setNoteColor('yellow')"></button><button class="color-dot color-green" type="button" data-color="green" onclick="setNoteColor('green')"></button><button class="color-dot color-blue" type="button" data-color="blue" onclick="setNoteColor('blue')"></button><button class="color-dot color-red" type="button" data-color="red" onclick="setNoteColor('red')"></button><button class="color-dot color-purple" type="button" data-color="purple" onclick="setNoteColor('purple')"></button>
         </div>
@@ -4075,7 +4090,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.65';
+const APP_VERSION = 'V.Beta.66';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -7413,7 +7428,7 @@ function openNoteModal(){createBlankNoteDirect();}
 function closeNoteModal(){const m=$('noteModal');if(m)m.classList.remove('show');resetNoteForm();}
 function setNoteColor(color){currentNoteColor=KEEP_COLORS.includes(color)?color:'default';document.querySelectorAll('#noteColorPicker .color-dot').forEach(btn=>btn.classList.toggle('active',btn.dataset.color===currentNoteColor));}
 function setNotesView(view){currentNotesView=['active','archive','trash'].includes(view)?view:'active';UI.editingNoteId=null;UI.noteEditMinHeight=0;if($('notesTabActive'))$('notesTabActive').classList.toggle('active',currentNotesView==='active');if($('notesTabArchive'))$('notesTabArchive').classList.toggle('active',currentNotesView==='archive');if($('notesTabTrash'))$('notesTabTrash').classList.toggle('active',currentNotesView==='trash');if($('emptyNotesTrashBtn'))$('emptyNotesTrashBtn').classList.toggle('hidden',currentNotesView!=='trash');renderNotes();}
-function resetNoteForm(){ensureNotas();['noteId','noteTitle','noteText'].forEach(id=>{if($(id))$(id).value='';});if($('saveNoteBtn'))$('saveNoteBtn').textContent='Adicionar';if($('noteStatus'))$('noteStatus').textContent='';setNoteColor('default');}
+function resetNoteForm(){ensureNotas();['noteId','noteTitle','noteText'].forEach(id=>{if($(id))$(id).value='';});if($('noteText'))noteAutosizeTextarea($('noteText'));if($('saveNoteBtn'))$('saveNoteBtn').textContent='Adicionar';if($('noteStatus'))$('noteStatus').textContent='';setNoteColor('default');}
 
 function getNoteLineInfo(text,pos){
   const before=String(text||'').slice(0,Math.max(0,pos||0));
@@ -8148,7 +8163,10 @@ function noteCommitChecklistDomToText(noteId){
 
 
 function noteApplyExactEditHeight(article){ return; }
-function noteGrowOnlyIfContentNeeds(article){ return; }
+function noteGrowOnlyIfContentNeeds(article){
+  const ta = article && article.querySelector ? article.querySelector('textarea.keep-inline-text') : null;
+  if(ta) noteAutosizeTextarea(ta);
+}
 function noteStabilizeCurrentEdit(){
   const article = document.querySelector('#screen-notas .keep-note.editing');
   if(!article) return;
@@ -8159,6 +8177,7 @@ function noteStabilizeCurrentEdit(){
 /* v454 - Notas editor natural sem espaço vazio */
 function noteAutosizeTextarea(el){
   if(!el)return;
+  el.style.setProperty('min-height','0','important');
   el.style.setProperty('height','auto','important');
   const h=Math.max(24,Math.ceil(el.scrollHeight||24));
   el.style.setProperty('height',h+'px','important');
