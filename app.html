@@ -1422,6 +1422,7 @@ body:not(.app-ready) .app{visibility:hidden;}
 .keep-check-delete:hover,.keep-check-delete:focus{opacity:.85;background:transparent !important;outline:none;}
 .keep-check-line:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-line.kc-ind-1, #screen-notas .keep-check-line.kc-ind-1, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-1{margin-left:22px!important;width:calc(100% - 22px)!important;max-width:calc(100% - 22px)!important}
+#screen-notas mark.note-hl{background:#ffe14d;color:#111;border-radius:3px;padding:0 1px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .keep-check-line.kc-ind-2, #screen-notas .keep-check-line.kc-ind-2, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-2{margin-left:44px!important;width:calc(100% - 44px)!important;max-width:calc(100% - 44px)!important}
 .keep-check-line.kc-ind-3, #screen-notas .keep-check-line.kc-ind-3, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-3{margin-left:66px!important;width:calc(100% - 66px)!important;max-width:calc(100% - 66px)!important}
 .keep-check-edit-row.kc-dragging{transition:none!important}
@@ -4090,7 +4091,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.66';
+const APP_VERSION = 'V.Beta.67';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -4260,6 +4261,17 @@ function syncTopbarLayoutStable(){
 }
 
 function escapeHtml(str){ return String(str==null?'':str).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;').split("'").join('&#039;'); }
+function noteHighlightTermo(){ return String(($('noteSearch')&&$('noteSearch').value)||'').trim(); }
+function noteHighlight(escapedText){
+  const termo = noteHighlightTermo();
+  if(!termo) return escapedText;
+  // termo escapado da mesma forma que o texto, para casar com o conteúdo já escapado
+  const alvo = escapeHtml(termo).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  if(!alvo) return escapedText;
+  try{
+    return String(escapedText).replace(new RegExp('('+alvo+')','gi'), '<mark class="note-hl">$1</mark>');
+  }catch(e){ return escapedText; }
+}
 function nl2br(str){ return escapeHtml(str).split('\n').join('<br>'); }
 function formatDateBR(date){ if(!date) return ''; const [y,m,d]=date.split('-'); return y&&m&&d?`${d}/${m}/${y}`:date; }
 
@@ -7480,12 +7492,12 @@ function renderNoteBodyHtml(text,noteId){
       const done=String(m[2]).toLowerCase()==='x';
       const lvl=Math.min(3,Math.floor(String(m[1]||'').replace(/\t/g,'  ').length/2));
       const checked=done?'☑':'☐';
-      const textHtml=escapeHtml(m[3]||'');
+      const textHtml=noteHighlight(escapeHtml(m[3]||''));
       return `<div class="keep-check-line ${done?'done':''}${lvl?' kc-ind-'+lvl:''}"><button class="keep-check-toggle" type="button" onclick="toggleNoteChecklistLine('${safeId}',${idx},event)" title="Marcar/desmarcar">${checked}</button><span class="keep-check-text">${textHtml||'&nbsp;'}</span><button class="keep-check-delete" type="button" onclick="deleteNoteLine('${safeId}',${idx},event)" title="Apagar linha marcada">✕</button></div>`;
     }
     m=raw.match(/^\s*[-*•]\s+(.*)$/);
-    if(m){return `<div class="keep-bullet-line"><span>•</span><span>${escapeHtml(m[1]||'')||'&nbsp;'}</span></div>`;}
-    return `<div class="keep-line">${escapeHtml(raw)||'&nbsp;'}</div>`;
+    if(m){return `<div class="keep-bullet-line"><span>•</span><span>${noteHighlight(escapeHtml(m[1]||''))||'&nbsp;'}</span></div>`;}
+    return `<div class="keep-line">${noteHighlight(escapeHtml(raw))||'&nbsp;'}</div>`;
   }).join('')+'</div>';
 }
 function toggleNoteChecklistLine(id,lineIndex,ev){
@@ -7883,7 +7895,7 @@ function renderNotes(){
     const collapseLabel=collapsed?'Expandir nota':'Recolher nota';
     const collapseIcon=collapsed?'▾':'▴';
     const shownTitle=title||'Sem título';
-    return section+`<article class="keep-note ${collapsed?'collapsed':''}" data-note-id="${safeId}" data-pinned="${n.pinned?'1':'0'}" data-color="${escapeHtml(color)}" onclick="editNote('${safeId}',event)"><div class="keep-note-header"><div class="keep-note-title">${escapeHtml(shownTitle)}</div><button class="keep-collapse-btn" type="button" onclick="toggleNoteCollapsed('${safeId}',event)" title="${collapseLabel}" aria-label="${collapseLabel}" aria-expanded="${collapsed?'false':'true'}">${collapseIcon}</button></div><div class="keep-note-text">${body?renderNoteBodyHtml(body,n.id):'Nota vazia'}</div><div class="keep-actions" onclick="event.stopPropagation()"><div class="keep-action-group">${actions}</div></div></article>`;
+    return section+`<article class="keep-note ${collapsed?'collapsed':''}" data-note-id="${safeId}" data-pinned="${n.pinned?'1':'0'}" data-color="${escapeHtml(color)}" onclick="editNote('${safeId}',event)"><div class="keep-note-header"><div class="keep-note-title">${noteHighlight(escapeHtml(shownTitle))}</div><button class="keep-collapse-btn" type="button" onclick="toggleNoteCollapsed('${safeId}',event)" title="${collapseLabel}" aria-label="${collapseLabel}" aria-expanded="${collapsed?'false':'true'}">${collapseIcon}</button></div><div class="keep-note-text">${body?renderNoteBodyHtml(body,n.id):'Nota vazia'}</div><div class="keep-actions" onclick="event.stopPropagation()"><div class="keep-action-group">${actions}</div></div></article>`;
   }).join('');
   /* v447: sem pós-reposicionamento visual após renderNotes */
 }
