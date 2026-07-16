@@ -1456,7 +1456,9 @@ body.notes-screen{scroll-padding-bottom:38vh;}
 /* v89/v90: busca de notas com lupa, sem visual novo de drag */
 #screen-notas .note-search-field label{display:none !important;}
 #screen-notas .note-search-box{position:relative;display:flex;align-items:center;width:100%;}
-#screen-notas .note-search-box input{width:100%;padding-left:42px !important;}
+#screen-notas .note-search-box input{width:100%;padding-left:42px !important;padding-right:40px !important;}
+#screen-notas .note-search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:rgba(120,120,120,.28);color:inherit;width:26px;height:26px;border-radius:50%;font-size:.86rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;opacity:.85;}
+#screen-notas .note-search-clear:active{background:rgba(120,120,120,.45);}
 #screen-notas .note-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.72;font-size:1.02rem;line-height:1;pointer-events:none;z-index:1;}
 #screen-notas .keep-note-header{padding-right:42px;}}
 
@@ -3647,7 +3649,7 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
       <div class="card">
         <div class="keep-shell">
           <div class="keep-topbar">
-            <div class="field note-search-field"><div class="note-search-box"><span class="note-search-icon" aria-hidden="true">🔎</span><input id="noteSearch" type="text" placeholder="Buscar por título ou texto" oninput="renderNotes()" /></div></div>
+            <div class="field note-search-field"><div class="note-search-box"><span class="note-search-icon" aria-hidden="true">🔎</span><input id="noteSearch" type="text" placeholder="Buscar por título ou texto" oninput="renderNotes();noteToggleSearchClear()" /><button type="button" id="noteSearchClear" class="note-search-clear" onclick="noteClearSearch()" title="Limpar busca" aria-label="Limpar busca" style="display:none">✕</button></div></div>
             <div class="keep-tabs"><button id="notesTabActive" class="keep-tab active" type="button" onclick="setNotesView('active')">Notas</button><button id="notesTabArchive" class="keep-tab" type="button" onclick="setNotesView('archive')">Arquivo</button><button id="notesTabTrash" class="keep-tab" type="button" onclick="setNotesView('trash')">Lixeira</button><button id="emptyNotesTrashBtn" class="keep-tab keep-trash-empty hidden" type="button" onclick="emptyNotesTrash()">Esvaziar lixeira</button></div>
           </div>
         </div>
@@ -4091,7 +4093,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.67';
+const APP_VERSION = 'V.Beta.68';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -4261,6 +4263,51 @@ function syncTopbarLayoutStable(){
 }
 
 function escapeHtml(str){ return String(str==null?'':str).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;').split("'").join('&#039;'); }
+function shareNote(id, ev){
+  if(ev){ ev.preventDefault(); ev.stopPropagation(); }
+  ensureNotas();
+  const n = AppState.data.notas.find(x=>String(x.id)===String(id));
+  if(!n) return;
+  const titulo = String(n.titulo||'').trim();
+  // texto com as caixas legíveis (☐/☑) e marcadores preservados
+  const corpo = String(n.texto||'')
+    .replace(/^([ \t]*)(?:-\s*)?\[[xX]\]\s?/gm, '$1☑ ')
+    .replace(/^([ \t]*)(?:-\s*)?\[ \]\s?/gm, '$1☐ ');
+  const conteudo = (titulo ? titulo + '\n\n' : '') + corpo;
+  if(!conteudo.trim()){ showAppMessage('Bloco de Notas','Esta nota está vazia.'); return; }
+  if(navigator.share){
+    navigator.share({ title: titulo || 'Nota', text: conteudo }).catch(()=>{});
+    return;
+  }
+  // fallback: copiar para a área de transferência
+  const feito = ()=>showAppMessage('Bloco de Notas','Nota copiada para a área de transferência.');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(conteudo).then(feito).catch(()=>copiarViaTextarea(conteudo, feito));
+  } else {
+    copiarViaTextarea(conteudo, feito);
+  }
+}
+function copiarViaTextarea(texto, aoConcluir){
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=texto; ta.setAttribute('readonly','');
+    ta.style.position='absolute'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    if(aoConcluir) aoConcluir();
+  }catch(e){ showAppMessage('Bloco de Notas','Não foi possível compartilhar nesta versão.'); }
+}
+function noteToggleSearchClear(){
+  const s=$('noteSearch'), btn=$('noteSearchClear');
+  if(btn) btn.style.display = (s && String(s.value||'').length>0) ? '' : 'none';
+}
+function noteClearSearch(){
+  const s=$('noteSearch');
+  if(s){ s.value=''; s.focus(); }
+  noteToggleSearchClear();
+  renderNotes();
+}
 function noteHighlightTermo(){ return String(($('noteSearch')&&$('noteSearch').value)||'').trim(); }
 function noteHighlight(escapedText){
   const termo = noteHighlightTermo();
@@ -7570,7 +7617,7 @@ function noteActionButtons(n, editing=false){
   if(currentNotesView==='trash')return `<button class="keep-icon" type="button" onclick="restoreNote('${safeId}')" title="Restaurar">↩</button><button class="keep-icon" type="button" onclick="deleteNoteForever('${safeId}')" title="Excluir definitivo">🗑</button>`;
   const fmt=getNoteFormatState(n);
   const saveBtn = editing ? `<button class="keep-icon keep-save-inline" type="button" onclick="saveInlineNote('${safeId}',event)" title="Salvar">Salvar</button>` : '';
-  return `<button class="keep-icon ${n.pinned?'active':''}" type="button" onclick="togglePinNote('${safeId}')" title="Fixar">📌</button><button class="keep-icon keep-format-toggle ${fmt.bullet?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','bullet',event)" title="Marcadores" aria-label="Marcadores">•</button><button class="keep-icon keep-format-toggle ${fmt.check?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','check',event)" title="Checklist" aria-label="Checklist">☑</button><button class="keep-icon" type="button" onclick="cycleNoteColor('${safeId}')" title="Mudar cor">🎨</button><button class="keep-icon" type="button" onclick="archiveNote('${safeId}')" title="Arquivar">${currentNotesView==='archive'?'↩':'📥'}</button><button class="keep-icon" type="button" onclick="moveNoteToTrash('${safeId}')" title="Lixeira">🗑</button>${saveBtn}`;
+  return `<button class="keep-icon ${n.pinned?'active':''}" type="button" onclick="togglePinNote('${safeId}')" title="Fixar">📌</button><button class="keep-icon keep-format-toggle ${fmt.bullet?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','bullet',event)" title="Marcadores" aria-label="Marcadores">•</button><button class="keep-icon keep-format-toggle ${fmt.check?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','check',event)" title="Checklist" aria-label="Checklist">☑</button><button class="keep-icon" type="button" onclick="cycleNoteColor('${safeId}')" title="Mudar cor">🎨</button><button class="keep-icon" type="button" onclick="shareNote('${safeId}',event)" title="Compartilhar" aria-label="Compartilhar">📤</button><button class="keep-icon" type="button" onclick="archiveNote('${safeId}')" title="Arquivar">${currentNotesView==='archive'?'↩':'📥'}</button><button class="keep-icon" type="button" onclick="moveNoteToTrash('${safeId}')" title="Lixeira">🗑</button>${saveBtn}`;
 }
 
 function isChecklistNoteText(text){
