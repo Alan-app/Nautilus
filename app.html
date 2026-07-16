@@ -1423,6 +1423,7 @@ body:not(.app-ready) .app{visibility:hidden;}
 .keep-check-line:not(.done):not(.kc-empty) .keep-check-delete{visibility:hidden;pointer-events:none;}
 .keep-check-line.kc-ind-1, #screen-notas .keep-check-line.kc-ind-1, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-1{margin-left:22px!important;width:calc(100% - 22px)!important;max-width:calc(100% - 22px)!important}
 #screen-notas mark.note-hl{background:#ffe14d;color:#111;border-radius:3px;padding:0 1px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#screen-notas .keep-icon.keep-share-icon svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .keep-check-line.kc-ind-2, #screen-notas .keep-check-line.kc-ind-2, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-2{margin-left:44px!important;width:calc(100% - 44px)!important;max-width:calc(100% - 44px)!important}
 .keep-check-line.kc-ind-3, #screen-notas .keep-check-line.kc-ind-3, #screen-notas .keep-note.editing .keep-check-edit-row.kc-ind-3{margin-left:66px!important;width:calc(100% - 66px)!important;max-width:calc(100% - 66px)!important}
 .keep-check-edit-row.kc-dragging{transition:none!important}
@@ -4093,7 +4094,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.68';
+const APP_VERSION = 'V.Beta.69';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -7617,7 +7618,7 @@ function noteActionButtons(n, editing=false){
   if(currentNotesView==='trash')return `<button class="keep-icon" type="button" onclick="restoreNote('${safeId}')" title="Restaurar">↩</button><button class="keep-icon" type="button" onclick="deleteNoteForever('${safeId}')" title="Excluir definitivo">🗑</button>`;
   const fmt=getNoteFormatState(n);
   const saveBtn = editing ? `<button class="keep-icon keep-save-inline" type="button" onclick="saveInlineNote('${safeId}',event)" title="Salvar">Salvar</button>` : '';
-  return `<button class="keep-icon ${n.pinned?'active':''}" type="button" onclick="togglePinNote('${safeId}')" title="Fixar">📌</button><button class="keep-icon keep-format-toggle ${fmt.bullet?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','bullet',event)" title="Marcadores" aria-label="Marcadores">•</button><button class="keep-icon keep-format-toggle ${fmt.check?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','check',event)" title="Checklist" aria-label="Checklist">☑</button><button class="keep-icon" type="button" onclick="cycleNoteColor('${safeId}')" title="Mudar cor">🎨</button><button class="keep-icon" type="button" onclick="shareNote('${safeId}',event)" title="Compartilhar" aria-label="Compartilhar">📤</button><button class="keep-icon" type="button" onclick="archiveNote('${safeId}')" title="Arquivar">${currentNotesView==='archive'?'↩':'📥'}</button><button class="keep-icon" type="button" onclick="moveNoteToTrash('${safeId}')" title="Lixeira">🗑</button>${saveBtn}`;
+  return `<button class="keep-icon ${n.pinned?'active':''}" type="button" onclick="togglePinNote('${safeId}')" title="Fixar">📌</button><button class="keep-icon keep-format-toggle ${fmt.bullet?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','bullet',event)" title="Marcadores" aria-label="Marcadores">•</button><button class="keep-icon keep-format-toggle ${fmt.check?'active':''}" type="button" onclick="applyNoteFormat('${safeId}','check',event)" title="Checklist" aria-label="Checklist">☑</button><button class="keep-icon" type="button" onclick="cycleNoteColor('${safeId}')" title="Mudar cor">🎨</button><button class="keep-icon" type="button" onclick="archiveNote('${safeId}')" title="Arquivar">${currentNotesView==='archive'?'↩':'📥'}</button><button class="keep-icon" type="button" onclick="moveNoteToTrash('${safeId}')" title="Lixeira">🗑</button><button class="keep-icon keep-share-icon" type="button" onclick="shareNote('${safeId}',event)" title="Compartilhar" aria-label="Compartilhar"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="2.4"></circle><circle cx="6" cy="12" r="2.4"></circle><circle cx="18" cy="19" r="2.4"></circle><path d="M8.4 10.8 15.6 6.2"></path><path d="M8.4 13.2 15.6 17.8"></path></svg></button>${saveBtn}`;
 }
 
 function isChecklistNoteText(text){
