@@ -3055,12 +3055,15 @@ html.rigs-sticky .app{overflow-x:clip;overflow-y:visible}
 /* =================== LEGENDA DO ATLAS (CSS) =================== */
 .atlas-entry-legenda{border-style:dashed !important}
 .atlas-entry-legenda .atlas-entry-title{font-weight:700}
-#atlasEntryList .atlas-legenda-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-#atlasEntryList .atlas-legenda-back{padding:6px 12px}
-#atlasEntryList .atlas-legenda-count{font-size:.82rem;opacity:.75}
-#atlasEntryList .atlas-legenda-card{border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.04);padding:12px 14px;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
-#atlasEntryList .atlas-legenda-field{min-width:0;overflow-wrap:anywhere;word-break:break-word;line-height:1.35}
-#atlasEntryList .atlas-legenda-field b{display:block;font-size:.72rem;opacity:.65;text-transform:uppercase;letter-spacing:.02em;margin-bottom:2px;font-weight:600}
+#atlasEntryList .atlas-legenda-search-box{position:relative;display:flex;align-items:center;width:100%;margin-bottom:12px}
+#atlasEntryList .atlas-legenda-search-box input{width:100%;padding-left:42px !important;padding-right:40px !important}
+#atlasEntryList .atlas-legenda-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.72;font-size:1.02rem;line-height:1;pointer-events:none;z-index:1}
+#atlasEntryList .atlas-legenda-search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:rgba(120,120,120,.28);color:inherit;width:26px;height:26px;border-radius:50%;font-size:.86rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;opacity:.85}
+#atlasEntryList .atlas-legenda-search-clear:active{background:rgba(120,120,120,.45)}
+#atlasEntryList .atlas-legenda-list{display:flex;flex-direction:column}
+#atlasEntryList .atlas-legenda-item{padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.35;overflow-wrap:anywhere;word-break:break-word}
+#atlasEntryList .atlas-legenda-cod{font-weight:700}
+#atlasEntryList .atlas-legenda-den{opacity:.85}
 /* =================== FIM LEGENDA DO ATLAS (CSS) =================== */
 
 
@@ -4105,7 +4108,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.73';
+const APP_VERSION = 'V.Beta.74';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -5879,7 +5882,7 @@ function goBack(){
   if(UI.currentScreen==='killcard'){ closeLivroHistorico(); showScreen('home'); return; }
   if(UI.currentScreen==='atlas'){ closeAtlasMenu(); showScreen('home'); return; }
   if(UI.currentScreen==='atlas-detail'){
-    if(document.querySelector('#atlasEntryList .atlas-legenda-card, #atlasEntryList .atlas-legenda-head') && UI.atlasLegendaCode){
+    if(document.getElementById('atlasLegendaList') && UI.atlasLegendaCode){
       var c = UI.atlasLegendaCode; UI.atlasLegendaCode = null; openAtlasDetail(c); return;
     }
     closeAtlasMenu(); showScreen('atlas'); return;
@@ -10038,7 +10041,6 @@ function openAtlasDetail(code, mode){
     </div>`;
   }).join('') || '') + `<div class="atlas-entry atlas-entry-legenda" onclick="openAtlasLegenda('${code}')" role="button" tabindex="0">
       <div class="atlas-entry-title">Legenda</div>
-      <div class="atlas-entry-sub">Equipamentos do bigrama ${escapeHtml(code)}</div>
     </div>`;
   openAtlasSection('screen-atlas-detail','ATLAS');
 }
@@ -10081,34 +10083,60 @@ function atlasLegendaEnsureIndex(){
   return AtlasLegendaIndex;
 }
 function openAtlasLegenda(code){
-  var idx = atlasLegendaEnsureIndex();
   var big = String(code||'').trim().toUpperCase();
-  var lista = idx[big] || [];
   var title = $('atlasDetailTitle');
   if(title) title.textContent = code + ' — Legenda';
   var wrap = $('atlasEntryList');
   if(!wrap) return;
-  UI.atlasLegendaCode = code; // para o voltar
-  var mostrar = [1,2,3]; // Código, Denominação, Localização
-  var rotulos = ['Código','Denominação','Localização'];
-  var html = '<div class="atlas-legenda-head"><button class="btn btn-ghost atlas-legenda-back" type="button" onclick="openAtlasDetail(\''+code+'\')">‹ Índices</button><span class="atlas-legenda-count">'+lista.length+(lista.length===1?' equipamento':' equipamentos')+'</span></div>';
-  if(!lista.length){
-    html += '<div class="empty">Nenhum equipamento cadastrado para o bigrama '+escapeHtml(code)+'.</div>';
-  } else {
-    for(var k=0;k<lista.length;k++){
-      var row = lista[k];
-      var campos = '';
-      for(var mi=0;mi<mostrar.length;mi++){
-        var c = mostrar[mi];
-        var val = row[c];
-        if(!val) continue;
-        campos += '<div class="atlas-legenda-field"><b>'+rotulos[mi]+'</b>'+escapeHtml(val)+'</div>';
-      }
-      html += '<div class="atlas-legenda-card">'+campos+'</div>';
-    }
-  }
-  wrap.innerHTML = html;
+  UI.atlasLegendaCode = big;
+  wrap.innerHTML =
+    '<div class="atlas-legenda-search-box">'+
+      '<span class="atlas-legenda-search-icon" aria-hidden="true">🔎</span>'+
+      '<input id="atlasLegendaSearch" type="search" autocomplete="off" aria-label="Buscar equipamento" placeholder="Buscar por código ou descrição" oninput="atlasLegendaRender()" />'+
+      '<button type="button" id="atlasLegendaClear" class="atlas-legenda-search-clear" onclick="atlasLegendaClearSearch()" title="Limpar busca" aria-label="Limpar busca" style="display:none">✕</button>'+
+    '</div>'+
+    '<div id="atlasLegendaList" class="atlas-legenda-list"></div>';
+  atlasLegendaRender();
   openAtlasSection('screen-atlas-detail','ATLAS');
+}
+function atlasLegendaNormalize(str){
+  return String(str==null?'':str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+function atlasLegendaToggleClear(){
+  var s=$('atlasLegendaSearch'), b=$('atlasLegendaClear');
+  if(b) b.style.display=(s && String(s.value||'').length>0)?'':'none';
+}
+function atlasLegendaClearSearch(){
+  var s=$('atlasLegendaSearch');
+  if(s){ s.value=''; s.focus(); }
+  atlasLegendaToggleClear(); atlasLegendaRender();
+}
+function atlasLegendaRender(){
+  var listEl=$('atlasLegendaList');
+  if(!listEl) return;
+  var idx=atlasLegendaEnsureIndex();
+  var big=String(UI.atlasLegendaCode||'').trim().toUpperCase();
+  var lista=idx[big]||[];
+  atlasLegendaToggleClear();
+  var termoRaw=String(($('atlasLegendaSearch')||{}).value||'').trim();
+  var termo=atlasLegendaNormalize(termoRaw);
+  var html='';
+  var mostrados=0;
+  for(var k=0;k<lista.length;k++){
+    var cod=String(lista[k][1]||'');
+    var den=String(lista[k][2]||'');
+    if(termo){
+      if(atlasLegendaNormalize(cod).indexOf(termo)===-1 && atlasLegendaNormalize(den).indexOf(termo)===-1) continue;
+    }
+    mostrados++;
+    html+='<div class="atlas-legenda-item"><span class="atlas-legenda-cod">'+escapeHtml(cod)+'</span>'+(den?'<span class="atlas-legenda-den"> - '+escapeHtml(den)+'</span>':'')+'</div>';
+  }
+  if(!lista.length){
+    html='<div class="empty">Nenhum equipamento cadastrado para o bigrama '+escapeHtml(big)+'.</div>';
+  } else if(!mostrados){
+    html='<div class="empty">Nenhum equipamento encontrado para "'+escapeHtml(termoRaw)+'".</div>';
+  }
+  listEl.innerHTML=html;
 }
 
 const ATLAS_DB_NAME = 'nautilus_atlas_cache';
