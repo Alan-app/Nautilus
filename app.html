@@ -3061,9 +3061,10 @@ html.rigs-sticky .app{overflow-x:clip;overflow-y:visible}
 #atlasEntryList .atlas-legenda-search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:rgba(120,120,120,.28);color:inherit;width:26px;height:26px;border-radius:50%;font-size:.86rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;opacity:.85}
 #atlasEntryList .atlas-legenda-search-clear:active{background:rgba(120,120,120,.45)}
 #atlasEntryList .atlas-legenda-list{display:flex;flex-direction:column}
-#atlasEntryList .atlas-legenda-item{padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.35;overflow-wrap:anywhere;word-break:break-word}
-#atlasEntryList .atlas-legenda-cod{font-weight:700}
-#atlasEntryList .atlas-legenda-den{opacity:.85}
+#atlasEntryList .atlas-legenda-item{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.25;overflow-wrap:anywhere;word-break:break-word}
+#atlasEntryList .atlas-legenda-cod{font-weight:700;font-size:.86rem}
+#atlasEntryList .atlas-legenda-den{opacity:.85;font-size:.8rem}
+#atlasEntryList .atlas-legenda-loc{display:block;font-size:.72rem;opacity:.6;margin-top:1px}
 /* =================== FIM LEGENDA DO ATLAS (CSS) =================== */
 
 
@@ -4108,7 +4109,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.74';
+const APP_VERSION = 'V.Beta.75';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -10125,11 +10126,12 @@ function atlasLegendaRender(){
   for(var k=0;k<lista.length;k++){
     var cod=String(lista[k][1]||'');
     var den=String(lista[k][2]||'');
+    var loc=String(lista[k][3]||'');
     if(termo){
-      if(atlasLegendaNormalize(cod).indexOf(termo)===-1 && atlasLegendaNormalize(den).indexOf(termo)===-1) continue;
+      if(atlasLegendaNormalize(cod).indexOf(termo)===-1 && atlasLegendaNormalize(den).indexOf(termo)===-1 && atlasLegendaNormalize(loc).indexOf(termo)===-1) continue;
     }
     mostrados++;
-    html+='<div class="atlas-legenda-item"><span class="atlas-legenda-cod">'+escapeHtml(cod)+'</span>'+(den?'<span class="atlas-legenda-den"> - '+escapeHtml(den)+'</span>':'')+'</div>';
+    html+='<div class="atlas-legenda-item"><span class="atlas-legenda-cod">'+escapeHtml(cod)+'</span>'+(den?'<span class="atlas-legenda-den"> - '+escapeHtml(den)+'</span>':'')+(loc?'<span class="atlas-legenda-loc">'+escapeHtml(loc)+'</span>':'')+'</div>';
   }
   if(!lista.length){
     html='<div class="empty">Nenhum equipamento cadastrado para o bigrama '+escapeHtml(big)+'.</div>';
