@@ -11241,6 +11241,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
   document.body.classList.add('app-ready');
 
+  /* Lembretes de Horas de Funcionamento: dispara a checagem na inicialização e ao voltar pro app */
+  setTimeout(()=>{ try{ checkDueReminders(); }catch(e){ console.error('Lembretes:', e); } }, 600);
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState==='visible' && !$('horasReminderActionModal').classList.contains('show')){
+      try{ checkDueReminders(); }catch(e){ console.error('Lembretes:', e); }
+    }
+  });
+
   setTimeout(ensureHomeFoldersRendered, 50);
   setTimeout(ensureHomeFoldersRendered, 300);
   migrateLegacyAttachmentsToIndexedDB().then(() => {
