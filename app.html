@@ -4005,12 +4005,8 @@ input[data-replace-on-next-type="1"]{caret-color:transparent!important;}
 <div id="reminderModal" class="modal-overlay" onclick="if(event.target.id==='reminderModal')closeReminderModal()">
     <div class="modal-box" onclick="event.stopPropagation()">
       <h3>Lembrete de atualização</h3>
-      <p>Define a periodicidade para lembrar de atualizar as horas de funcionamento deste bigrama.</p>
+      <p>Define a periodicidade para lembrar de atualizar as horas de funcionamento de todos os equipamentos.</p>
       <form id="reminderForm" class="section">
-        <div class="field">
-          <label for="reminderEquipName">Bigrama</label>
-          <input id="reminderEquipName" type="text" readonly style="opacity:.7;" />
-        </div>
         <div class="grid-2">
           <div class="field">
             <label for="reminderType">Periodicidade</label>
@@ -4109,7 +4105,7 @@ const DEFAULT_FICHA = {navio:'SUBMARINO HUMAITÁ',fichaNumero:'',folhaInicial:1,
 const IMG_DB_NAME = 'livro_historico_imagens';
 const IMG_DB_VERSION = 1;
 const IMG_STORE = 'images';
-const APP_VERSION = 'V.Beta.75';
+const APP_VERSION = 'V.Beta.76';
 document.addEventListener('DOMContentLoaded', function(){
   const el = document.getElementById('appVersionLabel');
   if(el) el.textContent = 'VERSÃO ' + APP_VERSION;
@@ -4134,6 +4130,7 @@ const AppState = {
         fichas:parsed.fichas&&typeof parsed.fichas==='object'?parsed.fichas:{},
         equipamentos:parsed.equipamentos&&typeof parsed.equipamentos==='object'?parsed.equipamentos:{},
         horasData:parsed.horasData&&typeof parsed.horasData==='object'?parsed.horasData:{},
+        horasReminder:parsed.horasReminder&&typeof parsed.horasReminder==='object'?parsed.horasReminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''},
         psData:parsed.psData&&typeof parsed.psData==='object'?parsed.psData:{},
         notas:Array.isArray(parsed.notas)?parsed.notas:[],
         filtros:parsed.filtros?{busca:'',status:'TODOS',dataInicio:'',dataFim:'',...parsed.filtros}:{busca:'',status:'TODOS',dataInicio:'',dataFim:''},
@@ -5399,19 +5396,36 @@ function saveHorasValue(id){
   setStatus('horasStatus', 'Horas atualizadas.');
   renderHorasFuncionamento();
 }
+function getGlobalHorasReminder(){
+  if(!AppState.data.horasReminder || typeof AppState.data.horasReminder !== 'object'){
+    AppState.data.horasReminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
+  }
+  return AppState.data.horasReminder;
+}
+function migrateHorasReminderToGlobal(){
+  const g = getGlobalHorasReminder();
+  if(g.type && g.type !== 'none') return;
+  for(const b of getHorasBigramas()){
+    const cfg = AppState.data.horasData[b.id];
+    const r = cfg && !Array.isArray(cfg) ? cfg.reminder : null;
+    if(r && r.type && r.type !== 'none'){
+      AppState.data.horasReminder = {type:r.type, startDate:r.startDate||'', lastNotifiedDate:r.lastNotifiedDate||'', snoozeUntil:r.snoozeUntil||'', pendingSince:r.pendingSince||''};
+      AppState.save();
+      return;
+    }
+  }
+}
 function openReminderModal(){
-  const cfg = getHorasConfigForSelected();
-  $('reminderEquipName').value = getBigramaLabel(AppState.data.selectedBigramaId) || '';
-  $('reminderType').value = (cfg.reminder && cfg.reminder.type) || 'none';
-  $('reminderStartDate').value = (cfg.reminder && cfg.reminder.startDate) || new Date().toISOString().slice(0,10);
+  const reminder = getGlobalHorasReminder();
+  $('reminderType').value = reminder.type || 'none';
+  $('reminderStartDate').value = reminder.startDate || new Date().toISOString().slice(0,10);
   $('reminderModal').classList.add('show');
 }
 function closeReminderModal(){
   $('reminderModal').classList.remove('show');
 }
 function clearReminderConfig(){
-  const cfg = getHorasConfigForSelected();
-  cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
+  AppState.data.horasReminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
   AppState.save();
   closeReminderModal();
   renderHorasFuncionamento();
@@ -5438,16 +5452,15 @@ function getNextReminderDate(reminder, todayStr){
 }
 function handleReminderSubmit(e){
   e.preventDefault();
-  const cfg = getHorasConfigForSelected();
+  const prev = getGlobalHorasReminder();
   const type = $('reminderType').value;
   const startDate = $('reminderStartDate').value;
-  cfg.reminder = {
-    ...(cfg.reminder || {}),
+  AppState.data.horasReminder = {
     type,
     startDate: type === 'none' ? '' : startDate,
-    lastNotifiedDate: type === 'none' ? '' : (cfg.reminder && cfg.reminder.lastNotifiedDate) || '',
-    snoozeUntil: type === 'none' ? '' : ((cfg.reminder && cfg.reminder.snoozeUntil) || ''),
-    pendingSince: type === 'none' ? '' : ((cfg.reminder && cfg.reminder.pendingSince) || '')
+    lastNotifiedDate: type === 'none' ? '' : (prev.lastNotifiedDate || ''),
+    snoozeUntil: type === 'none' ? '' : (prev.snoozeUntil || ''),
+    pendingSince: type === 'none' ? '' : (prev.pendingSince || '')
   };
   AppState.save();
   closeReminderModal();
@@ -5530,33 +5543,36 @@ function getHorasCfgForBigramaId(bigramaId){
   return cfg;
 }
 
-function getPendingHorasCountForBigrama(bigramaId){
-  const cfg = getHorasCfgForBigramaId(bigramaId);
-  const pendingSince = cfg.reminder && cfg.reminder.pendingSince ? new Date(cfg.reminder.pendingSince).getTime() : 0;
-  if(!pendingSince) return Array.isArray(cfg.equipamentos) ? cfg.equipamentos.length : 0;
-  return (cfg.equipamentos || []).filter(eq => !eq.updatedAt || Number(eq.updatedAt) < pendingSince).length;
+function getPendingHorasCountGlobal(){
+  const reminder = getGlobalHorasReminder();
+  const pendingSince = reminder.pendingSince ? new Date(reminder.pendingSince).getTime() : 0;
+  let total = 0;
+  for(const b of getHorasBigramas()){
+    const cfg = getHorasCfgForBigramaId(b.id);
+    const eqs = Array.isArray(cfg.equipamentos) ? cfg.equipamentos : [];
+    total += pendingSince ? eqs.filter(eq => !eq.updatedAt || Number(eq.updatedAt) < pendingSince).length : eqs.length;
+  }
+  return total;
 }
 
 function refreshActiveHorasReminderModal(){
   if(!$('horasReminderActionModal') || !$('horasReminderActionModal').classList.contains('show')) return;
   if(!Array.isArray(UI.activeHorasReminders) || !UI.activeHorasReminders.length) return;
 
-  UI.activeHorasReminders = UI.activeHorasReminders
-    .map(entry => ({...entry, qtd:getPendingHorasCountForBigrama(entry.bigrama.id)}))
-    .filter(entry => entry.qtd > 0);
-
-  if(!UI.activeHorasReminders.length){
+  const qtd = getPendingHorasCountGlobal();
+  if(qtd <= 0){
+    UI.activeHorasReminders = [];
     closeHorasReminderActionModal();
     return;
   }
-
+  UI.activeHorasReminders = [{...UI.activeHorasReminders[0], qtd}];
   renderHorasReminderActionModal(UI.activeHorasReminders);
 }
 
 function renderHorasReminderActionModal(items){
   $('horasReminderActionContent').innerHTML = items.map(x => `
     <div class="report-item">
-      <span>${escapeHtml(x.bigrama.sigla)}${x.qtd ? ` · ${x.qtd} equipamento(s)` : ''}</span>
+      <span>${x.qtd} equipamento(s) pendente(s)</span>
       <span>${formatDateBR(x.nextDate)}</span>
     </div>
   `).join('');
@@ -5564,18 +5580,10 @@ function renderHorasReminderActionModal(items){
 
 function confirmHorasReminderDone(){
   const today = new Date().toISOString().slice(0,10);
-  for(const entry of (UI.activeHorasReminders || [])){
-    let cfg = AppState.data.horasData[entry.bigrama.id];
-    if(!cfg) continue;
-    if(Array.isArray(cfg)){
-      cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''}};
-      AppState.data.horasData[entry.bigrama.id] = cfg;
-    }
-    if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''};
-    cfg.reminder.lastNotifiedDate = today;
-    cfg.reminder.snoozeUntil = '';
-    cfg.reminder.pendingSince = '';
-  }
+  const reminder = getGlobalHorasReminder();
+  reminder.lastNotifiedDate = today;
+  reminder.snoozeUntil = '';
+  reminder.pendingSince = '';
   AppState.save();
   UI.activeHorasReminders = [];
   closeHorasReminderActionModal();
@@ -5585,16 +5593,8 @@ function snoozeHorasReminderTomorrow(){
   const tomorrowDate = new Date();
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
   const tomorrow = tomorrowDate.toISOString().slice(0,10);
-  for(const entry of (UI.activeHorasReminders || [])){
-    let cfg = AppState.data.horasData[entry.bigrama.id];
-    if(!cfg) continue;
-    if(Array.isArray(cfg)){
-      cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''}};
-      AppState.data.horasData[entry.bigrama.id] = cfg;
-    }
-    if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:''};
-    cfg.reminder.snoozeUntil = tomorrow;
-  }
+  const reminder = getGlobalHorasReminder();
+  reminder.snoozeUntil = tomorrow;
   AppState.save();
   UI.activeHorasReminders = [];
   closeHorasReminderActionModal();
@@ -5605,94 +5605,58 @@ function closeDueReminderModal(){
 }
 function testReminderNotification(){
   const today = new Date().toISOString().slice(0,10);
-  const nowIso = new Date().toISOString();
-  const b = getSelectedBigrama();
-  if(!b) return;
 
-  const cfg = getHorasCfgForBigramaId(b.id);
-  if(!cfg.reminder) cfg.reminder = {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
-  if(!cfg.reminder.pendingSince) cfg.reminder.pendingSince = nowIso;
-
-  const qtd = getPendingHorasCountForBigrama(b.id);
-  const item = {
-    bigrama: b,
-    nextDate: today,
-    qtd
-  };
-
-  if(item.qtd <= 0){
-    showAppMessage('Lembrete', 'Todos os equipamentos já foram atualizados após a geração do lembrete.');
-    return;
+  if(!('Notification' in window)){
+    showAppMessage('Lembrete', 'Este dispositivo ou navegador não suporta notificações.');
+  } else if(Notification.permission !== 'granted'){
+    requestReminderPermission();
+    showAppMessage('Lembrete', 'A permissão de notificação ainda não foi concedida. Autorize nas configurações do navegador ou do app e teste novamente.');
+  } else {
+    showDeviceNotification('Nautilus', 'Atualize as horas de funcionamento dos equipamentos!');
   }
 
-  AppState.save();
-  UI.activeHorasReminders = [item];
-  renderHorasReminderActionModal([item]);
+  const qtd = getPendingHorasCountGlobal();
+  if(qtd <= 0) return;
+
+  UI.activeHorasReminders = [{nextDate: today, qtd}];
+  renderHorasReminderActionModal(UI.activeHorasReminders);
   $('horasReminderActionModal').classList.add('show');
 }
 
 function checkDueReminders(){
   const today = new Date().toISOString().slice(0,10);
   const nowIso = new Date().toISOString();
-  const dueItems = [];
+  const reminder = getGlobalHorasReminder();
 
-  for(const bigrama of getHorasBigramas()){
-    let cfg = AppState.data.horasData[bigrama.id];
-    if(!cfg) continue;
+  if(!reminder.type || reminder.type === 'none') return;
+  if(reminder.snoozeUntil && reminder.snoozeUntil > today) return;
 
-    if(Array.isArray(cfg)){
-      cfg = {equipamentos:[...cfg], reminder:{type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''}};
-      AppState.data.horasData[bigrama.id] = cfg;
-    }
+  const nextDate = getNextReminderDate(reminder, today);
+  const shouldNotifyBySchedule = nextDate && nextDate <= today && reminder.lastNotifiedDate !== today && !reminder.pendingSince;
+  const shouldNotifyBySnooze = reminder.snoozeUntil && reminder.snoozeUntil <= today;
 
-    const reminder = cfg && cfg.reminder ? cfg.reminder : {type:'none', startDate:'', lastNotifiedDate:'', snoozeUntil:'', pendingSince:''};
-
-    if(reminder.snoozeUntil && reminder.snoozeUntil > today) continue;
-
-    const nextDate = getNextReminderDate(reminder, today);
-    const shouldNotifyBySchedule = nextDate && nextDate <= today && reminder.lastNotifiedDate !== today && !reminder.pendingSince;
-    const shouldNotifyBySnooze = reminder.snoozeUntil && reminder.snoozeUntil <= today;
-
-    if(shouldNotifyBySchedule || shouldNotifyBySnooze){
-      if(!reminder.pendingSince) reminder.pendingSince = nowIso;
-      const qtd = getPendingHorasCountForBigrama(bigrama.id);
-
-      if(qtd <= 0){
-        reminder.lastNotifiedDate = today;
-        reminder.snoozeUntil = '';
-        reminder.pendingSince = '';
-        continue;
-      }
-
-      dueItems.push({
-        bigrama,
-        nextDate: shouldNotifyBySnooze ? today : nextDate,
-        qtd
-      });
-    } else if(reminder.pendingSince){
-      const qtd = getPendingHorasCountForBigrama(bigrama.id);
-      if(qtd > 0){
-        dueItems.push({
-          bigrama,
-          nextDate: reminder.snoozeUntil && reminder.snoozeUntil <= today ? today : (nextDate || today),
-          qtd
-        });
-      } else {
-        reminder.lastNotifiedDate = today;
-        reminder.snoozeUntil = '';
-        reminder.pendingSince = '';
-      }
-    }
+  let due = false;
+  if(shouldNotifyBySchedule || shouldNotifyBySnooze){
+    if(!reminder.pendingSince) reminder.pendingSince = nowIso;
+    due = true;
+  } else if(reminder.pendingSince){
+    due = true;
   }
 
-  if(!dueItems.length){
+  if(!due) return;
+
+  const qtd = getPendingHorasCountGlobal();
+  if(qtd <= 0){
+    reminder.lastNotifiedDate = today;
+    reminder.snoozeUntil = '';
+    reminder.pendingSince = '';
     AppState.save();
     return;
   }
 
   AppState.save();
-  UI.activeHorasReminders = dueItems;
-  renderHorasReminderActionModal(dueItems);
+  UI.activeHorasReminders = [{nextDate: shouldNotifyBySnooze ? today : (nextDate || today), qtd}];
+  renderHorasReminderActionModal(UI.activeHorasReminders);
   $('horasReminderActionModal').classList.add('show');
 
   showDeviceNotification('Nautilus', 'Atualize as horas de funcionamento dos equipamentos!');
@@ -11242,6 +11206,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.body.classList.add('app-ready');
 
   /* Lembretes de Horas de Funcionamento: dispara a checagem na inicialização e ao voltar pro app */
+  try{ migrateHorasReminderToGlobal(); }catch(e){ console.error('Lembretes:', e); }
   setTimeout(()=>{ try{ checkDueReminders(); }catch(e){ console.error('Lembretes:', e); } }, 600);
   document.addEventListener('visibilitychange', ()=>{
     if(document.visibilityState==='visible' && !$('horasReminderActionModal').classList.contains('show')){
