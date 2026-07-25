@@ -101,4 +101,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(cacheFirst(event.request));
 });
 
-// V.Beta.79
+// V.Beta.11
