@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-vbeta65-core';
-const RUNTIME_CACHE = 'nautilus-vbeta65-runtime';
+const CACHE_NAME = 'nautilus-vbeta80-core';
+const RUNTIME_CACHE = 'nautilus-vbeta80-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -49,7 +49,6 @@ async function fallbackHtml(){
 
 async function cacheFirstHtml(request){
   const cached = await caches.match(request);
-  // Atualização silenciosa em segundo plano quando houver rede:
   const revalidate = (async()=>{
     try{
       const response = await fetch(new Request(request, {cache:'reload'}));
@@ -57,10 +56,9 @@ async function cacheFirstHtml(request){
         const cache = await caches.open(CACHE_NAME);
         await cache.put(request, response.clone());
       }
-    }catch(e){ /* offline: segue com o cache */ }
+    }catch(e){}
   })();
   if(cached){
-    // não bloqueia a resposta esperando a rede
     revalidate.catch(()=>{});
     return cached;
   }
@@ -101,4 +99,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(cacheFirst(event.request));
 });
 
-// V.Beta.65
+// V.Beta.80
