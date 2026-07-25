@@ -1,0 +1,30 @@
+name: Restore to clean state
+on:
+  workflow_dispatch:
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore files from clean commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Restaura app.html, service-worker, README e CHANGELOG para o estado após limpeza MetaDriver e antes dos patches de Notas
+          git checkout 177b04bf2380a42367c65ffb43ccaf3fd2227318 -- app.html service-worker.js README.txt CHANGELOG.txt
+          # Remove os arquivos de patch que foram adicionados depois
+          rm -f scripts/patch_notes_v81.py
+          rm -f .github/workflows/patch-notes-v81.yml
+          rm -f .github/workflows/bump-version-80.yml
+          rm -f .github/workflows/restore-changelog.yml
+          git add -A
+          git status
+          git commit -m "Revert: restaura app.html + arquivos para estado limpo (V.Beta.79 / pré-patches Notas)
+
+Desfaz as tentativas de v.65/v.80/v.81 que deixaram o app bugado.
+Mantém a remoção dos arquivos MetaDriver/Uber que foram subidos por engano." || echo "Nenhuma mudança"
+          git push
