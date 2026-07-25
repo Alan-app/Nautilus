@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-vbeta80-core';
-const RUNTIME_CACHE = 'nautilus-vbeta80-runtime';
+const CACHE_NAME = 'nautilus-vbeta81-core';
+const RUNTIME_CACHE = 'nautilus-vbeta81-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -66,8 +66,7 @@ async function cacheFirstHtml(request){
     await revalidate;
     const fresh = await caches.match(request);
     if(fresh) return fresh;
-    const direct = await fetch(request);
-    return direct;
+    return await fetch(request);
   }catch(e){
     return await fallbackHtml();
   }
@@ -99,4 +98,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(cacheFirst(event.request));
 });
 
-// V.Beta.80
+// V.Beta.81
