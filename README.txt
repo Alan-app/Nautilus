@@ -1,2 +1,2 @@
-Nautilus V.Beta.80
-Notas/checklist: corrigido o problema em que, ao digitar em itens com caixas de selecao e o texto quebrar para a proxima linha, a linha de cima sumia e as linhas podiam se sobrepor. Agora cada item cresce com o texto e o scroll nao e forcado de volta a posicao do toque durante a digitacao. Veja CHANGELOG.txt para o historico completo.
+Nautilus V.Beta.64
+Corrigida a demora real de alguns esquemas do Atlas (ex.: "19 do BB"): a pré-renderização parava de vez em quando no meio do processo se uma página falhasse, deixando todas as páginas seguintes sem cache. Corrigido, mais um reparo automático em segundo plano pra quem já tinha esse problema. Removido também o indicador giratório da vBeta63 -- voltou a ser só o fundo sólido. Veja CHANGELOG.txt para o histórico completo de mudanças.
