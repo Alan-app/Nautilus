@@ -1,6 +1,9 @@
 name: Restore to clean state
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/restore-to-clean.yml'
 jobs:
   restore:
     runs-on: ubuntu-latest
@@ -21,6 +24,8 @@ jobs:
           rm -f .github/workflows/patch-notes-v81.yml
           rm -f .github/workflows/bump-version-80.yml
           rm -f .github/workflows/restore-changelog.yml
+          # Remove o próprio workflow após executar (one-shot)
+          rm -f .github/workflows/restore-to-clean.yml
           git add -A
           git status
           git commit -m "Revert: restaura app.html + arquivos para estado limpo (V.Beta.79 / pré-patches Notas)
