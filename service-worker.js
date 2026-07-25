@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nautilus-vbeta79-core';
-const RUNTIME_CACHE = 'nautilus-vbeta79-runtime';
+const CACHE_NAME = 'nautilus-vbeta65-core';
+const RUNTIME_CACHE = 'nautilus-vbeta65-runtime';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -101,4 +101,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(cacheFirst(event.request));
 });
 
-// V.Beta.11
+// V.Beta.65
