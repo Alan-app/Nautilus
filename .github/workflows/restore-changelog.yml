@@ -1,0 +1,42 @@
+name: Restore CHANGELOG
+on:
+  push:
+    paths:
+      - '.github/workflows/restore-changelog.yml'
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore full CHANGELOG with V.Beta.65 header
+        run: |
+          python3 << 'PY'
+          import subprocess
+          from pathlib import Path
+          old = subprocess.check_output(['git','show','177b04bf2380a42367c65ffb43ccaf3fd2227318:CHANGELOG.txt'], text=True)
+          header = '''V.Beta.65 - CORRECAO: Notas/checklist - texto que quebrava de linha sumia e linhas se sobrepunham durante a edicao
+- Relatado: em itens com caixas de selecao, ao digitar e o texto ir para a proxima linha, a linha de cima subia e sumia; as vezes as linhas se sobrepunham durante a edicao.
+- Causa: a funcao noteResizeChecklistInput forcava altura fixa de 28px no input e na row (com overflow hidden), enquanto o texto tentava crescer; alem disso, o ajuste de teclado podia forcar o scroll de volta a posicao do toque inicial no checklist.
+- Corrigido (somente Notas/checklist, sem alterar outras telas):
+  1) noteResizeChecklistInput agora deixa o item crescer com o texto (altura automatica).
+  2) no refresh do DOM do checklist, o oninput volta a usar noteAutosizeTextarea/noteAutosizeChecklist (mesmo comportamento do render inicial).
+  3) noteEnsureInputAboveKeyboard nao forca mais scroll de volta a posicao do toque quando o campo e item de checklist.
+  4) CSS final (vbeta65) reforca height:auto / max-height:none nos inputs e rows do checklist.
+- Cache do service worker atualizado para vbeta65 para o app instalado detectar a atualizacao.
+- Base oficial: V.Beta.64.
+
+'''
+          Path('CHANGELOG.txt').write_text(header + old, encoding='utf-8')
+          print('CHANGELOG restored, length', len(header+old))
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.txt
+          git commit -m "Restore CHANGELOG completo + entrada V.Beta.65" || echo nochange
+          git push
