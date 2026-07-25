@@ -1,0 +1,39 @@
+name: Bump to V.Beta.80
+on:
+  push:
+    paths:
+      - '.github/workflows/bump-version-80.yml'
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump APP_VERSION and labels from 79/65 to 80
+        run: |
+          python3 << 'PY'
+          from pathlib import Path
+          p = Path('app.html')
+          t = p.read_text(encoding='utf-8')
+          t2 = t.replace("const APP_VERSION = 'V.Beta.79';", "const APP_VERSION = 'V.Beta.80';")
+          t2 = t2.replace('V.Beta.65:', 'V.Beta.80:')
+          t2 = t2.replace('/* V.Beta.65:', '/* V.Beta.80:')
+          t2 = t2.replace('vbeta65-checklist-grow', 'vbeta80-checklist-grow')
+          t2 = t2.replace('V.Beta.65 - checklist', 'V.Beta.80 - checklist')
+          t2 = t2.replace('V.Beta.65: no checklist', 'V.Beta.80: no checklist')
+          t2 = t2.replace('V.Beta.65: permite crescer', 'V.Beta.80: permite crescer')
+          if t2 == t:
+            # still ok if only APP_VERSION changes
+            if "const APP_VERSION = 'V.Beta.80';" not in t2:
+              raise SystemExit('APP_VERSION bump failed')
+          p.write_text(t2, encoding='utf-8')
+          print('bumped')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app.html
+          git commit -m "V.Beta.80 - APP_VERSION e labels da correcao do checklist" || echo nochange
+          git push
